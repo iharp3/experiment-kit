@@ -1,7 +1,4 @@
-import xarray as xr
-
-
-class vanilla_get_raster_executor:
+class vanilla_find_time_executor:
     def __init__(
         self,
         variable: str,
@@ -13,7 +10,9 @@ class vanilla_get_raster_executor:
         min_lon: float,
         max_lon: float,
         spatial_resolution: float,  # 0.25, 0.5, 1
-        aggregation: str,  # "mean", "max", "min"
+        aggregation: str,  # "mean", "max", "min"  !! Use this aggregation for all aggregation
+        filter_predicate: str,  # "<", ">" !! only these two predicates are enough
+        filter_value: float,
     ):
         self.variable = variable
         self.start_datetime = start_datetime
@@ -25,10 +24,8 @@ class vanilla_get_raster_executor:
         self.max_lon = max_lon
         self.spatial_resolution = spatial_resolution
         self.aggregation = aggregation
+        self.filter_predicate = filter_predicate
+        self.filter_value = filter_value
 
     def execute(self):
-        """
-        Will be run on cs-u-spatial-514.cs.umn.edu
-        Only use the raw data in :/era5/raw/2m_temperature, See README.md
-        """
         pass

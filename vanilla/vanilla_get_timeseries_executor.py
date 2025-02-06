@@ -1,7 +1,4 @@
-import xarray as xr
-
-
-class vanilla_get_raster_executor:
+class vanilla_get_timeseries_executor:
     def __init__(
         self,
         variable: str,
@@ -13,7 +10,7 @@ class vanilla_get_raster_executor:
         min_lon: float,
         max_lon: float,
         spatial_resolution: float,  # 0.25, 0.5, 1
-        aggregation: str,  # "mean", "max", "min"
+        aggregation: str,  # "mean", "max", "min"  !! Use this aggregation for timeseries aggregation as well
     ):
         self.variable = variable
         self.start_datetime = start_datetime
@@ -27,8 +24,4 @@ class vanilla_get_raster_executor:
         self.aggregation = aggregation
 
     def execute(self):
-        """
-        Will be run on cs-u-spatial-514.cs.umn.edu
-        Only use the raw data in :/era5/raw/2m_temperature, See README.md
-        """
         pass
