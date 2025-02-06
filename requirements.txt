@@ -1,0 +1,10 @@
+jupyter
+xarray
+netcdf4
+dask[complete]
+zarr
+fsspec
+gcsfs
+tiledb
+tiledb-cf[complete]
+matplotlib
