@@ -14,7 +14,7 @@ def temporal_resolution_to_freq(resolution):
         raise ValueError("Invalid temporal_resolution")
 
 
-class CloudGetRasterExecutor:
+class cloud_get_raster_executor:
 
     def __init__(
         self,
@@ -27,7 +27,7 @@ class CloudGetRasterExecutor:
         min_lon: float,
         max_lon: float,
         spatial_resolution: float,  # 0.25, 0.5, 1
-        aggregation: str,  # "mean", "max", "min"
+        aggregation: str,  # "mean", "max", "min"  !! This aggregation applies for both temporal and spatial aggregation
     ):
         self.variable = variable
         self.start_datetime = start_datetime
@@ -41,9 +41,7 @@ class CloudGetRasterExecutor:
         self.aggregation = aggregation
 
     def execute(self):
-        ar = xr.open_zarr(
-            "gs://gcp-public-data-arco-era5/ar/full_37-1h-0p25deg-chunk-1.zarr-v3"
-        )
+        ar = xr.open_zarr("gs://gcp-public-data-arco-era5/ar/full_37-1h-0p25deg-chunk-1.zarr-v3")
         da = ar[self.variable].sel(
             time=slice(self.start_datetime, self.end_datetime),
             latitude=slice(self.max_lat, self.min_lat),
@@ -52,9 +50,7 @@ class CloudGetRasterExecutor:
 
         # temporal aggregation
         if self.temporal_resolution != "hour":
-            resampled = da.resample(
-                time=temporal_resolution_to_freq(self.temporal_resolution)
-            )
+            resampled = da.resample(time=temporal_resolution_to_freq(self.temporal_resolution))
             if self.aggregation == "mean":
                 da = resampled.mean()
             elif self.aggregation == "max":
@@ -62,9 +58,7 @@ class CloudGetRasterExecutor:
             elif self.aggregation == "min":
                 da = resampled.min()
             else:
-                raise ValueError(
-                    f"Temporal aggregation {self.aggregation} is not supported."
-                )
+                raise ValueError(f"Temporal aggregation {self.aggregation} is not supported.")
 
         # spatial aggregation
         if self.spatial_resolution > 0.25:
@@ -77,8 +71,6 @@ class CloudGetRasterExecutor:
             elif self.aggregation == "min":
                 da = coarsened.min()
             else:
-                raise ValueError(
-                    f"Spatial aggregation {self.aggregation} is not supported."
-                )
+                raise ValueError(f"Spatial aggregation {self.aggregation} is not supported.")
 
         return da.compute()
