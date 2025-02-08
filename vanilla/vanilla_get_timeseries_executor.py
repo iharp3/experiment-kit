@@ -1,17 +1,6 @@
 import xarray as xr
 
 
-def get_file_list(start_datetime, end_datetime):
-    file_list = []
-    start_year = start_datetime[:4]
-    end_year = end_datetime[:4]
-    for year in range(int(start_year), int(end_year) + 1):
-        file_path = f"/era5/raw/2m_temperature/2m_temperature-{year}.nc"
-        file_list.append(file_path)
-    print(file_list)
-    return file_list
-
-
 class vanilla_get_timeseries_executor:
     def __init__(
         self,
@@ -38,14 +27,4 @@ class vanilla_get_timeseries_executor:
         self.aggregation = aggregation
 
     def execute(self):
-        file_list = get_file_list(self.start_datetime, self.end_datetime)
-        ds_list = []
-        for file in file_list:
-            ds = xr.open_dataset(file, engine="netcdf4").sel(
-                time=slice(start_datetime, end_datetime),
-                latitude=slice(max_lat, min_lat),
-                longitude=slice(min_lon, max_lon),
-            )
-            ds_list.append(ds)
-        ds = xr.concat([i.chunk() for i in ds_list], dim="time")
-        return ds
+        pass

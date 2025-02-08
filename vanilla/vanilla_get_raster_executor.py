@@ -1,6 +1,16 @@
 import xarray as xr
 
 
+def get_file_list(start_datetime, end_datetime):
+    file_list = []
+    start_year = start_datetime[:4]
+    end_year = end_datetime[:4]
+    for year in range(int(start_year), int(end_year) + 1):
+        file_path = f"/data/era5/raw/2m_temperature/2m_temperature-{year}.nc"
+        file_list.append(file_path)
+    return file_list
+
+
 class vanilla_get_raster_executor:
     def __init__(
         self,
@@ -31,4 +41,31 @@ class vanilla_get_raster_executor:
         Will be run on cs-u-spatial-514.cs.umn.edu
         Only use the raw data in :/era5/raw/2m_temperature, See README.md
         """
-        pass
+        file_list = get_file_list(self.start_datetime, self.end_datetime)
+        ds_list = []
+        for file in file_list:
+            ds = xr.open_dataset(file, engine="netcdf4").sel(
+                time=slice(self.start_datetime, self.end_datetime),
+                latitude=slice(self.max_lat, self.min_lat),
+                longitude=slice(self.min_lon, self.max_lon),
+            )
+            ds_list.append(ds)
+        ds = xr.concat([i.chunk() for i in ds_list], dim="time")
+        return ds
+
+    def execute_dask(self):
+        """
+        Will not use this function in the vanilla baseline
+        """
+        file_list = get_file_list(self.start_datetime, self.end_datetime)
+        ds = xr.open_mfdataset(
+            file_list,
+            engine="netcdf4",
+            chunks={"time": 1000, "latitude": 100, "longitude": 100},
+        )
+        ds = ds.sel(
+            time=slice(self.start_datetime, self.end_datetime),
+            latitude=slice(self.max_lat, self.min_lat),
+            longitude=slice(self.min_lon, self.max_lon),
+        )
+        return ds.compute()
