@@ -11,6 +11,19 @@ def get_file_list(start_datetime, end_datetime):
     return file_list
 
 
+def temporal_resolution_to_freq(resolution):
+    if resolution == "hour":
+        return "h"
+    elif resolution == "day":
+        return "D"
+    elif resolution == "month":
+        return "ME"
+    elif resolution == "year":
+        return "YE"
+    else:
+        raise ValueError("Invalid temporal_resolution")
+
+
 class vanilla_get_raster_executor:
     def __init__(
         self,
@@ -51,21 +64,46 @@ class vanilla_get_raster_executor:
             )
             ds_list.append(ds)
         ds = xr.concat([i.chunk() for i in ds_list], dim="time")
-        return ds
 
-    def execute_dask(self):
-        """
-        Will not use this function in the vanilla baseline
-        """
-        file_list = get_file_list(self.start_datetime, self.end_datetime)
-        ds = xr.open_mfdataset(
-            file_list,
-            engine="netcdf4",
-            chunks={"time": 1000, "latitude": 100, "longitude": 100},
-        )
-        ds = ds.sel(
-            time=slice(self.start_datetime, self.end_datetime),
-            latitude=slice(self.max_lat, self.min_lat),
-            longitude=slice(self.min_lon, self.max_lon),
-        )
+        # temporal aggregation
+        if self.temporal_resolution != "hour":
+            resampled = ds.resample(time=temporal_resolution_to_freq(self.temporal_resolution))
+            if self.aggregation == "mean":
+                ds = resampled.mean()
+            elif self.aggregation == "max":
+                ds = resampled.max()
+            elif self.aggregation == "min":
+                ds = resampled.min()
+            else:
+                raise ValueError(f"Temporal aggregation {self.aggregation} is not supported.")
+
+        # spatial aggregation
+        if self.spatial_resolution > 0.25:
+            c_f = int(self.spatial_resolution / 0.25)
+            coarsened = ds.coarsen(latitude=c_f, longitude=c_f, boundary="trim")
+            if self.aggregation == "mean":
+                ds = coarsened.mean()
+            elif self.aggregation == "max":
+                ds = coarsened.max()
+            elif self.aggregation == "min":
+                ds = coarsened.min()
+            else:
+                raise ValueError(f"Spatial aggregation {self.aggregation} is not supported.")
         return ds.compute()
+
+    # def execute_dask(self):
+    #     """
+    #     Will not use this function in the vanilla baseline
+    #     """
+    #     file_list = get_file_list(self.start_datetime, self.end_datetime)
+    #     ds = xr.open_mfdataset(
+    #         file_list,
+    #         engine="netcdf4",
+    #         chunks={"time": 1000, "latitude": 100, "longitude": 100},
+    #     )
+    #     ds = ds.sel(
+    #         time=slice(self.start_datetime, self.end_datetime),
+    #         latitude=slice(self.max_lat, self.min_lat),
+    #         longitude=slice(self.min_lon, self.max_lon),
+    #     )
+    #     return ds.compute()
