@@ -9,15 +9,14 @@ class TimeseriesExecutor(QueryExecutor):
         variable: str,
         start_datetime: str,
         end_datetime: str,
-        temporal_resolution: str,  # e.g., "hour", "day", "month", "year"
-        temporal_aggregation: str,  # e.g., "mean", "max", "min"
         min_lat: float,
         max_lat: float,
         min_lon: float,
         max_lon: float,
+        temporal_resolution: str,  # e.g., "hour", "day", "month", "year"
+        spatial_resolution: float,  # e.g., 0.25, 0.5, 1.0
+        aggregation,  # e.g., "mean", "max", "min"
         time_series_aggregation_method: str,  # e.g., "mean", "max", "min"
-        spatial_resolution,  # e.g., 0.25, 0.5, 1.0
-        spatial_aggregation,  # e.g., "mean", "max", "min"
         metadata=None,  # metadata file path
     ):
         super().__init__(
@@ -29,16 +28,14 @@ class TimeseriesExecutor(QueryExecutor):
             min_lon,
             max_lon,
             temporal_resolution,
-            temporal_aggregation,
-            spatial_resolution=spatial_resolution,
-            spatial_aggregation=spatial_aggregation,
+            spatial_resolution,
+            aggregation,
             metadata=metadata,
         )
         self.time_series_aggregation_method = time_series_aggregation_method
 
     def execute(self):
         get_raster_executor = GetRasterExecutor(
-            metadata=self.metadata.f_path,
             variable=self.variable,
             start_datetime=self.start_datetime,
             end_datetime=self.end_datetime,
@@ -47,9 +44,9 @@ class TimeseriesExecutor(QueryExecutor):
             min_lon=self.min_lon,
             max_lon=self.max_lon,
             temporal_resolution=self.temporal_resolution,
-            temporal_aggregation=self.temporal_aggregation,
             spatial_resolution=self.spatial_resolution,
-            spatial_aggregation=self.spatial_aggregation,
+            aggregation=self.aggregation,
+            metadata=self.metadata.f_path,
         )
         raster = get_raster_executor.execute()
         if self.time_series_aggregation_method == "mean":

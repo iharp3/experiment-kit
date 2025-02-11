@@ -18,12 +18,11 @@ class FindTimeExecutor(QueryExecutor):
         min_lon: float,
         max_lon: float,
         temporal_resolution: str,  # e.g., "hour", "day", "month", "year"
-        temporal_aggregation: str,  # e.g., "mean", "max", "min"
         time_series_aggregation_method: str,  # e.g., "mean", "max", "min"
         filter_predicate: str,  # e.g., ">", "<", "==", "!=", ">=", "<="
         filter_value: float,
         spatial_resolution,  # e.g., 0.25, 0.5, 1.0
-        spatial_aggregation,  # e.g., "mean", "max", "min"
+        aggregation,  # e.g., "mean", "max", "min"
         metadata=None,  # metadata file path
     ):
         super().__init__(
@@ -35,9 +34,8 @@ class FindTimeExecutor(QueryExecutor):
             min_lon,
             max_lon,
             temporal_resolution,
-            temporal_aggregation,
-            spatial_resolution=spatial_resolution,
-            spatial_aggregation=spatial_aggregation,
+            spatial_resolution,
+            aggregation,
             metadata=metadata,
         )
         self.time_series_aggregation_method = time_series_aggregation_method
@@ -61,15 +59,14 @@ class FindTimeExecutor(QueryExecutor):
             self.variable,
             start_datetime,
             end_datetime,
-            self.temporal_resolution,
-            self.temporal_aggregation,
             self.min_lat,
             self.max_lat,
             self.min_lon,
             self.max_lon,
+            self.temporal_resolution,
+            self.spatial_resolution,
+            self.aggregation,
             self.time_series_aggregation_method,
-            spatial_resolution=self.spatial_resolution,
-            spatial_aggregation=self.spatial_aggregation,
             metadata=self.metadata.f_path,
         )
         ts = timeseries_executor.execute()
@@ -234,7 +231,8 @@ class FindTimeExecutor(QueryExecutor):
                 min_lon=self.min_lon,
                 max_lon=self.max_lon,
                 temporal_resolution=temporal_res,
-                temporal_aggregation="min",
+                spatial_resolution=self.spatial_resolution,
+                aggregation="min",
                 metadata=self.metadata.f_path,
             )
             get_max_executor = GetRasterExecutor(
@@ -246,7 +244,8 @@ class FindTimeExecutor(QueryExecutor):
                 min_lon=self.min_lon,
                 max_lon=self.max_lon,
                 temporal_resolution=temporal_res,
-                temporal_aggregation="max",
+                spatial_resolution=self.spatial_resolution,
+                aggregation="max",
                 metadata=self.metadata.f_path,
             )
             range_min = get_min_executor.execute()
