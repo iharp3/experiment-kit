@@ -11,3 +11,5 @@ pip install --upgrade setuptools
 pip install wheel
 
 pip install -r requirements.txt
+
+pip install tiledb

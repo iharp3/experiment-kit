@@ -5,6 +5,4 @@ dask[complete]
 zarr
 fsspec
 gcsfs
-tiledb
-tiledb-cf[complete]
 matplotlib
