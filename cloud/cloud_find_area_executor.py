@@ -1,3 +1,5 @@
+from cloud_get_heatmap_executor import cloud_get_heatmap_executor
+
 class cloud_find_area_executor:
     def __init__(
         self,
@@ -28,4 +30,36 @@ class cloud_find_area_executor:
         self.filter_value = filter_value
 
     def execute(self):
-        pass
+        return self._execute_baseline()
+    
+    def _execute_baseline(self):
+        heatmap_executor = cloud_get_heatmap_executor(
+            self.variable,
+            self.start_datetime,
+            self.end_datetime,
+            self.temporal_resolution,
+            self.min_lat,
+            self.max_lat,
+            self.min_lon,
+            self.max_lon,
+            self.spatial_resolution,
+            self.aggregation,
+        )
+        hm = heatmap_executor.execute()
+        if self.filter_predicate == ">":
+            res = hm.where(hm > self.filter_value, drop=False)
+        elif self.filter_predicate == "<":
+            res = hm.where(hm < self.filter_value, drop=False)
+        elif self.filter_predicate == "==":
+            res = hm.where(hm == self.filter_value, drop=False)
+        elif self.filter_predicate == "!=":
+            res = hm.where(hm != self.filter_value, drop=False)
+        elif self.filter_predicate == ">=":
+            res = hm.where(hm >= self.filter_value, drop=False)
+        elif self.filter_predicate == "<=":
+            res = hm.where(hm <= self.filter_value, drop=False)
+        else:
+            raise ValueError("Invalid filter_predicate")
+        res = res.fillna(False)
+        res = res.astype(bool)
+        return res

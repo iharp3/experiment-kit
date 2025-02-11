@@ -1,3 +1,5 @@
+from cloud_get_raster_executor import cloud_get_raster_executor
+
 class cloud_get_timeseries_executor:
     def __init__(
         self,
@@ -12,6 +14,7 @@ class cloud_get_timeseries_executor:
         spatial_resolution: float,  # 0.25, 0.5, 1
         aggregation: str,  # "mean", "max", "min"  !! Use this aggregation for timeseries aggregation as well
     ):
+        
         self.variable = variable
         self.start_datetime = start_datetime
         self.end_datetime = end_datetime
@@ -24,4 +27,26 @@ class cloud_get_timeseries_executor:
         self.aggregation = aggregation
 
     def execute(self):
-        pass
+        get_raster_exectuor = cloud_get_raster_executor(
+            variable= self.variable,
+            start_datetime= self.start_datetime,
+            end_datetime= self.end_datetime,
+            temporal_resolution= self.temporal_resolution,
+            min_lat= self.min_lat,
+            max_lat= self.max_lat,
+            min_lon= self.min_lon,
+            max_lon= self.max_lon,
+            spatial_resolution= self.spatial_resolution,
+            aggregation= self.aggregation,
+        )
+
+        raster = get_raster_exectuor.execute()
+
+        if self.aggregation == "mean":
+            return raster.mean(dim=["latitude", "longitude"])
+        elif self.aggregation == "max":
+            return raster.max(dim=["latitude", "longitude"])
+        elif self.aggregation == "min":
+            return raster.min(dim=["latitude", "longitude"])
+        else:
+            raise ValueError(f"Invalid aggregation method: {self.aggregation}")
