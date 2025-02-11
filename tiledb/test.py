@@ -11,3 +11,5 @@ with tiledb.open(tiledb_data_dir, mode="r") as array:
     print(f"\nType: {type(array)}")
     print(f"\nShape: {array.shape}")
     print(f"\nSchema: {array.schema}")
+
+array.close()
