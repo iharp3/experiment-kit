@@ -7,5 +7,7 @@ tiledb_data_dir = "/data/iharp-customized-storage/storage/experiments_tdb"
 with tiledb.open(tiledb_data_dir, mode="r") as array:
     # Example: Query all data for a specific time slice
     temp_data = array[:, :, 0]  # First time slice
-    print("Temperature data for first time slice:", temp_data)
-    # print(array.schema)
+    print("\nTemperature data for first time slice:", temp_data)
+    print(f"\nType: {type(array)}")
+    print(f"\nShape: {array.shape}")
+    print(f"\nSchema: {array.schema}")
