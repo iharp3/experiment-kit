@@ -70,7 +70,8 @@ def write_chunked_data(data, array_path, chunk_sizes):
                         data[t_start:t_end, lat_start:lat_end, lon_start:lon_end]
                     
                     counter += 1
-                    print(f"Chunk {counter}/{total_chunks} written")
+                    if counter%50==0:
+                        print(f"Chunk {counter}/{total_chunks} written")
 
 
 def make_array(ds):
