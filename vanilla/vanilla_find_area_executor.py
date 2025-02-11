@@ -1,4 +1,6 @@
-class vanilla_find_area_executor:
+from vanilla_get_heatmap_executor import VanillaGetHeatmapExecutor
+
+class VanillaFindAreaExecutor:
     def __init__(
         self,
         variable: str,
@@ -28,4 +30,35 @@ class vanilla_find_area_executor:
         self.filter_value = filter_value
 
     def execute(self):
-        pass
+        return self._execute_baseline()
+
+    def _execute_baseline(self):
+        heatmap_executor = VanillaGetHeatmapExecutor(
+            variable=self.variable,
+            start_datetime=self.start_datetime,
+            end_datetime=self.end_datetime,
+            min_lat=self.min_lat,
+            max_lat=self.max_lat,
+            min_lon=self.min_lon,
+            max_lon=self.max_lon,
+            spatial_resolution=self.spatial_resolution,
+            aggregation=self.aggregation,
+        )
+        hm = heatmap_executor.execute()
+        if self.filter_predicate == ">":
+            res = hm.where(hm > self.filter_value, drop=False)
+        elif self.filter_predicate == "<":
+            res = hm.where(hm < self.filter_value, drop=False)
+        elif self.filter_predicate == "==":
+            res = hm.where(hm == self.filter_value, drop=False)
+        elif self.filter_predicate == "!=":
+            res = hm.where(hm != self.filter_value, drop=False)
+        elif self.filter_predicate == ">=":
+            res = hm.where(hm >= self.filter_value, drop=False)
+        elif self.filter_predicate == "<=":
+            res = hm.where(hm <= self.filter_value, drop=False)
+        else:
+            raise ValueError("Invalid filter_predicate")
+        res = res.fillna(False)
+        res = res.astype(bool)
+        return res
