@@ -3,8 +3,6 @@ import numpy as np
 import xarray as xr
 import tiledb
 import shutil
-# import tiledb.cf  # Did not work - dependency issues
-# from tiledb.cf import AttrMetadata, ArrayMetadata     # Did not work - dependency issues
 
 nc_data_dir = "/data/iharp-customized-storage/storage/514_data"
 tiledb_data_dir = "/data/iharp-customized-storage/storage/experiments_tdb"
@@ -20,34 +18,8 @@ Run the following in terminal:
 # export TILEDB_DEFAULT_STORAGE_PATH="<directory for tiledb arrays>"
 """
 
-# ------------ PROBLEM: RuntimeWarning Engine 'tiledb' loading failed: module 'tiledb.libtiledb' has no attribute 'Metadata' ------------------ #
-# ------------          slow (took ~45 mins for 1 yr), can't edit dim names, etc., trying to find better way ------------------ 
-
-# if tiledb.object_type(tiledb_data_dir) == "array":
-#     shutil.rmtree(tiledb_data_dir)
-#     print(f"Deleted TileDB array at {tiledb_data_dir}")
-# else:
-#     print("No TileDB array found at the specified path.")
-
-# ds = xr.open_dataset(os.path.join(nc_data_dir, "2m_temperature-2014.nc"))
-# chunked = ds.chunk({"time": 24, "latitude": 10, "longitude": 10})
-# # print(chunked.chunksizes)
-# chunked['t2m'].data.to_tiledb(os.path.join(tiledb_data_dir))
-
-
-# ------------ PROBLEM: Need to fix datetime object I think
 # ------------          took 15 minutes for 100/62208 chunks to load
-
-def delete_schema(path):
-    if tiledb.object_type(path) == "array":
-        shutil.rmtree(path)
-        print(f"Deleted TileDB array at {path}")
-    else:
-        print("No TileDB array found at the specified path.")
-
-def load_dataset(nc_path, file_name):
-    ds = xr.open_dataset(os.path.join(nc_path, file_name))
-
+def get_time_range(ds):
     s_date = ds.time.min().values
     e_date = ds.time.max().values
 
@@ -63,7 +35,18 @@ def load_dataset(nc_path, file_name):
         print(f"\n\tStarting date type: {type(e_date)}")
         e_date = np.datetime64(e_date)
 
-    return ds, s_date, e_date
+    return s_date, e_date
+
+def delete_schema(path):
+    if tiledb.object_type(path) == "array":
+        shutil.rmtree(path)
+        print(f"Deleted TileDB array at {path}")
+    else:
+        print("No TileDB array found at the specified path.")
+
+def load_dataset(nc_path, file_name):
+    ds = xr.open_dataset(os.path.join(nc_path, file_name))
+    return ds
 
 def chunk_dataset(ds, t, lat, lon):
     chunked = ds.chunk({"time": t, "latitude": lat, "longitude": lon})
@@ -93,14 +76,17 @@ def write_chunked_data(data, array_path, chunk_sizes):
                         print(f"Chunk {counter}/{total_chunks} written")
 
 
-def make_array(ds, t, lat, lon, start, end):
+def make_array(ds, t, lat, lon):
 
-    time_dim = tiledb.Dim(name="time", domain=(start, end), tile=t, dtype=np.uint64)
+    # All Dim in dense tiledb Array must be the same *integer* type
+    time_dim = tiledb.Dim(name="time", domain=(0, ds.sizes["time"] - 1), tile=t, dtype=np.uint64)
     lat_dim = tiledb.Dim(name="latitude", domain=(0, ds.sizes["latitude"] - 1), tile=lat, dtype=np.uint64)
     lon_dim = tiledb.Dim(name="longitude", domain=(0, ds.sizes["longitude"] - 1), tile=lon, dtype=np.uint64)
     print(f"\n\tCreated dimensions")
+    
     domain = tiledb.Domain(time_dim, lat_dim, lon_dim)
     print(f"\n\tCreated domain")
+    
     attr = tiledb.Attr(name="temperature", dtype=np.float64)
     print(f"\n\tCreated attribute")
 
@@ -112,24 +98,37 @@ def make_array(ds, t, lat, lon, start, end):
         sparse=False,
     )
     print(f"\n\tCreated schema")
+
     tiledb.DenseArray.create(tiledb_data_dir, schema)
     print(f"\n\tCreated densearray")
 
-    # with tiledb.DenseArray(tiledb_data_dir, mode="w") as array:
-    #     array[:] = ds["t2m"].data
     write_chunked_data(ds["t2m"].data, tiledb_data_dir, (t, lat, lon))
 
 if __name__ == "__main__":
     print(f"\nDeleting schema")
     delete_schema(tiledb_data_dir)
     print(f"\nLoading dataset")
-    ds, s_date, e_date = load_dataset(nc_data_dir, eg_file)
+    ds = load_dataset(nc_data_dir, eg_file)
     print(f"\nChunking dataset")
     c = chunk_dataset(ds, t=t_chunk, lat=lat_chunk, lon=lon_chunk)
     print(f"\nMaking array")
-    make_array(c, t=t_chunk, lat=lat_chunk, lon=lon_chunk, start=s_date, end=e_date)
+    make_array(c, t=t_chunk, lat=lat_chunk, lon=lon_chunk)
 
 """ --------------------------------------- Graveyard --------------------------------------- """
+# ------------ PROBLEM: RuntimeWarning Engine 'tiledb' loading failed: module 'tiledb.libtiledb' has no attribute 'Metadata' ------------------ #
+# ------------          slow (took ~45 mins for 1 yr), can't edit dim names, etc., trying to find better way ------------------ 
+
+# if tiledb.object_type(tiledb_data_dir) == "array":
+#     shutil.rmtree(tiledb_data_dir)
+#     print(f"Deleted TileDB array at {tiledb_data_dir}")
+# else:
+#     print("No TileDB array found at the specified path.")
+
+# ds = xr.open_dataset(os.path.join(nc_data_dir, "2m_temperature-2014.nc"))
+# chunked = ds.chunk({"time": 24, "latitude": 10, "longitude": 10})
+# # print(chunked.chunksizes)
+# chunked['t2m'].data.to_tiledb(os.path.join(tiledb_data_dir))
+
 # ------------ PROBLEM: module 'tiledb.libtiledb' has no attribute 'Metadata ------------------ #
 # # Define time range   
 # start_date = np.datetime64("2014-01-01")
