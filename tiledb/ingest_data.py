@@ -9,6 +9,9 @@ import shutil
 nc_data_dir = "/data/iharp-customized-storage/storage/514_data"
 tiledb_data_dir = "/data/iharp-customized-storage/storage/experiments_tdb"
 eg_file = "2m_temperature-2014.nc"
+t_chunk = 730
+lat_chunk = 10
+lon_chunk = 20
 
 """ 
 Run the following in terminal:
@@ -32,8 +35,8 @@ Run the following in terminal:
 # chunked['t2m'].data.to_tiledb(os.path.join(tiledb_data_dir))
 
 
-# ------------ PROBLEM: RuntimeWarning Engine loading failed: module 'tiledb.libtiledb' has no attribute 'Metadata ------------------ #
-# ------------          Did not show any sign of finishing after 40min (nothing on commits, etc)
+# ------------ PROBLEM: Need to fix datetime object I think
+# ------------          took 15 minutes for 100/62208 chunks to load
 
 def delete_schema(path):
     if tiledb.object_type(path) == "array":
@@ -44,10 +47,26 @@ def delete_schema(path):
 
 def load_dataset(nc_path, file_name):
     ds = xr.open_dataset(os.path.join(nc_path, file_name))
-    return ds
 
-def chunk_dataset(ds):
-    chunked = ds.chunk({"time": 24, "latitude": 10, "longitude": 10})
+    s_date = ds.time.min().values
+    e_date = ds.time.max().values
+
+    if isinstance(s_date, np.datetime64):
+        pass
+    else:
+        print(f"\n\tStarting date type: {type(s_date)}")
+        s_date = np.datetime64(s_date)
+
+    if isinstance(e_date, np.datetime64):
+        pass
+    else:
+        print(f"\n\tStarting date type: {type(e_date)}")
+        e_date = np.datetime64(e_date)
+
+    return ds, s_date, e_date
+
+def chunk_dataset(ds, t, lat, lon):
+    chunked = ds.chunk({"time": t, "latitude": lat, "longitude": lon})
     return chunked
 
 def write_chunked_data(data, array_path, chunk_sizes):
@@ -74,10 +93,11 @@ def write_chunked_data(data, array_path, chunk_sizes):
                         print(f"Chunk {counter}/{total_chunks} written")
 
 
-def make_array(ds):
-    time_dim = tiledb.Dim(name="time", domain=(0, ds.sizes["time"] - 1), tile=730, dtype=np.uint64)
-    lat_dim = tiledb.Dim(name="latitude", domain=(0, ds.sizes["latitude"] - 1), tile=10, dtype=np.uint64)
-    lon_dim = tiledb.Dim(name="longitude", domain=(0, ds.sizes["longitude"] - 1), tile=20, dtype=np.uint64)
+def make_array(ds, t, lat, lon, start, end):
+
+    time_dim = tiledb.Dim(name="time", domain=(start, end), tile=t, dtype=np.uint64)
+    lat_dim = tiledb.Dim(name="latitude", domain=(0, ds.sizes["latitude"] - 1), tile=lat, dtype=np.uint64)
+    lon_dim = tiledb.Dim(name="longitude", domain=(0, ds.sizes["longitude"] - 1), tile=lon, dtype=np.uint64)
     print(f"\n\tCreated dimensions")
     domain = tiledb.Domain(time_dim, lat_dim, lon_dim)
     print(f"\n\tCreated domain")
@@ -97,18 +117,17 @@ def make_array(ds):
 
     # with tiledb.DenseArray(tiledb_data_dir, mode="w") as array:
     #     array[:] = ds["t2m"].data
-    chunk_sizes = (730, 10, 20)  # Time, latitude, longitude
-    write_chunked_data(ds["t2m"].data, tiledb_data_dir, chunk_sizes)
+    write_chunked_data(ds["t2m"].data, tiledb_data_dir, (t, lat, lon))
 
 if __name__ == "__main__":
     print(f"\nDeleting schema")
     delete_schema(tiledb_data_dir)
     print(f"\nLoading dataset")
-    ds = load_dataset(nc_data_dir, eg_file)
+    ds, s_date, e_date = load_dataset(nc_data_dir, eg_file)
     print(f"\nChunking dataset")
-    c = chunk_dataset(ds)
+    c = chunk_dataset(ds, t=t_chunk, lat=lat_chunk, lon=lon_chunk)
     print(f"\nMaking array")
-    make_array(c)
+    make_array(c, t=t_chunk, lat=lat_chunk, lon=lon_chunk, start=s_date, end=e_date)
 
 """ --------------------------------------- Graveyard --------------------------------------- """
 # ------------ PROBLEM: module 'tiledb.libtiledb' has no attribute 'Metadata ------------------ #
