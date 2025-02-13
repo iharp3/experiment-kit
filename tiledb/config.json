@@ -1,0 +1,13 @@
+{
+    "nc_data_dir": "/data/iharp-customized-storage/storage/514_data",
+    "tiledb_data_dir": "/data/iharp-customized-storage/storage/experiments_tdb",
+    "eg_file": "2m_temperature-2014.nc",
+    "var": "t2m",
+    "all_files": "True",
+    "t_chunk": 730,
+    "lat_chunk": 10,
+    "lon_chunk": 20,
+    "time_idx_max": 87600,
+    "lat_idx_max": 720,
+    "lon_idx_max": 1440
+}
