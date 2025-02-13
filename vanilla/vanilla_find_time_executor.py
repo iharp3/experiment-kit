@@ -1,6 +1,7 @@
 import pandas as pd
 import xarray as xr
 
+from utils.const import long_short_name_dict
 from vanilla_get_raster_executor import VanillaGetRasterExecutor
 from vanilla_get_timeseries_executor import VanillaGetTimeseriesExecutor
 from utils.get_whole_period import get_whole_period_between, get_last_date_of_month, time_array_to_range
@@ -33,6 +34,7 @@ class VanillaFindTimeExecutor:
         self.aggregation = aggregation
         self.filter_predicate = filter_predicate
         self.filter_value = filter_value
+        self.variable_short_name = long_short_name_dict[self.variable]
 
     def execute(self):
         if self.temporal_resolution == "hour" and self.filter_predicate != "!=":

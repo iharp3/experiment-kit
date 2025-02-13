@@ -6,7 +6,7 @@ class VanillaFindAreaExecutor:
         variable: str,
         start_datetime: str,
         end_datetime: str,
-        temporal_resolution: str,  # "hour", "day", "month", "year"
+        # temporal_resolution: str,  # "hour", "day", "month", "year"
         min_lat: float,
         max_lat: float,
         min_lon: float,
@@ -19,7 +19,7 @@ class VanillaFindAreaExecutor:
         self.variable = variable
         self.start_datetime = start_datetime
         self.end_datetime = end_datetime
-        self.temporal_resolution = temporal_resolution
+        self.temporal_resolution = "hour"
         self.min_lat = min_lat
         self.max_lat = max_lat
         self.min_lon = min_lon
@@ -43,6 +43,7 @@ class VanillaFindAreaExecutor:
             max_lon=self.max_lon,
             spatial_resolution=self.spatial_resolution,
             aggregation=self.aggregation,
+            temporal_resolution=self.temporal_resolution,
         )
         hm = heatmap_executor.execute()
         if self.filter_predicate == ">":

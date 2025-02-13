@@ -1,6 +1,7 @@
 import numpy as np
 import xarray as xr
 
+from utils.const import long_short_name_dict
 from vanilla_get_raster_executor import VanillaGetRasterExecutor
 from utils.get_whole_period import (
     get_whole_ranges_between,
@@ -36,6 +37,7 @@ class VanillaGetHeatmapExecutor:
         self.max_lon = max_lon
         self.spatial_resolution = spatial_resolution
         self.aggregation = aggregation
+        self.variable_short_name = long_short_name_dict[self.variable]
 
     def execute(self):
         if self.aggregation == "mean":
@@ -61,14 +63,14 @@ class VanillaGetHeatmapExecutor:
         hour_hours = []
         for start_year, end_year in year_range:
             get_raster_year = VanillaGetRasterExecutor(
-                self.variable,
-                str(start_year),
-                str(end_year),
+                variable=self.variable,
+                start_datetime=str(start_year),
+                end_datetime=str(end_year),
                 temporal_resolution="year",
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
+                min_lat=self.min_lat,
+                max_lat=self.max_lat,
+                min_lon=self.min_lon,
+                max_lon=self.max_lon,
                 spatial_resolution=self.spatial_resolution,
                 aggregation=self.aggregation,
             )
@@ -76,14 +78,14 @@ class VanillaGetHeatmapExecutor:
             year_hours += [get_total_hours_in_year(y) for y in range(start_year.year, end_year.year + 1)]
         for start_month, end_month in month_range:
             get_raster_month = VanillaGetRasterExecutor(
-                self.variable,
-                str(start_month),
-                str(end_month),
+                variable=self.variable,
+                start_datetime=str(start_month),
+                end_datetime=str(end_month),
                 temporal_resolution="month",
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
+                min_lat=self.min_lat,
+                max_lat=self.max_lat,
+                min_lon=self.min_lon,
+                max_lon=self.max_lon,
                 spatial_resolution=self.spatial_resolution,
                 aggregation=self.aggregation,
             )
@@ -91,14 +93,14 @@ class VanillaGetHeatmapExecutor:
             month_hours += [get_total_hours_in_month(m) for m in iterate_months(start_month, end_month)]
         for start_day, end_day in day_range:
             get_raster_day = VanillaGetRasterExecutor(
-                self.variable,
-                str(start_day),
-                str(end_day),
+                variable=self.variable,
+                start_datetime=str(start_day),
+                end_datetime=str(end_day),
                 temporal_resolution="day",
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
+                min_lat=self.min_lat,
+                max_lat=self.max_lat,
+                min_lon=self.min_lon,
+                max_lon=self.max_lon,
                 spatial_resolution=self.spatial_resolution,
                 aggregation=self.aggregation,
             )
@@ -106,14 +108,14 @@ class VanillaGetHeatmapExecutor:
             day_hours += [24 for _ in range(number_of_days_inclusive(start_day, end_day))]
         for start_hour, end_hour in hour_range:
             get_raster_hour = VanillaGetRasterExecutor(
-                self.variable,
-                str(start_hour),
-                str(end_hour),
+                variable=self.variable,
+                start_datetime=str(start_hour),
+                end_datetime=str(end_hour),
                 temporal_resolution="hour",
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
+                min_lat=self.min_lat,
+                max_lat=self.max_lat,
+                min_lon=self.min_lon,
+                max_lon=self.max_lon,
                 spatial_resolution=self.spatial_resolution,
                 aggregation=self.aggregation,
             )
@@ -142,56 +144,56 @@ class VanillaGetHeatmapExecutor:
         ds_hour = []
         for start_year, end_year in year_range:
             get_raster_year = VanillaGetRasterExecutor(
-                self.variable,
-                str(start_year),
-                str(end_year),
+                variable=self.variable,
+                start_datetime=str(start_year),
+                end_datetime=str(end_year),
                 temporal_resolution="year",
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
+                min_lat=self.min_lat,
+                max_lat=self.max_lat,
+                min_lon=self.min_lon,
+                max_lon=self.max_lon,
                 spatial_resolution=self.spatial_resolution,
                 aggregation=self.aggregation,
             )
             ds_year.append(get_raster_year.execute())
         for start_month, end_month in month_range:
             get_raster_month = VanillaGetRasterExecutor(
-                self.variable,
-                str(start_month),
-                str(end_month),
+                variable=self.variable,
+                start_datetime=str(start_month),
+                end_datetime=str(end_month),
                 temporal_resolution="month",
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
+                min_lat=self.min_lat,
+                max_lat=self.max_lat,
+                min_lon=self.min_lon,
+                max_lon=self.max_lon,
                 spatial_resolution=self.spatial_resolution,
                 aggregation=self.aggregation,
             )
             ds_month.append(get_raster_month.execute())
         for start_day, end_day in day_range:
             get_raster_day = VanillaGetRasterExecutor(
-                self.variable,
-                str(start_day),
-                str(end_day),
+                variable=self.variable,
+                start_datetime=str(start_month),
+                end_datetime=str(end_month),
                 temporal_resolution="day",
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
+                min_lat=self.min_lat,
+                max_lat=self.max_lat,
+                min_lon=self.min_lon,
+                max_lon=self.max_lon,
                 spatial_resolution=self.spatial_resolution,
                 aggregation=self.aggregation,
             )
             ds_day.append(get_raster_day.execute())
         for start_hour, end_hour in hour_range:
             get_raster_hour = VanillaGetRasterExecutor(
-                self.variable,
-                str(start_hour),
-                str(end_hour),
+                variable=self.variable,
+                start_datetime=str(start_month),
+                end_datetime=str(end_month),
                 temporal_resolution="hour",
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
+                min_lat=self.min_lat,
+                max_lat=self.max_lat,
+                min_lon=self.min_lon,
+                max_lon=self.max_lon,
                 spatial_resolution=self.spatial_resolution,
                 aggregation=self.aggregation,
             )
@@ -209,56 +211,56 @@ class VanillaGetHeatmapExecutor:
         ds_hour = []
         for start_year, end_year in year_range:
             get_raster_year = VanillaGetRasterExecutor(
-                self.variable,
-                str(start_year),
-                str(end_year),
+                variable=self.variable,
+                start_datetime=str(start_month),
+                end_datetime=str(end_month),
                 temporal_resolution="year",
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
+                min_lat=self.min_lat,
+                max_lat=self.max_lat,
+                min_lon=self.min_lon,
+                max_lon=self.max_lon,
                 spatial_resolution=self.spatial_resolution,
                 aggregation=self.aggregation,
             )
             ds_year.append(get_raster_year.execute())
         for start_month, end_month in month_range:
             get_raster_month = VanillaGetRasterExecutor(
-                self.variable,
-                str(start_month),
-                str(end_month),
+                variable=self.variable,
+                start_datetime=str(start_month),
+                end_datetime=str(end_month),
                 temporal_resolution="month",
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
+                min_lat=self.min_lat,
+                max_lat=self.max_lat,
+                min_lon=self.min_lon,
+                max_lon=self.max_lon,
                 spatial_resolution=self.spatial_resolution,
                 aggregation=self.aggregation,
             )
             ds_month.append(get_raster_month.execute())
         for start_day, end_day in day_range:
             get_raster_day = VanillaGetRasterExecutor(
-                self.variable,
-                str(start_day),
-                str(end_day),
+                variable=self.variable,
+                start_datetime=str(start_month),
+                end_datetime=str(end_month),
                 temporal_resolution="day",
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
+                min_lat=self.min_lat,
+                max_lat=self.max_lat,
+                min_lon=self.min_lon,
+                max_lon=self.max_lon,
                 spatial_resolution=self.spatial_resolution,
                 aggregation=self.aggregation,
             )
             ds_day.append(get_raster_day.execute())
         for start_hour, end_hour in hour_range:
             get_raster_hour = VanillaGetRasterExecutor(
-                self.variable,
-                str(start_hour),
-                str(end_hour),
+                variable=self.variable,
+                start_datetime=str(start_month),
+                end_datetime=str(end_month),
                 temporal_resolution="hour",
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
+                min_lat=self.min_lat,
+                max_lat=self.max_lat,
+                min_lon=self.min_lon,
+                max_lon=self.max_lon,
                 spatial_resolution=self.spatial_resolution,
                 aggregation=self.aggregation,
             )
