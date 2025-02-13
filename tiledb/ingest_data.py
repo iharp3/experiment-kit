@@ -159,15 +159,16 @@ if __name__ == "__main__":
         make_array(t=inputs["t_chunk"], lat=inputs["lat_chunk"], lon=inputs["lon_chunk"])
         t_idx = 0
 
-        for file in inputs["nc_data_dir"]:
-            ds = load_dataset(inputs["nc_data_dir"], file)
-            c = chunk_dataset(ds, t=inputs["t_chunk"], lat=inputs["lat_chunk"], lon=inputs["lon_chunk"])
-            
-            with tiledb.DenseArray(inputs["tiledb_data_dir"], mode="w") as array:
-                t_size, lat_size, lon_size = write_chunked_data(c[inputs["var"]].data, t_idx, inputs["t_chunk"], inputs["lat_chunk"], inputs["lon_chunk"])
-                t_idx += t_size
-                # lat_idx += lat_size   #TODO: figure out how to make sure the data has same dim values at each interval
-                # lon_idx += lon_size
+        for file in os.listdir(inputs["nc_data_dir"]):
+            if file.endswith(".nc"):
+                ds = load_dataset(inputs["nc_data_dir"], file)
+                c = chunk_dataset(ds, t=inputs["t_chunk"], lat=inputs["lat_chunk"], lon=inputs["lon_chunk"])
+                
+                with tiledb.DenseArray(inputs["tiledb_data_dir"], mode="w") as array:
+                    t_size, lat_size, lon_size = write_chunked_data(c[inputs["var"]].data, t_idx, inputs["t_chunk"], inputs["lat_chunk"], inputs["lon_chunk"])
+                    t_idx += t_size
+                    # lat_idx += lat_size   #TODO: figure out how to make sure the data has same dim values at each interval
+                    # lon_idx += lon_size
 
     else:   # for one .nc file
         ds = load_dataset(inputs["nc_data_dir"], inputs["eg_file"])

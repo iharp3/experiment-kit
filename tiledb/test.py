@@ -1,48 +1,53 @@
 import os
+import sys
+import json
 import xarray as xr
 import tiledb
 
-import json
+json_file = "/data/experiment-kit/tiledb/config.json"
+with open(json_file, "r") as f:
+    inputs = json.load(f)
 
-# Data to save
-data = {
-    "nc_data_dir": "/data/iharp-customized-storage/storage/514_data",
-    "tiledb_data_dir": "/data/iharp-customized-storage/storage/experiments_tdb",
-    "eg_file": "2m_temperature-2014.nc",
-    "t_chunk": 730,
-    "lat_chunk": 10,
-    "lon_chunk": 20,
-    "arr_s_time": None,
-    "arr_e_time": None
-}
+def load_dataset(nc_path, file_name):
+    ds = xr.open_dataset(os.path.join(nc_path, file_name))
+    return ds
 
-# Save to JSON file
-json_file = "config.json"
-with open(json_file, "w") as f:
-    json.dump(data, f, indent=4)
+if __name__ == "__main__":
+    same = True
+    start = True
+    for file in os.listdir(inputs["nc_data_dir"]):
+        if same:
+            if file.endswith(".nc"):
+                if start:
+                    ds_prev = load_dataset(inputs["nc_data_dir"], file)
+                    print(f"\n\n")
+                    print(f"File: {file}")
+                    print(f"\n\n")
+                    print(ds_prev.dims)
+                    print(f"\n\n")
+                    # print(ds.coords)
+                    start = False
+                    continue
+                ds_cur = load_dataset(inputs["nc_data_dir"], file)
+                print(f"\n\n")
+                print(f"File: {file}")
+                print(f"\n\n")
+                print(ds_prev.dims)
+                print(f"\n\n")
+                # print(ds.coords)
 
-print(f"Configuration saved to {json_file}")
+                # compare datasets:
+                if ds_prev["time"] == ds_cur["time"]:
+                    pass
+                else:
+                    print(f"\n\n\t\t{ds_prev["time"]}")
+                    print(f"\n\n\t\t{ds_cur["time"]}")
+                    same = False
+
+        else:
+            sys.exit()
 
 
-# nc_data_dir = "/data/iharp-customized-storage/storage/514_data"
-# tiledb_data_dir = "/data/iharp-customized-storage/storage/experiments_tdb"
-# eg_file = "2m_temperature-2014.nc"
-
-
-# def load_dataset(nc_path, file_name):
-#     ds = xr.open_dataset(os.path.join(nc_path, file_name))
-#     return ds
-
-# if __name__ == "__main__":
-#     ds = load_dataset(nc_data_dir, eg_file)
-#     print(f"\n\n")
-#     print(ds.values)
-#     print(f"\n\n")
-#     print(ds.dims)
-#     print(f"\n\n")
-#     print(ds.coords)
-#     print(f"\n\n")
-#     print(ds.attrs)
 
 # # Open one of the arrays (replace with your variable name, e.g., temperature)
 # with tiledb.open(tiledb_data_dir, mode="r") as array:
