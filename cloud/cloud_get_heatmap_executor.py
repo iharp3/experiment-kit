@@ -1,6 +1,8 @@
 import numpy as np
 import xarray as xr
+import pandas as pd
 
+from utils.const import long_short_name_dict
 from cloud_get_raster_executor import cloud_get_raster_executor
 from utils.get_whole_period import (
     get_whole_ranges_between,
@@ -38,11 +40,13 @@ class cloud_get_heatmap_executor:
         self.max_lon = max_lon
         self.spatial_resolution = spatial_resolution
         self.aggregation = aggregation
+        self.variable_short_name = long_short_name_dict[self.variable]
+
 
     def execute(self):
         if self.aggregation == "mean":
             return self._get_mean_heatmap()
-        elif self.aggreagtion == "max":
+        elif self.aggregation == "max":
             return self._get_max_heatmap()
         elif self.aggregation == "min":
             return self._get_min_heatmap()
@@ -51,84 +55,35 @@ class cloud_get_heatmap_executor:
         
 
     def _get_mean_heatmap(self):
-        year_range, month_range, day_range, hour_range = get_whole_ranges_between(
-            self.start_datetime, self.end_datetime
-        )
-        ds_year = []
-        ds_month = []
-        ds_day = []
+        # hour_start = pd.Timestamp(f"{self.start_datetime} 00:00:00")
+        # hour_end = pd.Timestamp(f"{self.end_datetime} 23:00:00")
+        # hour_range =  [hour_start, hour_end]
+        
+
         ds_hour = []
-        year_hours = []
-        month_hours = []
-        day_hours = []
-        hour_hours = []
+        # hour_hours = []
         
-        for start_year, end_year in year_range:
-            get_raster_year = cloud_get_raster_executor(
-                self.variable,
-                str(start_year),
-                str(end_year),
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
-                temporal_resolution="year",
-                spatial_resolution=self.spatial_resolution,
-                aggregation=self.aggregation,
-            )
-            ds_year.append(get_raster_year.execute())
-            year_hours += [get_total_hours_in_year(y) for y in range(start_year.year, end_year.year + 1)]
-        for start_month, end_month in month_range:
-            get_raster_month = cloud_get_raster_executor(
-                self.variable,
-                str(start_month),
-                str(end_month),
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
-                temporal_resolution="month",
-                spatial_resolution=self.spatial_resolution,
-                aggregation=self.aggregation,
-            )
-            ds_month.append(get_raster_month.execute())
-            year_hours += [get_total_hours_in_month(m) for m in range(start_month, end_month)]
-        for start_day, end_day in day_range:
-            get_raster_day = cloud_get_raster_executor(
-                self.variable,
-                str(start_day),
-                str(end_day),
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
-                temporal_resolution="day",
-                spatial_resolution=self.spatial_resolution,
-                aggregation=self.aggregation,
-            )
-            ds_day.append(get_raster_day.execute())
-            year_hours += [24 for _ in range(number_of_days_inclusive(start_day, end_day))]
-        for start_hour, end_hour in hour_range:
-            get_raster_day = cloud_get_raster_executor(
-                self.variable,
-                str(start_hour),
-                str(end_hour),
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
-                temporal_resolution="hour",
-                spatial_resolution=self.spatial_resolution,
-                aggregation=self.aggregation,
-            )
-            ds_hour.append(get_raster_day.execute())
-            year_hours += [1 for _ in range(number_of_days_inclusive(start_hour, end_hour))]
+        get_raster = cloud_get_raster_executor(
+            variable= self.variable,
+            start_datetime= self.start_datetime,
+            end_datetime= self.end_datetime,
+            temporal_resolution= "hour",
+            min_lat= self.min_lat,
+            max_lat= self.max_lat,
+            min_lon= self.min_lon,
+            max_lon= self.max_lon,
+            spatial_resolution= self.spatial_resolution,
+            aggregation= self.aggregation,
+        )
+        ds_hour.append(get_raster.execute())
+        hours_hours = [1 for _ in range(number_of_days_inclusive(self.start_datetime, self.end_datetime))]
         
-        xrds_concat = xr.concat(ds_year + ds_month + ds_day, + ds_hour, dim="valid_time")
-        nd_array = xrds_concat[self.variable_short_name].to_numpy()
-        weights = np.array(year_hours + month_hours + day_hours + hour_hours)
-        total_hours = get_total_hours_between(self.start_datetime, self.end_datetime)
-        weights = weights / total_hours
+        xrds_concat = xr.concat(ds_hour, dim="time")
+        nd_array = xrds_concat.to_numpy()
+        weights = np.array(hours_hours)
+        total_hours = nd_array.shape[0]
+        weights = np.ones(total_hours) / total_hours
+        #weights = weights / total_hours
         average = np.average(nd_array, axis=0, weights=weights)
         res = xr.Dataset(
             {self.variable_short_name: (["latitude", "longitude"], average)},
@@ -137,137 +92,43 @@ class cloud_get_heatmap_executor:
         return res
     
     def _get_max_heatmap(self):
-        year_range, month_range, day_range, hour_range = get_whole_ranges_between(
+        hour_range = get_total_hours_between(
             self.start_datetime, self.end_datetime
         )
-        ds_year = []
-        ds_month = []
-        ds_day = []
+
         ds_hour = []
+    
+        get_raster = cloud_get_raster_executor(
+            variable= self.variable,
+            start_datetime= self.start_datetime,
+            end_datetime= self.end_datetime,
+            temporal_resolution= "hour",
+            min_lat= self.min_lat,
+            max_lat= self.max_lat,
+            min_lon= self.min_lon,
+            max_lon= self.max_lon,
+            spatial_resolution= self.spatial_resolution,
+            aggregation= self.aggregation,
+        )
+        ds_hour.append(get_raster.execute())
         
-        for start_year, end_year in year_range:
-            get_raster_year = cloud_get_raster_executor(
-                self.variable,
-                str(start_year),
-                str(end_year),
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
-                temporal_resolution="year",
-                spatial_resolution=self.spatial_resolution,
-                aggregation=self.aggregation,
-            )
-            ds_year.append(get_raster_year.execute())
-        for start_month, end_month in month_range:
-            get_raster_month = cloud_get_raster_executor(
-                self.variable,
-                str(start_month),
-                str(end_month),
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
-                temporal_resolution="month",
-                spatial_resolution=self.spatial_resolution,
-                aggregation=self.aggregation,
-            )
-            ds_month.append(get_raster_month.execute())
-        for start_day, end_day in day_range:
-            get_raster_day = cloud_get_raster_executor(
-                self.variable,
-                str(start_day),
-                str(end_day),
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
-                temporal_resolution="day",
-                spatial_resolution=self.spatial_resolution,
-                aggregation=self.aggregation,
-            )
-            ds_day.append(get_raster_day.execute())
-        for start_hour, end_hour in hour_range:
-            get_raster_day = cloud_get_raster_executor(
-                self.variable,
-                str(start_hour),
-                str(end_hour),
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
-                temporal_resolution="hour",
-                spatial_resolution=self.spatial_resolution,
-                aggregation=self.aggregation,
-            )
-            ds_hour.append(get_raster_day.execute())
-        
-        return xr.concat(ds_year + ds_month + ds_day + ds_hour, dim="valid_time").max(dim="valid_time")
+        return xr.concat(ds_hour, dim="time").max(dim="time")
     
     def _get_min_heatmap(self):
-        year_range, month_range, day_range, hour_range = get_whole_ranges_between(
-            self.start_datetime, self.end_datetime
-        )
-        ds_year = []
-        ds_month = []
-        ds_day = []
         ds_hour = []
+    
+        get_raster = cloud_get_raster_executor(
+            variable= self.variable,
+            start_datetime= self.start_datetime,
+            end_datetime= self.end_datetime,
+            temporal_resolution= "hour",
+            min_lat= self.min_lat,
+            max_lat= self.max_lat,
+            min_lon= self.min_lon,
+            max_lon= self.max_lon,
+            spatial_resolution= self.spatial_resolution,
+            aggregation= self.aggregation,
+        )
+        ds_hour.append(get_raster.execute())
         
-        for start_year, end_year in year_range:
-            get_raster_year = cloud_get_raster_executor(
-                self.variable,
-                str(start_year),
-                str(end_year),
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
-                temporal_resolution="year",
-                spatial_resolution=self.spatial_resolution,
-                aggregation=self.aggregation,
-            )
-            ds_year.append(get_raster_year.execute())
-        for start_month, end_month in month_range:
-            get_raster_month = cloud_get_raster_executor(
-                self.variable,
-                str(start_month),
-                str(end_month),
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
-                temporal_resolution="month",
-                spatial_resolution=self.spatial_resolution,
-                aggregation=self.aggregation,
-            )
-            ds_month.append(get_raster_month.execute())
-        for start_day, end_day in day_range:
-            get_raster_day = cloud_get_raster_executor(
-                self.variable,
-                str(start_day),
-                str(end_day),
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
-                temporal_resolution="day",
-                spatial_resolution=self.spatial_resolution,
-                aggregation=self.aggregation,
-            )
-            ds_day.append(get_raster_day.execute())
-        for start_hour, end_hour in hour_range:
-            get_raster_day = cloud_get_raster_executor(
-                self.variable,
-                str(start_hour),
-                str(end_hour),
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
-                temporal_resolution="hour",
-                spatial_resolution=self.spatial_resolution,
-                aggregation=self.aggregation,
-            )
-            ds_hour.append(get_raster_day.execute())
-        
-        return xr.concat(ds_year + ds_month + ds_day + ds_hour, dim="valid_time").min(dim="valid_time")
+        return xr.concat(ds_hour, dim="time").min(dim="time")

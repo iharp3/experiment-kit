@@ -22,6 +22,7 @@ class vanilla_get_heatmap_executor:
         self.max_lon = max_lon
         self.spatial_resolution = spatial_resolution
         self.aggregation = aggregation
+        
 
     def execute(self):
         pass
