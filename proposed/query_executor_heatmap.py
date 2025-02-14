@@ -24,9 +24,9 @@ class HeatmapExecutor(QueryExecutor):
         max_lat: float,
         min_lon: float,
         max_lon: float,
+        spatial_resolution: float,  # e.g., 0.25, 0.5, 1.0
+        aggregation,  # e.g., "mean", "max", "min"
         heatmap_aggregation_method: str,  # e.g., "mean", "max", "min"
-        spatial_resolution,  # e.g., 0.25, 0.5, 1.0
-        spatial_aggregation,  # e.g., "mean", "max", "min"
         metadata=None,  # metadata file path
     ):
         super().__init__(
@@ -37,8 +37,9 @@ class HeatmapExecutor(QueryExecutor):
             max_lat,
             min_lon,
             max_lon,
+            temporal_resolution="hour",
             spatial_resolution=spatial_resolution,
-            spatial_aggregation=spatial_aggregation,
+            aggregation=aggregation,
             metadata=metadata,
         )
         self.heatmap_aggregation_method = heatmap_aggregation_method
@@ -75,9 +76,8 @@ class HeatmapExecutor(QueryExecutor):
                 self.min_lon,
                 self.max_lon,
                 temporal_resolution="year",
-                temporal_aggregation=self.heatmap_aggregation_method,
                 spatial_resolution=self.spatial_resolution,
-                spatial_aggregation=self.spatial_aggregation,
+                aggregation=self.heatmap_aggregation_method,
                 metadata=self.metadata.f_path,
             )
             ds_year.append(get_raster_year.execute())
@@ -92,9 +92,8 @@ class HeatmapExecutor(QueryExecutor):
                 self.min_lon,
                 self.max_lon,
                 temporal_resolution="month",
-                temporal_aggregation=self.heatmap_aggregation_method,
                 spatial_resolution=self.spatial_resolution,
-                spatial_aggregation=self.spatial_aggregation,
+                aggregation=self.heatmap_aggregation_method,
                 metadata=self.metadata.f_path,
             )
             ds_month.append(get_raster_month.execute())
@@ -109,9 +108,8 @@ class HeatmapExecutor(QueryExecutor):
                 self.min_lon,
                 self.max_lon,
                 temporal_resolution="day",
-                temporal_aggregation=self.heatmap_aggregation_method,
                 spatial_resolution=self.spatial_resolution,
-                spatial_aggregation=self.spatial_aggregation,
+                aggregation=self.heatmap_aggregation_method,
                 metadata=self.metadata.f_path,
             )
             ds_day.append(get_raster_day.execute())
@@ -126,9 +124,8 @@ class HeatmapExecutor(QueryExecutor):
                 self.min_lon,
                 self.max_lon,
                 temporal_resolution="hour",
-                temporal_aggregation=None,
                 spatial_resolution=self.spatial_resolution,
-                spatial_aggregation=self.spatial_aggregation,
+                aggregation=self.aggregation,
                 metadata=self.metadata.f_path,
             )
             ds_hour.append(get_raster_hour.execute())
@@ -164,9 +161,8 @@ class HeatmapExecutor(QueryExecutor):
                 self.min_lon,
                 self.max_lon,
                 temporal_resolution="year",
-                temporal_aggregation=self.heatmap_aggregation_method,
                 spatial_resolution=self.spatial_resolution,
-                spatial_aggregation=self.spatial_aggregation,
+                aggregation=self.heatmap_aggregation_method,
                 metadata=self.metadata.f_path,
             )
             ds_year.append(get_raster_year.execute())
@@ -180,9 +176,8 @@ class HeatmapExecutor(QueryExecutor):
                 self.min_lon,
                 self.max_lon,
                 temporal_resolution="month",
-                temporal_aggregation=self.heatmap_aggregation_method,
                 spatial_resolution=self.spatial_resolution,
-                spatial_aggregation=self.spatial_aggregation,
+                aggregation=self.heatmap_aggregation_method,
                 metadata=self.metadata.f_path,
             )
             ds_month.append(get_raster_month.execute())
@@ -196,9 +191,8 @@ class HeatmapExecutor(QueryExecutor):
                 self.min_lon,
                 self.max_lon,
                 temporal_resolution="day",
-                temporal_aggregation=self.heatmap_aggregation_method,
                 spatial_resolution=self.spatial_resolution,
-                spatial_aggregation=self.spatial_aggregation,
+                aggregation=self.heatmap_aggregation_method,
                 metadata=self.metadata.f_path,
             )
             ds_day.append(get_raster_day.execute())
@@ -212,9 +206,8 @@ class HeatmapExecutor(QueryExecutor):
                 self.min_lon,
                 self.max_lon,
                 temporal_resolution="hour",
-                temporal_aggregation=None,
                 spatial_resolution=self.spatial_resolution,
-                spatial_aggregation=self.spatial_aggregation,
+                aggregation=self.aggregation,
                 metadata=self.metadata.f_path,
             )
             ds_hour.append(get_raster_hour.execute())
@@ -239,9 +232,8 @@ class HeatmapExecutor(QueryExecutor):
                 self.min_lon,
                 self.max_lon,
                 temporal_resolution="year",
-                temporal_aggregation=self.heatmap_aggregation_method,
                 spatial_resolution=self.spatial_resolution,
-                spatial_aggregation=self.spatial_aggregation,
+                aggregation=self.heatmap_aggregation_method,
                 metadata=self.metadata.f_path,
             )
             ds_year.append(get_raster_year.execute())
@@ -255,9 +247,8 @@ class HeatmapExecutor(QueryExecutor):
                 self.min_lon,
                 self.max_lon,
                 temporal_resolution="month",
-                temporal_aggregation=self.heatmap_aggregation_method,
                 spatial_resolution=self.spatial_resolution,
-                spatial_aggregation=self.spatial_aggregation,
+                aggregation=self.heatmap_aggregation_method,
                 metadata=self.metadata.f_path,
             )
             ds_month.append(get_raster_month.execute())
@@ -271,9 +262,8 @@ class HeatmapExecutor(QueryExecutor):
                 self.min_lon,
                 self.max_lon,
                 temporal_resolution="day",
-                temporal_aggregation=self.heatmap_aggregation_method,
                 spatial_resolution=self.spatial_resolution,
-                spatial_aggregation=self.spatial_aggregation,
+                aggregation=self.heatmap_aggregation_method,
                 metadata=self.metadata.f_path,
             )
             ds_day.append(get_raster_day.execute())
@@ -287,9 +277,8 @@ class HeatmapExecutor(QueryExecutor):
                 self.min_lon,
                 self.max_lon,
                 temporal_resolution="hour",
-                temporal_aggregation=None,
                 spatial_resolution=self.spatial_resolution,
-                spatial_aggregation=self.spatial_aggregation,
+                aggregation=self.aggregation,
                 metadata=self.metadata.f_path,
             )
             ds_hour.append(get_raster_hour.execute())

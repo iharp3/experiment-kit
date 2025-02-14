@@ -16,10 +16,9 @@ class GetRasterExecutor(QueryExecutor):
         max_lat: float,
         min_lon: float,
         max_lon: float,
-        temporal_resolution,  # e.g., "hour", "day", "month", "year"
-        temporal_aggregation,  # e.g., "mean", "max", "min"
-        spatial_resolution,  # e.g., 0.25, 0.5, 1.0
-        spatial_aggregation,  # e.g., "mean", "max", "min"
+        temporal_resolution: str,  # e.g., "hour", "day", "month", "year"
+        spatial_resolution: float,  # e.g., 0.25, 0.5, 1.0
+        aggregation,  # e.g., "mean", "max", "min"
         metadata=None,  # metadata file path
     ):
         super().__init__(
@@ -31,9 +30,8 @@ class GetRasterExecutor(QueryExecutor):
             min_lon,
             max_lon,
             temporal_resolution,
-            temporal_aggregation,
             spatial_resolution,
-            spatial_aggregation,
+            aggregation,
             metadata=metadata,
         )
 
@@ -54,9 +52,8 @@ class GetRasterExecutor(QueryExecutor):
             self.min_lon,
             self.max_lon,
             self.temporal_resolution,
-            self.temporal_aggregation,
             self.spatial_resolution,
-            self.spatial_aggregation,
+            self.aggregation,
         )
 
         local_files = df_overlap["file_path"].tolist()
@@ -124,6 +121,8 @@ class GetRasterExecutor(QueryExecutor):
             )
             ds_list.append(ds)
 
+        print("check1")
+
         # 3.3 assemble result
         # compat="override" is a temporal walkaround as pre-aggregation value conflicts with downloaded data
         # future solution: use new encoding when write pre-aggregated data
@@ -132,4 +131,6 @@ class GetRasterExecutor(QueryExecutor):
         except ValueError:
             print("WARNING: conflict in merging data, use override")
             ds = xr.merge([i.chunk() for i in ds_list], compat="override")
+
+        print("check2")
         return ds.compute()

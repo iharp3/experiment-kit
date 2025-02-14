@@ -73,14 +73,11 @@ class Metadata:
         min_lon,
         max_lon,
         temporal_resolution,
-        temporal_aggregation,
         spatial_resolution,
-        spatial_aggregation,
+        aggregation,
     ):
-        if temporal_aggregation is None:
-            temporal_aggregation = "none"
-        if spatial_aggregation is None:
-            spatial_aggregation = "none"
+        if aggregation is None:
+            aggregation = "none"
 
         df_overlap = self.df_meta[
             (self.df_meta["variable"] == variable)
@@ -92,8 +89,7 @@ class Metadata:
             & (pd.to_datetime(self.df_meta["end_datetime"]) >= pd.to_datetime(start_datetime))
             & (self.df_meta["temporal_resolution"] == temporal_resolution)
             & (self.df_meta["spatial_resolution"] == spatial_resolution)
-            & (self.df_meta["temporal_aggregation"] == temporal_aggregation)
-            & (self.df_meta["spatial_aggregation"] == spatial_aggregation)
+            & (self.df_meta["aggregation"] == aggregation)
         ]
 
         ds_query = gen_empty_xarray(

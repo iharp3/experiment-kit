@@ -15,16 +15,13 @@ class QueryExecutor(ABC):
         max_lat: float,
         min_lon: float,
         max_lon: float,
-        temporal_resolution,  # e.g., "hour", "day", "month", "year"
-        temporal_aggregation,  # e.g., "mean", "max", "min"
-        spatial_resolution,  # e.g., 0.25, 0.5, 1.0
-        spatial_aggregation,  # e.g., "mean", "max", "min"
+        temporal_resolution: str,  # e.g., "hour", "day", "month", "year"
+        spatial_resolution: float,  # e.g., 0.25, 0.5, 1.0
+        aggregation,  # e.g., "mean", "max", "min"
         metadata=None,  # metadata file path
     ):
-        if temporal_resolution == "hour":
-            temporal_aggregation = None
-        if spatial_resolution == 0.25:
-            spatial_aggregation = None
+        if temporal_resolution == "hour" and spatial_resolution == 0.25:
+            aggregation = None
         # user query parameters
         self.variable = variable
         self.start_datetime = start_datetime
@@ -34,9 +31,8 @@ class QueryExecutor(ABC):
         self.min_lon = min_lon
         self.max_lon = max_lon
         self.temporal_resolution = temporal_resolution
-        self.temporal_aggregation = temporal_aggregation
         self.spatial_resolution = spatial_resolution
-        self.spatial_aggregation = spatial_aggregation
+        self.aggregation = aggregation
 
         # query internal variables
         self.variable_short_name = long_short_name_dict[self.variable]

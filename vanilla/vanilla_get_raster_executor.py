@@ -24,7 +24,7 @@ def temporal_resolution_to_freq(resolution):
         raise ValueError("Invalid temporal_resolution")
 
 
-class vanilla_get_raster_executor:
+class VanillaGetRasterExecutor:
     def __init__(
         self,
         variable: str,

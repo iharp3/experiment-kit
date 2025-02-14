@@ -12,11 +12,11 @@ class FindAreaExecutor(QueryExecutor):
         max_lat: float,
         min_lon: float,
         max_lon: float,
+        spatial_resolution: float,  # e.g., 0.25, 0.5, 1.0
+        aggregation,  # e.g., "mean", "max", "min"
         heatmap_aggregation_method: str,  # e.g., "mean", "max", "min"
         filter_predicate: str,  # e.g., ">", "<", "==", "!=", ">=", "<="
         filter_value: float,
-        spatial_resolution,  # e.g., 0.25, 0.5, 1.0
-        spatial_aggregation,  # e.g., "mean", "max", "min"
         metadata=None,  # metadata file path
     ):
         super().__init__(
@@ -28,7 +28,8 @@ class FindAreaExecutor(QueryExecutor):
             min_lon,
             max_lon,
             spatial_resolution=spatial_resolution,
-            spatial_aggregation=spatial_aggregation,
+            temporal_resolution="hour",
+            aggregation=aggregation,
             metadata=metadata,
         )
         self.heatmap_aggregation_method = heatmap_aggregation_method
@@ -47,9 +48,9 @@ class FindAreaExecutor(QueryExecutor):
             self.max_lat,
             self.min_lon,
             self.max_lon,
-            self.heatmap_aggregation_method,
             self.spatial_resolution,
-            self.spatial_aggregation,
+            self.aggregation,
+            self.heatmap_aggregation_method,
             metadata=self.metadata.f_path,
         )
         hm = heatmap_executor.execute()
