@@ -1,3 +1,12 @@
+import json
+import tiledb
+
+from utils import get_time_indices, get_spatial_range
+
+json_file = "/data/experiment-kit/tiledb/config.json"
+with open(json_file, "r") as f:
+    inputs = json.load(f),
+
 class tiledb_get_raster_executor:
 
     def __init__(
@@ -25,4 +34,25 @@ class tiledb_get_raster_executor:
         self.aggregation = aggregation
 
     def execute(self):
-        pass
+
+        s, e = get_time_indices(start_time=self.start_datetime, end_time=self.end_datetime)
+        max_la, min_la, max_lo, min_lo = get_spatial_range(max_lat=self.max_lat,
+                                                           min_lat=self.min_lat,
+                                                           max_lon=self.max_lon,
+                                                           min_lon=self.min_lon)
+
+        with tiledb.open(inputs["tiledb_data_dir"], mode="r") as array:
+            time_range = slice(s,e)         # Time indices (inclusive start, exclusive end)
+            lat_range = slice(min_la, max_la)
+            lon_range = slice(min_lo, max_lo)
+
+            ds = array[time_range, lat_range, lon_range][self.variable]     # numpy array
+
+        # temporal aggregation
+        # TODO
+
+        # spatial aggregation
+        # TODO
+
+        print(ds)
+        return ds

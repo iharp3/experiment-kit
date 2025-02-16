@@ -3,7 +3,6 @@ import json
 import numpy as np
 import pandas as pd
 import tiledb
-from proposed.utils.get_whole_period import get_whole_period_between
 
 json_file = "/data/experiment-kit/tiledb/config.json"
 with open(json_file, "r") as f:
