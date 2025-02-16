@@ -3,6 +3,7 @@ import numpy as np
 import tiledb
 
 from utils import get_time_indices, get_spatial_range
+from get_whole_period import get_whole_period_between
 
 json_file = "/data/experiment-kit/tiledb/config.json"
 with open(json_file, "r") as f:
@@ -67,8 +68,14 @@ class tiledb_get_raster_executor:
             else:
                 return ValueError(f"Invalid spatial resolution {self.spatial_resolution}")
             
+            y, m, d, h = get_whole_period_between(start=self.start_datetime, end=self.end_datetime)
             if self.temporal_resolution == "hour":
                 time_block = [i for i in range(s, e, 1)]
+            
+            # TODO: you need every pair of start and end indices for each day/month/year.
+
+
+
             elif self.temporal_resolution == "day":
                 # TODO: make a list of increasing 24 indices from the start of indices and the end of indices 
                 #       (careful to agg the same days together (if start idx starts mid day you have to do 12 and then 24...))
