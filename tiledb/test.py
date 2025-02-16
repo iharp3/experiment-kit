@@ -103,19 +103,17 @@ def get_hour_idx(day: int) -> int:
 if __name__ == "__main__":
     # open_tiledb_array()
     s1 = pd.Timestamp("2014-01-01 00:00")
-    s = pd.Timestamp("2015-01-01 00:00")
-    e = pd.Timestamp("2016-04-13 09:00")
+    s = pd.Timestamp("2015-06-01 00:00")
+    e = pd.Timestamp("2016-06-01 09:00")
 
-    starting_idx = (s -s1).total_seconds()/3600
-    ending_idx = (e - s1).total_seconds()/3600
+    got_year = got_month = got_day = got_hour = False
 
-    print(starting_idx, ending_idx)
+    y, m, d, h = get_whole_period_between(s, e)
 
-
-
-    # got_year = got_month = got_day = got_hour = False
-
-    # y, m, d, h = get_whole_period_between(s, e)
+    print(f"\nYEAR: {y}")
+    print(f"\nMONTH: {m}")
+    print(f"\nDAY: {d}")
+    print(f"\nHOUR: {h}")
 
     # if y:
     #     got_year = True
