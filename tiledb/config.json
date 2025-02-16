@@ -10,6 +10,9 @@
     "time_idx_max": 87600,
     "lat_idx_max": 720,
     "lon_idx_max": 1440,
+    "start_time":"2014-01-01 00:00",
+    "latitude_shift":90,
+    "longitude_shift":180,
     
     "standard_year_month_indices": {
         "January": [0, 743],
@@ -41,7 +44,7 @@
         "December": [8040, 8783]
     },
 
-    "year_indices": {
+    "year_indices_days": {
         "2014": 0,
         "2015":365,
         "2016":730,
@@ -53,6 +56,35 @@
         "2022":2922,
         "2023":3287,
         "2024":3652
+    },
+
+    "year_indices_hours": {
+        "2014": 0,
+        "2015": 8760,
+        "2016": 17520,
+        "2017": 26304,
+        "2018": 35064,
+        "2019": 43824,
+        "2020": 52584,
+        "2021": 61368,
+        "2022": 70128,
+        "2023": 78888,
+        "2024": 87648
+    },
+
+    "month_numbers": {
+        "January":1,
+        "February":2,
+        "March":3,
+        "April":4,
+        "May":5,
+        "June":6,
+        "July":7,
+        "August":8,
+        "September":9,
+        "October":10,
+        "November":11,
+        "December":12
     },
 
     "leap_years": [2012,2016,2020,2024,2028,2032,2036,2040,2044]
