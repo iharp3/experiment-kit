@@ -1,14 +1,5 @@
-import json
-import numpy as np
-import tiledb
-
 from utils import get_agg_function
-
 from tiledb_get_raster_executor import tiledb_get_raster_executor
-
-json_file = "/data/experiment-kit/tiledb/config.json"
-with open(json_file, "r") as f:
-    inputs = json.load(f),
 
 class tiledb_get_heatmap_executor:
     def __init__(
@@ -51,7 +42,7 @@ class tiledb_get_heatmap_executor:
 
         raster = executor.execute()
         agg_function = get_agg_function(self.aggregation)
-        
+
         result = agg_function(raster, axis=0)   # Shape: (lat, lon)
         print(f"\n\t heatmap result: {result.shape}")
         return result
