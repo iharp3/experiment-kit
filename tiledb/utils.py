@@ -15,12 +15,15 @@ def get_time_indices(start_time, end_time):
         return starting_idx, ending_idx
 
 def get_spatial_range(max_lat, min_lat, max_lon, min_lon):
-        max_lat_idx = max_lat + inputs["latitude_shift"]
-        min_lat_idx = min_lat + inputs["latitude_shift"]
-        max_lon_idx = max_lon + inputs["longitude_shift"]
-        min_lon_idx = min_lon + inputs["longitude_shift"]
+        max_lat_idx = get_025_idx(max_lat, inputs["latitude_shift"])
+        min_lat_idx = get_025_idx(min_lat, inputs["latitude_shift"])
+        max_lon_idx = get_025_idx(max_lon, inputs["longitude_shift"])
+        min_lon_idx = get_025_idx(min_lon, inputs["longitude_shift"])
 
         return int(max_lat_idx), int(min_lat_idx), int(max_lon_idx), int(min_lon_idx)
+
+def get_025_idx(x, shift):
+        return 4 * (shift + x)
 
 def get_index_pairs(timestamps, time_res, start_time):
     time_shift = int((pd.to_datetime(start_time) - pd.to_datetime(inputs["start_time"])).total_seconds()/3600) # moves relative index pairs to correct part of array indices

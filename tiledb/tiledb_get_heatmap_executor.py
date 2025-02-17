@@ -2,7 +2,7 @@ import json
 import numpy as np
 import tiledb
 
-from tiledb_get_raster_executor import get_time_indices, get_spatial_range
+from tiledb_get_raster_executor import tiledb_get_raster_executor
 
 json_file = "/data/experiment-kit/tiledb/config.json"
 with open(json_file, "r") as f:
@@ -34,41 +34,19 @@ class tiledb_get_heatmap_executor:
         self.aggregation = aggregation
 
     def execute(self):
-        # define grid resolution for coarsening
-        if self.spatial_resolution == 0.25:
-            lat_block = lon_block = 1
-        elif self.spatial_resolution == 0.5:
-            lat_block = lon_block = 2
-        elif self.spatial_resolution  == 1:
-            lat_block = lon_block = 4
-        else:
-            return ValueError(f"Invalid spatial resolution {self.spatial_resolution}")
-
-        # get indices for dataset slice
-        s, e = get_time_indices(start_time=self.start_datetime, end_time=self.end_datetime)
-        max_la, min_la, max_lo, min_lo = get_spatial_range(max_lat=self.max_lat,
-                                                           min_lat=self.min_lat,
-                                                           max_lon=self.max_lon,
-                                                           min_lon=self.min_lon)
-
-        lat_size, lon_size = ((max_la - min_la), (max_lo - min_lo))
-        coarse_lat_size = lat_size // lat_block
-        coarse_lon_size = lon_size // lon_block
-
-        mean_temperature = np.zeros((lat_size, lon_size))
-
-        with tiledb.open(inputs["tiledb_data_dir"], mode="r") as array:
-            # get data slice you're interested in
-
-            for lat in range(lat_size):
-                for lon in range(lon_size):
-                    mean_temperature[lat, lon] = array[:, lat, lon].agg(self.aggregation)[self.variable]
-
-        # Reshape and average blocks
-        coarse_mean_temperature = (
-            mean_temperature[:coarse_lat_size * lat_block, :coarse_lon_size * lon_block]
-            .reshape(coarse_lat_size, lat_block, coarse_lon_size, lon_block)
-            .mean(axis=(1, 3))
+        executor = tiledb_get_raster_executor(
+            variable= self.variable,
+            start_datetime= self.start_datetime,
+            end_datetime= self.end_datetime,
+            temporal_resolution= self.temporal_resolution,
+            min_lat= self.min_lat,
+            max_lat= self.max_lat,
+            min_lon= self.min_lon,
+            max_lon= self.max_lon,
+            spatial_resolution= self.spatial_resolution,
+            aggregation= self.aggregation,
         )
 
-        print(coarse_mean_temperature.shape)
+        raster = executor.execute()
+
+        heatmap = raster[:, :, :].agg(self.aggregation)[self.variable]
