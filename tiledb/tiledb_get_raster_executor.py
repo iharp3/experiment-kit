@@ -76,30 +76,36 @@ class tiledb_get_raster_executor:
                 
             lat_size = max_la - min_la
             lon_size = max_lo - min_lo
-            coarse_lat_size = lat_size // lat_block
-            coarse_lon_size = lon_size // lon_block    
-            coarse_time_size = len(time_block)
+            coarse_lat_size = int(lat_size // lat_block)
+            coarse_lon_size = int(lon_size // lon_block)    
+            coarse_time_size = int(len(time_block))
+
+            print(f"coarse lat: {coarse_lat_size}  coarse lon: {coarse_lon_size}  coarse time: {coarse_time_size}")
+            print(f"lat block: {lat_block}  lon block: {lon_block}")
+            print(f"coarse lat size * lat block = {coarse_lat_size * lat_block}")
 
             coarse_data = np.zeros((coarse_time_size, coarse_lat_size, coarse_lon_size))
 
             counter = 0
-            with tiledb.open(inputs["tiledb_data_dir"], mode="r") as array:
+            with tiledb.open("/data/iharp-customized-storage/storage/experiments_tdb", mode="r") as array:
+                print(f"\narray.shape: {array.shape}")
                 for t in time_block:
                     cur_start_time = t[0]
                     cur_end_time = t[1]
+                    # print(f"\nstart: {cur_start_time}   end: {cur_end_time} lat: {min_la, max_la}   lon: {min_lo, max_lo}")
                     # Read all desired lat/long data for the selected time block
                     temp_data = array[cur_start_time:cur_end_time, min_la:max_la, min_lo:max_lo][self.variable]  # Shape: (t, lat, lon)
                     # Agg over the whole time block
                     aggregated_over_time = agg_function(temp_data, axis=0)  # Shape: (lat, lon)
                     # Agg over space
-                    coarse_data[counter, lat_range,lon_range] = (
+                    coarse_data[counter, :, :] = (
                         agg_function(
-                            aggregated_over_time[:coarse_lat_size * lat_block, :coarse_lon_size * lon_block]
+                            aggregated_over_time[:coarse_lat_size * lat_block, :coarse_lon_size * lon_block]    # TODO: fix the lat and long aggregations
                             .reshape(coarse_lat_size, lat_block, coarse_lon_size, lon_block),
                             axis=(1, 3)  # Aggregate over lat_block and lon_block
                         )
                     )
                     counter+=1
 
-        print(coarse_data.shape)
+        print(f"\n\t coarse_data shape: {coarse_data.shape}")
         return coarse_data

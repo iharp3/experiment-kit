@@ -9,8 +9,8 @@ with open(json_file, "r") as f:
     inputs = json.load(f)
 
 def get_time_indices(start_time, end_time):
-        starting_idx = int((start_time - inputs["start_time"]).total_seconds()/3600)
-        ending_idx = int((end_time - inputs["start_time"]).total_seconds()/3600)    # [starting_idx, ending_idx) 
+        starting_idx = int((pd.to_datetime(start_time) - pd.to_datetime(inputs["start_time"])).total_seconds()/3600)
+        ending_idx = int((pd.to_datetime(end_time) - pd.to_datetime(inputs["start_time"])).total_seconds()/3600)    # [starting_idx, ending_idx) 
 
         return starting_idx, ending_idx
 
@@ -20,7 +20,7 @@ def get_spatial_range(max_lat, min_lat, max_lon, min_lon):
         max_lon_idx = max_lon + inputs["longitude_shift"]
         min_lon_idx = min_lon + inputs["longitude_shift"]
 
-        return max_lat_idx, min_lat_idx, max_lon_idx, min_lon_idx
+        return int(max_lat_idx), int(min_lat_idx), int(max_lon_idx), int(min_lon_idx)
 
 def get_index_pairs(timestamps, time_res, start_time):
     time_shift = int((pd.to_datetime(start_time) - pd.to_datetime(inputs["start_time"])).total_seconds()/3600) # moves relative index pairs to correct part of array indices
@@ -43,7 +43,10 @@ def get_index_pairs(timestamps, time_res, start_time):
         else:
             return ValueError(f"Invalid temporal resolution {time_res}")
 
-    index_pairs.append((start_idx+time_shift, (len(timestamps) -1)+time_shift)) # last pair -> end of timestamps
+    if start_idx <= len(timestamps)-1:
+         pass
+    else:
+        index_pairs.append((start_idx+time_shift, (len(timestamps) -1)+time_shift)) # last pair -> end of timestamps
 
     # print(index_pairs)
     return index_pairs

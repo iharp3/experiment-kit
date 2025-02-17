@@ -6,6 +6,7 @@ import pandas as pd
 import xarray as xr
 import tiledb
 
+from tiledb_get_raster_executor import tiledb_get_raster_executor
 from get_whole_period import get_whole_period_between, get_whole_ranges_between
 
 json_file = "/data/experiment-kit/tiledb/config.json"
@@ -204,14 +205,31 @@ def get_index_pairs(timestamps, time_res, start_time):
     return index_pairs
 
 if __name__ == "__main__":
-    # open_tiledb_array()
-    # start_time = "201-01-01 00:00"
-    s = pd.Timestamp("2015-06-01 00:00")
-    e = pd.Timestamp("2016-02-28 00:00")
-    temporal_resolution = "year"
-
-    # list of times at specified resolution within time range
-    timestamps = pd.period_range(start=s, end=e, freq="h")
+    """Testing util functions"""
     
-    index_pairs = get_index_pairs(timestamps=timestamps, time_res=temporal_resolution, start_time=s)  # TODO: self.temporal_resolution
-    print(index_pairs)
+    # open_tiledb_array()
+
+    # s = pd.Timestamp("2015-06-01 00:00")
+    # e = pd.Timestamp("2016-02-28 00:00")
+    # temporal_resolution = "year"
+    # timestamps = pd.period_range(start=s, end=e, freq="h")
+    # index_pairs = get_index_pairs(timestamps=timestamps, time_res=temporal_resolution, start_time=s)  # TODO: self.temporal_resolution
+    # print(index_pairs)
+
+    """Testing get_raster"""
+
+    executor = tiledb_get_raster_executor(
+    variable="temperature",  # Change to an available variable in the dataset
+    start_datetime="2014-01-01 00:00",
+    end_datetime="2014-06-01 00:00",
+    temporal_resolution="day",
+    min_lat=30.0,
+    max_lat=40.0,
+    min_lon=-100.0,
+    max_lon=-90.0,
+    spatial_resolution=0.5,
+    aggregation="mean"
+    )
+
+    result = executor.execute()
+    print(result)
