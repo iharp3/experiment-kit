@@ -35,10 +35,6 @@ class GetRasterExecutor(QueryExecutor):
             metadata=metadata,
         )
 
-    def _gen_download_file_name(self):
-        dt = datetime.now().strftime("%Y%m%d_%H%M%S")
-        return f"download_{dt}.nc"
-
     def _check_metadata(self):
         """
         Return: [local_files], [api_calls]
@@ -102,7 +98,7 @@ class GetRasterExecutor(QueryExecutor):
             }
             api_calls.append((dataset, request))
         print("local files:", local_files)
-        print("api:", api_calls)
+        # print("api:", api_calls)
         return local_files, api_calls
 
     def execute(self):
@@ -121,8 +117,6 @@ class GetRasterExecutor(QueryExecutor):
             )
             ds_list.append(ds)
 
-        print("check1")
-
         # 3.3 assemble result
         # compat="override" is a temporal walkaround as pre-aggregation value conflicts with downloaded data
         # future solution: use new encoding when write pre-aggregated data
@@ -132,5 +126,4 @@ class GetRasterExecutor(QueryExecutor):
             print("WARNING: conflict in merging data, use override")
             ds = xr.merge([i.chunk() for i in ds_list], compat="override")
 
-        print("check2")
         return ds.compute()
