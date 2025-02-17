@@ -1,3 +1,6 @@
+from utils import get_agg_function
+from tiledb_get_raster_executor import tiledb_get_raster_executor
+
 class tiledb_get_timeseries_executor:
     def __init__(
         self,
@@ -24,4 +27,22 @@ class tiledb_get_timeseries_executor:
         self.aggregation = aggregation
 
     def execute(self):
-        pass
+        executor = tiledb_get_raster_executor(
+            variable= self.variable,
+            start_datetime= self.start_datetime,
+            end_datetime= self.end_datetime,
+            temporal_resolution= self.temporal_resolution,
+            min_lat= self.min_lat,
+            max_lat= self.max_lat,
+            min_lon= self.min_lon,
+            max_lon= self.max_lon,
+            spatial_resolution= self.spatial_resolution,
+            aggregation= self.aggregation,
+        )
+
+        raster = executor.execute()
+        agg_function = get_agg_function(self.aggregation)
+        
+        result = agg_function(raster, axis=(1,2))   # Shape: (time,)
+        print(f"\n\t timeseries result: {result.shape}")
+        return result
