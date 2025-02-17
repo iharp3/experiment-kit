@@ -19,14 +19,16 @@ def gen_random_spatial_range(n_lat, n_lon):
 
 
 def gen_random_time_span(n_years):
-    start_year = np.random.randint(1994, 2023 - n_years)
+    if n_years == 20:
+        return "2004-01-01 00:00:00", "2023-12-31 23:00:00"
+    start_year = np.random.randint(2004, 2023 - n_years + 1)
     end_year = start_year + n_years
     start_time = f"{start_year}-01-01 00:00:00"
     end_time = f"{end_year}-12-31 23:00:00"
     return start_time, end_time
 
 
-def make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, s_res, t_res):
+def make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, s_res, t_res, agg):
     query = {
         "variable": "2m_temperature",
         "start_time": start_time,
@@ -37,57 +39,58 @@ def make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, s_res, 
         "max_lon": max_lon,
         "spatial_resolution": s_res,
         "temporal_resolution": t_res,
-        "aggregation": "mean",
+        "aggregation": agg,
     }
     return query
 
 
 if __name__ == "__main__":
     queries = []
+    aggs = ["min", "max", "mean"]
 
-    # 1. Area, 10 years, 0.25, daily
+    # 1. [10%, 25%, 50%, 100% of Greenland], 10 years, 1, daily
     areas = [[3, 5], [15, 25], [25, 30], [25, 60]]
     for n_lat, n_lon in areas:
-        for _ in range(3):
+        for agg in aggs:
             max_lat, min_lat, min_lon, max_lon = gen_random_spatial_range(n_lat, n_lon)
             start_time, end_time = gen_random_time_span(10)
-            query = make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, 0.25, "day")
+            query = make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, 1, "day", agg)
             query["time_span"] = 10
             query["area_persent"] = int((n_lat * n_lon) / (25 * 60) * 100)
             query["category"] = "changing_area"
             queries.append(query)
 
-    # 2. Greenland, Time, 0.25, daily
+    # 2. Greenland, [1, 5, 10, 20 years], 1, daily
     years = [1, 5, 10, 20]
     for year in years:
-        for _ in range(3):
+        for agg in aggs:
             max_lat, min_lat, min_lon, max_lon = gen_random_spatial_range(25, 60)
             start_time, end_time = gen_random_time_span(year)
-            query = make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, 0.25, "day")
+            query = make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, 1, "day", agg)
             query["time_span"] = year
             query["area_persent"] = 100
             query["category"] = "changing_time"
             queries.append(query)
 
-    # 3. Greenland, 10 years, spatial_res, daily
+    # 3. Greenland, 10 years, [0.25, 0.5, 1], daily
     spatial_resolutions = [0.25, 0.5, 1]
     for s_res in spatial_resolutions:
-        for _ in range(3):
+        for agg in aggs:
             max_lat, min_lat, min_lon, max_lon = gen_random_spatial_range(25, 60)
             start_time, end_time = gen_random_time_span(10)
-            query = make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, s_res, "day")
+            query = make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, s_res, "day", agg)
             query["time_span"] = 10
             query["area_persent"] = 100
             query["category"] = "changing_spatial_res"
             queries.append(query)
 
-    # 4. Greenland, 10 years, 0.25, temporal_res
+    # 4. Greenland, 10 years, 1, [hourly, daily, monthly, yearly]
     temporal_resolutions = ["hour", "day", "month", "year"]
     for t_res in temporal_resolutions:
-        for _ in range(3):
+        for agg in aggs:
             max_lat, min_lat, min_lon, max_lon = gen_random_spatial_range(25, 60)
             start_time, end_time = gen_random_time_span(10)
-            query = make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, 0.25, t_res)
+            query = make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, 1, t_res, agg)
             query["time_span"] = 10
             query["area_persent"] = 100
             query["category"] = "changing_temporal_res"
@@ -96,4 +99,4 @@ if __name__ == "__main__":
     df = pd.DataFrame(queries)
     df["qid"] = df.index
     df = df[["qid"] + [col for col in df.columns if col != "qid"]]
-    df.to_csv("rht_query_set_0214.csv", index=False)
+    df.to_csv("get_raster_test_set.csv", index=False)
