@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import tiledb
 
-from utils import get_time_indices, get_spatial_range, get_index_pairs
+from utils import get_time_indices, get_spatial_range, get_index_pairs, get_agg_function, get_coord_block
 
 json_file = "/data/experiment-kit/tiledb/config.json"
 with open(json_file, "r") as f:
@@ -50,23 +50,8 @@ class tiledb_get_raster_executor:
                 lon_range = slice(min_lo, max_lo)
                 coarse_data = array[time_range, lat_range, lon_range][self.variable]   # numpy array
         else:
-            if self.aggregation == "mean":
-                agg_function = np.mean
-            elif self.aggregation == "max":
-                agg_function = np.max
-            elif self.aggregation == "min":
-                agg_function = np.min
-            else:
-                return ValueError(f"Invalid aggregation {self.aggregation}")
-            
-            if self.spatial_resolution == 0.25:
-                lat_block = lon_block = 1
-            elif self.spatial_resolution == 0.5:
-                lat_block = lon_block = 2
-            elif self.spatial_resolution  == 1:
-                lat_block = lon_block = 4
-            else:
-                return ValueError(f"Invalid spatial resolution {self.spatial_resolution}")
+            agg_function = get_agg_function(self.aggregation)
+            lat_block = lon_block = get_coord_block(self.spatial_resolution)
 
             if self.temporal_resolution == "hour":
                 time_block = [(i, i+1) for i in range(s, e + 1, 1)] # [inclusive, exclusive)
@@ -80,15 +65,15 @@ class tiledb_get_raster_executor:
             coarse_lon_size = int(lon_size // lon_block)    
             coarse_time_size = int(len(time_block))
 
-            print(f"coarse lat: {coarse_lat_size}  coarse lon: {coarse_lon_size}  coarse time: {coarse_time_size}")
-            print(f"lat block: {lat_block}  lon block: {lon_block}")
-            print(f"coarse lat size * lat block = {coarse_lat_size * lat_block}")
+            print(f"\tcoarse lat: {coarse_lat_size}  coarse lon: {coarse_lon_size}  coarse time: {coarse_time_size}")
+            print(f"\tlat block: {lat_block}  lon block: {lon_block}")
+            print(f"\tcoarse lat size * lat block = {coarse_lat_size * lat_block}")
 
             coarse_data = np.zeros((coarse_time_size, coarse_lat_size, coarse_lon_size))
 
             counter = 0
-            with tiledb.open("/data/iharp-customized-storage/storage/experiments_tdb", mode="r") as array:
-                print(f"\narray.shape: {array.shape}")
+            with tiledb.open("/data/iharp-customized-storage/storage/experiments_tdb", mode="r") as array:  # TODO: figure out why inputs["tiledb_data_dir"] doesn't work...
+                print(f"\n\tarray.shape: {array.shape}")
                 for t in time_block:
                     cur_start_time = t[0]
                     cur_end_time = t[1]
@@ -100,12 +85,12 @@ class tiledb_get_raster_executor:
                     # Agg over space
                     coarse_data[counter, :, :] = (
                         agg_function(
-                            aggregated_over_time[:coarse_lat_size * lat_block, :coarse_lon_size * lon_block]    # TODO: fix the lat and long aggregations
+                            aggregated_over_time[:coarse_lat_size * lat_block, :coarse_lon_size * lon_block]
                             .reshape(coarse_lat_size, lat_block, coarse_lon_size, lon_block),
                             axis=(1, 3)  # Aggregate over lat_block and lon_block
                         )
                     )
                     counter+=1
 
-        print(f"\n\t coarse_data shape: {coarse_data.shape}")
+        print(f"\n\tcoarse_data shape: {coarse_data.shape}")
         return coarse_data

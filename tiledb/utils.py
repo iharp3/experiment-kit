@@ -25,6 +25,27 @@ def get_spatial_range(max_lat, min_lat, max_lon, min_lon):
 def get_025_idx(x, shift):
         return 4 * (shift + x)
 
+def get_agg_function(agg):
+        if agg == "mean":
+                agg_function = np.mean
+        elif agg == "max":
+                agg_function = np.max
+        elif agg == "min":
+                agg_function = np.min
+        else:
+                return ValueError(f"Invalid aggregation {agg}")
+        return agg_function
+
+def get_coord_block(res):
+        if res == 0.25:
+                b = 1
+        elif res == 0.5:
+                b = 2
+        elif res  == 1:
+                b = 4
+        else:
+                return ValueError(f"Invalid spatial resolution {res}")
+        return b
 def get_index_pairs(timestamps, time_res, start_time):
     time_shift = int((pd.to_datetime(start_time) - pd.to_datetime(inputs["start_time"])).total_seconds()/3600) # moves relative index pairs to correct part of array indices
     timestamps = timestamps.to_timestamp()
