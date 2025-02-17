@@ -68,48 +68,9 @@ def check_dims_raw_files():
         # else:
         #     sys.exit()
 
-def open_tiledb_array():
-    # Open one of the arrays (replace with your variable name, e.g., temperature)
-    with tiledb.open(inputs["tiledb_data_dir"], mode="r") as array:
-        # Example: Query all data for a specific time slice
-        temp_data = array[:, :, 0]  # First time slice
-        print("\nTemperature data for first time slice:", temp_data)
-        print(f"\nType: {type(array)}")
-        print(f"\nShape: {array.shape}")
-        print(f"\nSchema: {array.schema}")
-
-    array.close()
-
-def compare_array_aggs():
-    ds = load_dataset(inputs["nc_data_dir"])
-    with tiledb.open(inputs["tiledb_data_dir"], mode="r") as array:
-        pass
-    array.close()
-
-def xr_temp_agg(ds):
-    daily_avg_temp = ds["temperature"].resample(time="1D").mean()
-    return daily_avg_temp
-
-def tdb_temp_agg(ar):
-    pass
-
-def get_last_hour_idx(day: int) -> int:
-    return (24*day)
-
-def get_hour_idx(day: int) -> int:
-    idx = (24 * day) - 24
-    return idx
-
-if __name__ == "__main__":
-    # open_tiledb_array()
-    s1 = pd.Timestamp("2014-01-01 00:00")
-    s = pd.Timestamp("2015-01-01 00:00")
-    e = pd.Timestamp("2017-01-01 12:00")
-
-    got_year = got_month = got_day = got_hour = False
-
+def explore_whole_period_between(s,e):
     y, m, d, h = get_whole_period_between(s, e)
-
+    got_year = got_month = got_day = got_hour = False
     print(f"\nYEAR: {y}")
     print(f"\nMONTH: {m}")
     print(f"\nDAY: {d}")
@@ -183,3 +144,74 @@ if __name__ == "__main__":
     end_idx = y2 + m2 + d2 + h2
     print(f"starting index: {start_idx}")
     print(f"ending index: {end_idx}")
+
+def open_tiledb_array():
+    # Open one of the arrays (replace with your variable name, e.g., temperature)
+    with tiledb.open(inputs["tiledb_data_dir"], mode="r") as array:
+        # Example: Query all data for a specific time slice
+        temp_data = array[:, :, 0]  # First time slice
+        print("\nTemperature data for first time slice:", temp_data)
+        print(f"\nType: {type(array)}")
+        print(f"\nShape: {array.shape}")
+        print(f"\nSchema: {array.schema}")
+
+    array.close()
+
+def compare_array_aggs():
+    ds = load_dataset(inputs["nc_data_dir"])
+    with tiledb.open(inputs["tiledb_data_dir"], mode="r") as array:
+        pass
+    array.close()
+
+def xr_temp_agg(ds):
+    daily_avg_temp = ds["temperature"].resample(time="1D").mean()
+    return daily_avg_temp
+
+def tdb_temp_agg(ar):
+    pass
+
+def get_last_hour_idx(day: int) -> int:
+    return (24*day)
+
+def get_hour_idx(day: int) -> int:
+    idx = (24 * day) - 24
+    return idx
+
+def get_index_pairs(timestamps, time_res, start_time):
+    time_shift = int((pd.to_datetime(start_time) - pd.to_datetime(inputs["start_time"])).total_seconds()/3600)  # moves relative index pairs to correct part of array indices
+    timestamps = timestamps.to_timestamp()
+    index_pairs = []
+    start_idx = 0
+    for i in range(1, len(timestamps)):
+        if time_res == "day":
+            if timestamps[i].date() != timestamps[i - 1].date():  # checks day is the same
+                index_pairs.append((start_idx+time_shift, i+time_shift))
+                start_idx = i  # Update start index for new day
+        elif time_res == "month":
+            if pd.to_datetime(timestamps[i]).month != pd.to_datetime(timestamps[i - 1]).month:    # checks month is the same
+                index_pairs.append((start_idx+time_shift, i+time_shift))
+                start_idx = i  # Update start index for new month
+        elif time_res == "year":
+            if pd.to_datetime(timestamps[i]).year != pd.to_datetime(timestamps[i - 1]).year:    # checks year is the same
+                index_pairs.append((start_idx+time_shift, i+time_shift))
+                start_idx = i  # Update start index for new year
+        else:
+            return ValueError(f"Invalid temporal resolution {time_res}")
+
+    index_pairs.append((start_idx+time_shift, (len(timestamps) -1)+time_shift)) # last pair -> end of timestamps
+
+    # print(index_pairs)
+    return index_pairs
+
+if __name__ == "__main__":
+    # open_tiledb_array()
+    # start_time = "201-01-01 00:00"
+    s = pd.Timestamp("2015-06-01 00:00")
+    e = pd.Timestamp("2016-02-28 00:00")
+    temporal_resolution = "year"
+
+    # list of times at specified resolution within time range
+    timestamps = pd.period_range(start=s, end=e, freq="h")
+    
+    index_pairs = get_index_pairs(timestamps=timestamps, time_res=temporal_resolution, start_time=s)  # TODO: self.temporal_resolution
+    print(index_pairs)

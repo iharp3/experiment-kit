@@ -1,9 +1,9 @@
 import json
 import numpy as np
+import pandas as pd
 import tiledb
 
-from utils import get_time_indices, get_spatial_range
-from get_whole_period import get_whole_period_between
+from utils import get_time_indices, get_spatial_range, get_index_pairs
 
 json_file = "/data/experiment-kit/tiledb/config.json"
 with open(json_file, "r") as f:
@@ -67,31 +67,13 @@ class tiledb_get_raster_executor:
                 lat_block = lon_block = 4
             else:
                 return ValueError(f"Invalid spatial resolution {self.spatial_resolution}")
-            
-            y, m, d, h = get_whole_period_between(start=self.start_datetime, end=self.end_datetime)
+
             if self.temporal_resolution == "hour":
-                time_block = [i for i in range(s, e, 1)]
-            
-            # TODO: you need every pair of start and end indices for each day/month/year.
-
-
-
-            elif self.temporal_resolution == "day":
-                # TODO: make a list of increasing 24 indices from the start of indices and the end of indices 
-                #       (careful to agg the same days together (if start idx starts mid day you have to do 12 and then 24...))
-                time_block = []
-            elif self.temporal_resolution == "month":
-                # TODO: get index pairs (start_month, end_month) for every month in the time range 
-                #       need y, m, d, h and then 
-                #       for y: get monthly (start, end) indices for whole year (st or leap)
-                #       for m: get monthly (start, end) indices for each specific months in the list
-                #       for d: combine all the leftover day (24 indices to count per day) and hour values (one index per hour) into one
-                time_block = []
-            elif self.temporal_resolution == "year":
-                # TODO: get index pairs of each year in the set
-                # (max(start_time_idx, first yr start idx), first yr end idx), (middle yr start idx, middle yr end idx), (end yr start idx, min(end_time_idx, end yr end idx))
-                time_block = []
-
+                time_block = [(i, i+1) for i in range(s, e + 1, 1)] # [inclusive, exclusive)
+            else:
+                timestamps = pd.period_range(start=self.start_datetime, end=self.end_datetime, freq="h")  # list of times within time range at specified resolution 
+                time_block = get_index_pairs(timestamps=timestamps, time_res=self.temporal_resolution, start_time=self.start_datetime)
+                
             lat_size = max_la - min_la
             lon_size = max_lo - min_lo
             coarse_lat_size = lat_size // lat_block
@@ -100,22 +82,24 @@ class tiledb_get_raster_executor:
 
             coarse_data = np.zeros((coarse_time_size, coarse_lat_size, coarse_lon_size))
 
+            counter = 0
             with tiledb.open(inputs["tiledb_data_dir"], mode="r") as array:
                 for t in time_block:
                     cur_start_time = t[0]
                     cur_end_time = t[1]
-                    # Read data for the selected time block
-                    temp_data = array[cur_start_time:cur_end_time, :,:][self.variable]  # Shape: (t, lat, lon)
-
+                    # Read all desired lat/long data for the selected time block
+                    temp_data = array[cur_start_time:cur_end_time, min_la:max_la, min_lo:max_lo][self.variable]  # Shape: (t, lat, lon)
+                    # Agg over the whole time block
                     aggregated_over_time = agg_function(temp_data, axis=0)  # Shape: (lat, lon)
-
-                    coarse_data[cur_end_time, :, :] = (
-                    agg_function(
-                        aggregated_over_time[:coarse_lat_size * lat_block, :coarse_lon_size * lon_block]
-                        .reshape(coarse_lat_size, lat_block, coarse_lon_size, lon_block),
-                        axis=(1, 3)  # Aggregate over lat_block and lon_block
+                    # Agg over space
+                    coarse_data[counter, lat_range,lon_range] = (
+                        agg_function(
+                            aggregated_over_time[:coarse_lat_size * lat_block, :coarse_lon_size * lon_block]
+                            .reshape(coarse_lat_size, lat_block, coarse_lon_size, lon_block),
+                            axis=(1, 3)  # Aggregate over lat_block and lon_block
+                        )
                     )
-                )
+                    counter+=1
 
         print(coarse_data.shape)
         return coarse_data

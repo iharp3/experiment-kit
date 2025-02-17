@@ -22,6 +22,32 @@ def get_spatial_range(max_lat, min_lat, max_lon, min_lon):
 
         return max_lat_idx, min_lat_idx, max_lon_idx, min_lon_idx
 
+def get_index_pairs(timestamps, time_res, start_time):
+    time_shift = int((pd.to_datetime(start_time) - pd.to_datetime(inputs["start_time"])).total_seconds()/3600) # moves relative index pairs to correct part of array indices
+    timestamps = timestamps.to_timestamp()
+    index_pairs = []
+    start_idx = 0
+    for i in range(1, len(timestamps)):
+        if time_res == "day":
+            if timestamps[i].date() != timestamps[i - 1].date():  # checks day is the same
+                index_pairs.append((start_idx+time_shift, i+time_shift))
+                start_idx = i  # Update start index for new day
+        elif time_res == "month":
+            if pd.to_datetime(timestamps[i]).month != pd.to_datetime(timestamps[i - 1]).month:    # checks month is the same
+                index_pairs.append((start_idx+time_shift, i+time_shift))
+                start_idx = i  # Update start index for new month
+        elif time_res == "year":
+            if pd.to_datetime(timestamps[i]).year != pd.to_datetime(timestamps[i - 1]).year:    # checks year is the same
+                index_pairs.append((start_idx+time_shift, i+time_shift))
+                start_idx = i  # Update start index for new year
+        else:
+            return ValueError(f"Invalid temporal resolution {time_res}")
+
+    index_pairs.append((start_idx+time_shift, (len(timestamps) -1)+time_shift)) # last pair -> end of timestamps
+
+    # print(index_pairs)
+    return index_pairs
+
 def time_aggregation(res, data):
 
         """
