@@ -1,5 +1,5 @@
-import xarray as xr
 from vanilla_get_raster_executor import VanillaGetRasterExecutor
+
 
 class VanillaGetTimeseriesExecutor:
     def __init__(
@@ -41,10 +41,11 @@ class VanillaGetTimeseriesExecutor:
         )
         vanilla_raster = vanilla_get_raster_executor.execute()
         if self.aggregation == "mean":
-            return vanilla_raster.mean(dim=["latitude", "longitude"]).compute()
+            time_series = vanilla_raster.mean(dim=["latitude", "longitude"]).compute()
         elif self.aggregation == "max":
-            return vanilla_raster.max(dim=["latitude", "longitude"]).compute()
+            time_series = vanilla_raster.max(dim=["latitude", "longitude"]).compute()
         elif self.aggregation == "min":
-            return vanilla_raster.min(dim=["latitude", "longitude"]).compute()
+            time_series = vanilla_raster.min(dim=["latitude", "longitude"]).compute()
         else:
             raise ValueError(f"Invalid time series aggregation method: {self.aggregation}")
+        return time_series.compute()

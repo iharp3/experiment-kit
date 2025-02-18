@@ -1,5 +1,6 @@
 from vanilla_get_heatmap_executor import VanillaGetHeatmapExecutor
 
+
 class VanillaFindAreaExecutor:
     def __init__(
         self,
@@ -30,9 +31,6 @@ class VanillaFindAreaExecutor:
         self.filter_value = filter_value
 
     def execute(self):
-        return self._execute_baseline()
-
-    def _execute_baseline(self):
         heatmap_executor = VanillaGetHeatmapExecutor(
             variable=self.variable,
             start_datetime=self.start_datetime,
@@ -50,16 +48,8 @@ class VanillaFindAreaExecutor:
             res = hm.where(hm > self.filter_value, drop=False)
         elif self.filter_predicate == "<":
             res = hm.where(hm < self.filter_value, drop=False)
-        elif self.filter_predicate == "==":
-            res = hm.where(hm == self.filter_value, drop=False)
-        elif self.filter_predicate == "!=":
-            res = hm.where(hm != self.filter_value, drop=False)
-        elif self.filter_predicate == ">=":
-            res = hm.where(hm >= self.filter_value, drop=False)
-        elif self.filter_predicate == "<=":
-            res = hm.where(hm <= self.filter_value, drop=False)
         else:
             raise ValueError("Invalid filter_predicate")
         res = res.fillna(False)
         res = res.astype(bool)
-        return res
+        return res.compute()
