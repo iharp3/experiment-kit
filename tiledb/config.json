@@ -1,0 +1,92 @@
+{
+    "nc_data_dir": "/data/iharp-customized-storage/storage/514_data",
+    "tiledb_data_dir": "/data/iharp-customized-storage/storage/experiments_tdb",
+    "eg_file": "2m_temperature-2014.nc",
+    "var": "t2m",
+    "all_files": "True",
+    "t_chunk": 730,
+    "lat_chunk": 10,
+    "lon_chunk": 20,
+    "time_idx_max": 87648,
+    "lat_idx_max": 721,
+    "lon_idx_max": 1440,
+    "start_time":"2014-01-01 00:00",
+    "latitude_shift":90,
+    "longitude_shift":180,
+    
+    "standard_year_month_indices": {
+        "January": [0, 743],
+        "February": [744, 1415],
+        "March": [1416, 2159],
+        "April": [2160, 2879],
+        "May": [2880, 3623],
+        "June": [3624, 4343],
+        "July": [4344, 5087],
+        "August": [5088, 5831],
+        "September": [5832, 6551],
+        "October": [6552, 7295],
+        "November": [7296, 8015],
+        "December": [8016, 8759]
+    },
+
+    "leap_year_month_indices": {
+        "January": [0, 743],
+        "February": [744, 1439],
+        "March": [1440, 2183],
+        "April": [2184, 2903],
+        "May": [2904, 3647],
+        "June": [3648, 4367],
+        "July": [4368, 5111],
+        "August": [5112, 5855],
+        "September": [5856, 6575],
+        "October": [6576, 7319],
+        "November": [7320, 8039],
+        "December": [8040, 8783]
+    },
+
+    "year_indices_days": {
+        "2014": 0,
+        "2015":365,
+        "2016":730,
+        "2017":1096,
+        "2018":1461,
+        "2019":1826,
+        "2020":2191,
+        "2021":2557,
+        "2022":2922,
+        "2023":3287,
+        "2024":3652
+    },
+
+    "year_indices_hours": {
+        "2014": 0,
+        "2015": 8760,
+        "2016": 17520,
+        "2017": 26304,
+        "2018": 35064,
+        "2019": 43824,
+        "2020": 52584,
+        "2021": 61368,
+        "2022": 70128,
+        "2023": 78888,
+        "2024": 87648
+    },
+
+    "month_numbers": {
+        "January":1,
+        "February":2,
+        "March":3,
+        "April":4,
+        "May":5,
+        "June":6,
+        "July":7,
+        "August":8,
+        "September":9,
+        "October":10,
+        "November":11,
+        "December":12
+    },
+
+    "leap_years": [2012,2016,2020,2024,2028,2032,2036,2040,2044]
+
+}
