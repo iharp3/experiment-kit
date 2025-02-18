@@ -44,5 +44,6 @@ class tiledb_get_timeseries_executor:
         agg_function = get_agg_function(self.aggregation)
         
         result = agg_function(raster, axis=(1,2))   # Shape: (time,)
-        print(f"\n\t timeseries result: {result.shape}")
+
+        # print(f"\n\t timeseries result: {result.shape}")
         return result

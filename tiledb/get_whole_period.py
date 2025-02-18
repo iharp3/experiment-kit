@@ -1,3 +1,7 @@
+"""
+COPY OF get_whole_period.py IN experiment-kit/proposed/utils/get_whole_period.py
+"""
+
 import pandas as pd
 import calendar
 

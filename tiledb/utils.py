@@ -74,24 +74,3 @@ def get_index_pairs(timestamps, time_res, start_time):
 
     # print(index_pairs)
     return index_pairs
-
-def time_aggregation(res, data):
-
-        """
-        res: string ("day", "month", "year")
-        data: list of tiledb dense arrays
-        """
-
-        # define a function that aggregates each array by a specific time (day, month, year) by taking in the necessary indices, and using aggregation with slicing OR just pandas/numpy (like GPT example)
-
-        # if statements for all the different time resolutions
-
-        # .apply or use UDF to send list of arrays to aggregate and return the aggregate...which can be 1) a new array that you delete after you use or 2) a numpy/panda object that you use vanilla code (?) on to get the answer you want?
-
-        # MULTI-ARRAY DF EXAMPLE: https://documentation.cloud.tiledb.com/academy/analyze/user-defined-functions/#multi-array-udfs
-
-
-def spatial_aggregation(res, data): # *same as time aggregation function*
-        pass
-        # you can just aggregate that section by aggregating every 4 values for every resolution drop
-

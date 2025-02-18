@@ -1,4 +1,3 @@
-from utils import get_agg_function
 from tiledb_get_heatmap_executor import tiledb_get_heatmap_executor
 
 class tiledb_find_area_executor:
@@ -61,5 +60,5 @@ class tiledb_find_area_executor:
         else:
             raise ValueError("Invalid filter predicate")
         
-        print(f"\n\t find area result: {result.shape}")
+        # print(f"\n\t find area result: {result.shape}")
         return result

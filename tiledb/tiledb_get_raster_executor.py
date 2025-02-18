@@ -3,7 +3,11 @@ import numpy as np
 import pandas as pd
 import tiledb
 
-from utils import get_time_indices, get_spatial_range, get_index_pairs, get_agg_function, get_coord_block
+from utils import (get_time_indices, 
+                   get_spatial_range, 
+                   get_index_pairs, 
+                   get_agg_function, 
+                   get_coord_block)
 
 json_file = "/data/experiment-kit/tiledb/config.json"
 with open(json_file, "r") as f:
@@ -65,24 +69,17 @@ class tiledb_get_raster_executor:
             coarse_lon_size = int(lon_size // lon_block)    
             coarse_time_size = int(len(time_block))
 
-            print(f"\tcoarse lat: {coarse_lat_size}  coarse lon: {coarse_lon_size}  coarse time: {coarse_time_size}")
-            print(f"\tlat block: {lat_block}  lon block: {lon_block}")
-            print(f"\tcoarse lat size * lat block = {coarse_lat_size * lat_block}")
-
             coarse_data = np.zeros((coarse_time_size, coarse_lat_size, coarse_lon_size))
 
             counter = 0
             with tiledb.open("/data/iharp-customized-storage/storage/experiments_tdb", mode="r") as array:  # TODO: figure out why inputs["tiledb_data_dir"] doesn't work...
-                print(f"\n\tarray.shape: {array.shape}")
                 for t in time_block:
                     cur_start_time = t[0]
                     cur_end_time = t[1]
-                    # print(f"\nstart: {cur_start_time}   end: {cur_end_time} lat: {min_la, max_la}   lon: {min_lo, max_lo}")
-                    # Read all desired lat/long data for the selected time block
-                    temp_data = array[cur_start_time:cur_end_time, min_la:max_la, min_lo:max_lo][self.variable]  # Shape: (t, lat, lon)
-                    # Agg over the whole time block
+                    
+                    temp_data = array[cur_start_time:cur_end_time, min_la:max_la, min_lo:max_lo][self.variable]  # Shape: (current time block, lat, lon)
                     aggregated_over_time = agg_function(temp_data, axis=0)  # Shape: (lat, lon)
-                    # Agg over space
+
                     coarse_data[counter, :, :] = (
                         agg_function(
                             aggregated_over_time[:coarse_lat_size * lat_block, :coarse_lon_size * lon_block]
@@ -92,5 +89,5 @@ class tiledb_get_raster_executor:
                     )
                     counter+=1
 
-        print(f"\n\tcoarse_data shape: {coarse_data.shape}")
+        # print(f"\n\tcoarse_data shape: {coarse_data.shape}")
         return coarse_data

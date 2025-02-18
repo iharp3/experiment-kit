@@ -1,4 +1,3 @@
-from utils import get_agg_function
 from tiledb_get_timeseries_executor import tiledb_get_timeseries_executor
 
 class tiledb_find_time_executor:
@@ -61,5 +60,5 @@ class tiledb_find_time_executor:
         else:
             raise ValueError("Invalid filter predicate")
         
-        print(f"\n\t find time result: {result.shape}")
+        # print(f"\n\t find time result: {result.shape}")
         return result

@@ -44,5 +44,6 @@ class tiledb_get_heatmap_executor:
         agg_function = get_agg_function(self.aggregation)
 
         result = agg_function(raster, axis=0)   # Shape: (lat, lon)
-        print(f"\n\t heatmap result: {result.shape}")
+        
+        # print(f"\n\t heatmap result: {result.shape}")
         return result
