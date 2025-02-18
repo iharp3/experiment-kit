@@ -1,3 +1,6 @@
+from utils import get_agg_function
+from tiledb_get_timeseries_executor import tiledb_get_timeseries_executor
+
 class tiledb_find_time_executor:
     def __init__(
         self,
@@ -28,4 +31,35 @@ class tiledb_find_time_executor:
         self.filter_value = filter_value
 
     def execute(self):
-        pass
+        executor = tiledb_get_timeseries_executor(
+            variable= self.variable,
+            start_datetime= self.start_datetime,
+            end_datetime= self.end_datetime,
+            temporal_resolution= self.temporal_resolution,
+            min_lat= self.min_lat,
+            max_lat= self.max_lat,
+            min_lon= self.min_lon,
+            max_lon= self.max_lon,
+            spatial_resolution= self.spatial_resolution,
+            aggregation= self.aggregation,
+        )
+
+        timeseries_result = executor.execute()
+
+        if self.filter_predicate == ">":
+            result = timeseries_result > self.filter_value
+        elif self.filter_predicate == "<":
+            result = timeseries_result < self.filter_value
+        elif self.filter_predicate == "==":
+            result = timeseries_result == self.filter_value
+        elif self.filter_predicate == "!=":
+            result = timeseries_result != self.filter_value
+        elif self.filter_predicate == ">=":
+            result = timeseries_result >= self.filter_value
+        elif self.filter_predicate == "<=":
+            result = timeseries_result <= self.filter_value
+        else:
+            raise ValueError("Invalid filter predicate")
+        
+        print(f"\n\t find time result: {result.shape}")
+        return result

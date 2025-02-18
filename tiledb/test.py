@@ -13,6 +13,7 @@ from tiledb_get_raster_executor import tiledb_get_raster_executor
 from tiledb_get_heatmap_executor import tiledb_get_heatmap_executor
 from tiledb_get_timeseries_executor import tiledb_get_timeseries_executor
 from tiledb_find_area_executor import tiledb_find_area_executor
+from tiledb_find_time_executor import tiledb_find_time_executor
 
 json_file = "/data/experiment-kit/tiledb/config.json"
 with open(json_file, "r") as f:
@@ -281,6 +282,24 @@ if __name__ == "__main__":
         filter_predicate= "<",
         filter_value=360.0
         )
+    result = executor.execute()
+    print("\nfind area\n", result[:5,:5])
+    
+    """Testing find_time"""
+    executor = tiledb_find_time_executor(
+        variable="temperature",  # Change to an available variable in the dataset
+        start_datetime="2014-01-01 00:00",
+        end_datetime="2014-06-01 00:00",
+        temporal_resolution="day",
+        min_lat=30.0,
+        max_lat=40.0,
+        min_lon=-100.0,
+        max_lon=-90.0,
+        spatial_resolution=0.5,
+        aggregation="mean",
+        filter_predicate= "<",
+        filter_value=360.0
+        )
 
     result = executor.execute()
-    print(result[:10,:10])
+    print("\nfind time\n",result[:5])

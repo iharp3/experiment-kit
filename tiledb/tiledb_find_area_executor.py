@@ -1,5 +1,5 @@
 from utils import get_agg_function
-from tiledb_get_raster_executor import tiledb_get_raster_executor
+from tiledb_get_heatmap_executor import tiledb_get_heatmap_executor
 
 class tiledb_find_area_executor:
     def __init__(
@@ -31,7 +31,7 @@ class tiledb_find_area_executor:
         self.filter_value = filter_value
 
     def execute(self):
-        executor = tiledb_get_raster_executor(
+        executor = tiledb_get_heatmap_executor(
             variable= self.variable,
             start_datetime= self.start_datetime,
             end_datetime= self.end_datetime,
@@ -44,10 +44,7 @@ class tiledb_find_area_executor:
             aggregation= self.aggregation,
         )
 
-        raster = executor.execute()
-        agg_function = get_agg_function(self.aggregation)
-
-        heatmap_result = agg_function(raster, axis=0)   # Shape: (lat, lon)
+        heatmap_result = executor.execute()
 
         if self.filter_predicate == ">":
             result = heatmap_result > self.filter_value
