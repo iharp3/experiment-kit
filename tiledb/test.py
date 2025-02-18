@@ -219,7 +219,7 @@ if __name__ == "__main__":
     # e = pd.Timestamp("2016-02-28 00:00")
     # temporal_resolution = "year"
     # timestamps = pd.period_range(start=s, end=e, freq="h")
-    # index_pairs = get_index_pairs(timestamps=timestamps, time_res=temporal_resolution, start_time=s)  # TODO: self.temporal_resolution
+    # index_pairs = get_index_pairs(timestamps=timestamps, time_res=temporal_resolution, start_time=s)
     # print(index_pairs)
 
     """Testing get_raster"""
@@ -268,37 +268,37 @@ if __name__ == "__main__":
     
     
     """Testing find_area"""
-    executor = tiledb_find_area_executor(
-        variable="temperature",  # Change to an available variable in the dataset
-        start_datetime="2014-01-01 00:00",
-        end_datetime="2014-06-01 00:00",
-        temporal_resolution="day",
-        min_lat=30.0,
-        max_lat=40.0,
-        min_lon=-100.0,
-        max_lon=-90.0,
-        spatial_resolution=0.5,
-        aggregation="mean",
-        filter_predicate= "<",
-        filter_value=360.0
-        )
-    result = executor.execute()
-    print("\nfind area\n", result[:5,:5])
+    # executor = tiledb_find_area_executor(
+    #     variable="temperature",  # Change to an available variable in the dataset
+    #     start_datetime="2014-01-01 00:00",
+    #     end_datetime="2014-06-01 00:00",
+    #     temporal_resolution="day",
+    #     min_lat=30.0,
+    #     max_lat=40.0,
+    #     min_lon=-100.0,
+    #     max_lon=-90.0,
+    #     spatial_resolution=1.0,
+    #     aggregation="mean",
+    #     filter_predicate= "<",
+    #     filter_value=360.0
+    #     )
+    # result = executor.execute()
+    # print("\nfind area\n", result[:5,:5])
     
     """Testing find_time"""
     executor = tiledb_find_time_executor(
         variable="temperature",  # Change to an available variable in the dataset
         start_datetime="2014-01-01 00:00",
         end_datetime="2014-06-01 00:00",
-        temporal_resolution="day",
+        temporal_resolution="month",
         min_lat=30.0,
         max_lat=40.0,
         min_lon=-100.0,
         max_lon=-90.0,
         spatial_resolution=0.5,
-        aggregation="mean",
-        filter_predicate= "<",
-        filter_value=360.0
+        aggregation="max",
+        filter_predicate= ">",
+        filter_value=270.0
         )
 
     result = executor.execute()
