@@ -3,9 +3,8 @@ import sys
 import time
 
 # add the path to the sys.path
-sys.path.append("../proposed")
-from query_executor_get_raster import GetRasterExecutor
-
+sys.path.append("..")
+from proposed.query_executor_get_raster import GetRasterExecutor
 
 def run_query(q):
     start_time = time.time()
