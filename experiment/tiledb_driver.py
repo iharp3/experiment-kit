@@ -33,8 +33,12 @@ def run_query(q):
 def main():
     df_query = pd.read_csv("queries/get_raster_test_set_tiledb.csv")
 
-    with multiprocessing.Pool(process=multiprocessing.cpu_count()) as pool:
+    num_cores = max(1, multiprocessing.cpu_count() - 3)
+    print(f"Using {num_cores} cores")
+
+    with multiprocessing.Pool(process=num_cores) as pool:
         time_list = pool.map(run_query, df_query.to_dict(orient="records"))
+        
     df_query["execution_time"] = time_list
     current_time = time.strftime("%m%d-%H%M%S")
     df_query.to_csv(f"results/tiledb_get_raster_test_result_{current_time}.csv", index=False)
