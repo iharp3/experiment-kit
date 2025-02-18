@@ -81,6 +81,7 @@ def write_chunked_data(data, i_t, time_chunks=inputs["t_chunk"], lat_chunks=inpu
     print(f"\n\tTotal chunks to process: {total_chunks}")
 
     counter = 0
+    final_time_idx = 0
     for t_start in range(0, data.shape[0], time_chunks):
         for lat_start in range(0, data.shape[1], lat_chunks):
             for lon_start in range(0, data.shape[2], lon_chunks):
@@ -93,8 +94,11 @@ def write_chunked_data(data, i_t, time_chunks=inputs["t_chunk"], lat_chunks=inpu
                     data[t_start:t_end, lat_start:lat_end, lon_start:lon_end]
                 
                 counter += 1
-                if counter%100==0:
+                if counter%(total_chunks//5)==0:
                     print(f"\t\tChunk {counter}/{total_chunks} written")
+                final_time_idx = t_end
+    print(f"\n\tfinal time idx: {final_time_idx}")
+    return final_time_idx
 
 def make_array(t, lat, lon):
     print(f"\nMaking array")
@@ -153,22 +157,28 @@ def make_array_from_one(ds, t, lat, lon):
 
 if __name__ == "__main__":
     
-    # delete_schema(inputs["tiledb_data_dir"])
+    delete_schema(inputs["tiledb_data_dir"])
 
     if inputs["all_files"]=="True":     # for all .nc files in folder
         make_array(t=inputs["t_chunk"], lat=inputs["lat_chunk"], lon=inputs["lon_chunk"])
         t_idx = 0
 
+        prev_file = ""
         for file in os.listdir(inputs["nc_data_dir"]):
             if file.endswith(".nc"):
+                print(f"\n\tLoading file {file}")
                 ds = load_dataset(inputs["nc_data_dir"], file)
                 c = chunk_dataset(ds, t=inputs["t_chunk"], lat=inputs["lat_chunk"], lon=inputs["lon_chunk"])
                 
                 with tiledb.DenseArray(inputs["tiledb_data_dir"], mode="w") as array:
-                    t_size, lat_size, lon_size = write_chunked_data(c[inputs["var"]].data, t_idx, inputs["t_chunk"], inputs["lat_chunk"], inputs["lon_chunk"])
+                    t_size = write_chunked_data(c[inputs["var"]].data, t_idx, inputs["t_chunk"], inputs["lat_chunk"], inputs["lon_chunk"])
                     t_idx += t_size
-                    # lat_idx += lat_size   #TODO: figure out how to make sure the data has same dim values at each interval
-                    # lon_idx += lon_size
+                
+                # deleting previous file
+                if os.path.exists(prev_file):
+                    os.remove(prev_file)
+                    print(f"{file} has been deleted.")
+                prev_file = file
 
     else:   # for one .nc file
         ds = load_dataset(inputs["nc_data_dir"], inputs["eg_file"])
