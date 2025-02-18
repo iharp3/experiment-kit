@@ -9,9 +9,9 @@ from utils import (get_time_indices,
                    get_agg_function, 
                    get_coord_block)
 
-json_file = "/data/experiment-kit/tiledb/config.json"
-with open(json_file, "r") as f:
-    inputs = json.load(f),
+# json_file = "/data/experiment-kit/tiledb/config.json"
+# with open(json_file, "r") as f:
+#     inputs = json.load(f),
 
 class tiledb_get_raster_executor:
 
@@ -48,7 +48,7 @@ class tiledb_get_raster_executor:
                                                            min_lon=self.min_lon)
         
         if self.temporal_resolution == "hour" and self.spatial_resolution == 0.25: 
-            with tiledb.open(inputs["tiledb_data_dir"], mode="r") as array:
+            with tiledb.open("/data/iharp-customized-storage/storage/experiments_tdb", mode="r") as array:  # TODO: figure out why inputs["tiledb_data_dir"] doesn't work
                 time_range = slice(s,e)         # Time indices (inclusive start, exclusive end)
                 lat_range = slice(min_la, max_la)
                 lon_range = slice(min_lo, max_lo)
