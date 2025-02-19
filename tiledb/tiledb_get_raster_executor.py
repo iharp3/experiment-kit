@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import tiledb
 
-from utils import (get_time_indices, 
+from tiledb.utils import (get_time_indices, 
                    get_spatial_range, 
                    get_index_pairs, 
                    get_agg_function, 

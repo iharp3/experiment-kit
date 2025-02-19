@@ -2,9 +2,12 @@ import multiprocessing
 import pandas as pd
 import sys
 import time
+import os
 
 # add the path to the sys.path
-sys.path.append("..")
+main_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+print(main_dir)
+sys.path.append(main_dir)
 from tiledb.tiledb_get_raster_executor import tiledb_get_raster_executor
 
 def run_query(q):
@@ -31,12 +34,12 @@ def run_query(q):
 
 
 def main():
-    df_query = pd.read_csv("queries/get_raster_test_set_tiledb.csv")
+    df_query = pd.read_csv("/data/experiment-kit/experiment/queries/get_raster_test_set_tiledb.csv")
 
     num_cores = max(1, multiprocessing.cpu_count() - 3)
     print(f"Using {num_cores} cores")
 
-    with multiprocessing.Pool(process=num_cores) as pool:
+    with multiprocessing.Pool(processes=num_cores) as pool:
         time_list = pool.map(run_query, df_query.to_dict(orient="records"))
         
     df_query["execution_time"] = time_list

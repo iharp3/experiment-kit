@@ -213,7 +213,7 @@ def get_index_pairs(timestamps, time_res, start_time):
 if __name__ == "__main__":
     """Testing util functions"""
     
-    # open_tiledb_array()
+    open_tiledb_array()
 
     # s = pd.Timestamp("2015-06-01 00:00")
     # e = pd.Timestamp("2016-02-28 00:00")
@@ -224,21 +224,21 @@ if __name__ == "__main__":
 
     """Testing get_raster"""
 
-    executor = tiledb_get_raster_executor(
-        variable="temperature",  # Change to an available variable in the dataset
-        start_datetime="2014-01-01 00:00",
-        end_datetime="2014-06-01 00:00",
-        temporal_resolution="hour",
-        min_lat=0.0,
-        max_lat=40.0,
-        min_lon=0.0,
-        max_lon=40.0,
-        spatial_resolution=0.25,
-        aggregation="mean"
-        )
+    # executor = tiledb_get_raster_executor(
+    #     variable="temperature",  # Change to an available variable in the dataset
+    #     start_datetime="2014-01-01 00:00",
+    #     end_datetime="2014-06-01 00:00",
+    #     temporal_resolution="hour",
+    #     min_lat=0.0,
+    #     max_lat=40.0,
+    #     min_lon=0.0,
+    #     max_lon=40.0,
+    #     spatial_resolution=0.25,
+    #     aggregation="mean"
+    #     )
     
 
-    """Testing get_heatmap"""       # TODO: test 1.0, test min, max
+    """Testing get_heatmap"""
     # executor = tiledb_get_heatmap_executor(
     #     variable="temperature",  # Change to an available variable in the dataset
     #     start_datetime="2014-01-01 00:00",
@@ -301,5 +301,5 @@ if __name__ == "__main__":
     #     filter_value=270.0
     #     )
 
-    result = executor.execute()
-    print("\nresult\n",result[:5])
+    # result = executor.execute()
+    # print("\nresult\n",result[:5])
