@@ -30,11 +30,14 @@ def run_query(q):
         print(q)
         print(e)
         return -1
-    return time.time() - start_time
+    
+    end_time = time.time() - start_time
+    print(end_time)
+    return end_time
 
 
 def main():
-    df_query = pd.read_csv("/data/experiment-kit/experiment/queries/get_raster_test_set_tiledb.csv")
+    df_query = pd.read_csv("/data/experiment-kit/experiment/queries/get_raster_test_set_tiledb_5yr.csv")
 
     num_cores = max(1, multiprocessing.cpu_count() - 3)
     print(f"Using {num_cores} cores")
