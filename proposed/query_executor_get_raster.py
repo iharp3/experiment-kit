@@ -96,6 +96,7 @@ class GetRasterExecutor(QueryExecutor):
                 "area": [leftover_max_lat, leftover_min_lon, leftover_min_lat, leftover_max_lon],
             }
             api_calls.append((dataset, request))
+        local_files = sorted(local_files)
         print("local files:", local_files)
         # print("api:", api_calls)
         return local_files, api_calls
@@ -119,10 +120,11 @@ class GetRasterExecutor(QueryExecutor):
         # 3.3 assemble result
         # compat="override" is a temporal walkaround as pre-aggregation value conflicts with downloaded data
         # future solution: use new encoding when write pre-aggregated data
-        try:
-            ds = xr.merge([i.chunk() for i in ds_list], compat="no_conflicts")
-        except ValueError:
-            print("WARNING: conflict in merging data, use override")
-            ds = xr.merge([i.chunk() for i in ds_list], compat="override")
+        # try:
+        #     ds = xr.merge([i.chunk() for i in ds_list], compat="no_conflicts")
+        # except ValueError:
+        #     print("WARNING: conflict in merging data, use override")
+        #     ds = xr.merge([i.chunk() for i in ds_list], compat="override")
 
+        ds = xr.concat([i.chunk() for i in ds_list], dim="time")
         return ds.compute()
