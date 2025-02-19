@@ -65,8 +65,8 @@ def gen_queries():
             query["category"] = "changing_area"
             queries.append(query)
 
-    # 2. Greenland, [1, 2.5, 5 years], 0.25, hourly
-    years = [1, 2.5, 5]
+    # 2. Greenland, [1, 2.5, 5, 10 years], 0.25, hourly
+    years = [1, 2.5, 5, 10]
     for year in years:
         for agg in aggs:
             max_lat, min_lat, min_lon, max_lon = gen_random_spatial_range(25, 60)
