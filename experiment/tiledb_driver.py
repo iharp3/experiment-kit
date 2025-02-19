@@ -44,7 +44,7 @@ def main():
         
     df_query["execution_time"] = time_list
     current_time = time.strftime("%m%d-%H%M%S")
-    df_query.to_csv(f"results/tiledb_get_raster_test_result_{current_time}.csv", index=False)
+    df_query.to_csv(f"/data/experiment-kit/experiment/results/tiledb_get_raster_test_result_{current_time}.csv", index=False)
 
 if __name__ == "__main__":
     main()
