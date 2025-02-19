@@ -52,4 +52,4 @@ class VanillaFindAreaExecutor:
             raise ValueError("Invalid filter_predicate")
         res = res.fillna(False)
         res = res.astype(bool)
-        return res.compute()
+        return res.load()
