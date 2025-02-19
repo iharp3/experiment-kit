@@ -21,17 +21,15 @@ def gen_random_spatial_range(n_lat, n_lon):
 def gen_random_time_span(n_years):
     if n_years == 20:
         return "2004-01-01 00:00:00", "2023-12-31 23:00:00"
+
+    int_years = int(n_years)
+    start_year = np.random.randint(2004, 2023 - int_years + 1)
+    end_year = start_year + int_years
+    start_time = f"{start_year}-01-01 00:00:00"
     if n_years % 1 == 0.5:
-        int_years = int(n_years)
-        start_year = np.random.randint(2004, 2023 - int_years + 1)
-        end_year = start_year + int_years
-        start_time = f"{start_year}-01-01 00:00:00"
         end_time = f"{end_year}-06-30 23:00:00"
     else:
-        start_year = np.random.randint(2004, 2023 - n_years + 1)
-        end_year = start_year + n_years - 1
-        start_time = f"{start_year}-01-01 00:00:00"
-        end_time = f"{end_year}-12-31 23:00:00"
+        end_time = f"{end_year-1}-12-31 23:00:00"
     return start_time, end_time
 
 
@@ -51,7 +49,7 @@ def make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, s_res, 
     return query
 
 
-if __name__ == "__main__":
+def gen_queries():
     queries = []
     aggs = ["min", "max", "mean"]
 
@@ -102,6 +100,24 @@ if __name__ == "__main__":
             query["area_persent"] = 100
             query["category"] = "changing_temporal_res"
             queries.append(query)
+
+    return queries
+
+
+def check_same_start_year(queries):
+    last_start_year = None
+    for query in queries:
+        start_year = query["start_time"].split("-")[0]
+        if last_start_year is not None and last_start_year == start_year:
+            return True
+        last_start_year = start_year
+    return False
+
+
+if __name__ == "__main__":
+    queries = gen_queries()
+    while check_same_start_year(queries):
+        queries = gen_queries()
 
     df = pd.DataFrame(queries)
     df["qid"] = df.index
