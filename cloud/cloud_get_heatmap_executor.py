@@ -15,6 +15,10 @@ class cloud_get_heatmap_executor:
         spatial_resolution: float,  # 0.25, 0.5, 1
         aggregation: str,  # "mean", "max", "min"  !! Use this aggregation for heatmap aggregation as well
     ):
+        # change min_lon, max_lon to 0-360
+        min_lon = min_lon % 360
+        max_lon = max_lon % 360
+        
         self.variable = variable
         self.start_datetime = start_datetime
         self.end_datetime = end_datetime
