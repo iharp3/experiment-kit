@@ -19,6 +19,24 @@ json_file = "/data/experiment-kit/tiledb/config.json"
 with open(json_file, "r") as f:
     inputs = json.load(f)
 
+def get_time_range(ds):
+    s_date = ds.time.min().values
+    e_date = ds.time.max().values
+
+    if isinstance(s_date, np.datetime64):
+        pass
+    else:
+        print(f"\n\tStarting date type: {type(s_date)}")
+        s_date = np.datetime64(s_date)
+
+    if isinstance(e_date, np.datetime64):
+        pass
+    else:
+        print(f"\n\tStarting date type: {type(e_date)}")
+        e_date = np.datetime64(e_date)
+
+    return s_date, e_date
+
 def load_dataset(nc_path, file_name):
     ds = xr.open_dataset(os.path.join(nc_path, file_name))
     return ds
