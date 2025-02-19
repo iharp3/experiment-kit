@@ -3,12 +3,13 @@ import sys
 import time
 
 # add the path to the sys.path
-sys.path.append("..")
-from proposed.query_executor_get_raster import GetRasterExecutor
+sys.path.append("../vanilla")
+from vanilla_get_raster_executor import VanillaGetRasterExecutor
+
 
 def run_query(q):
     start_time = time.time()
-    qe = GetRasterExecutor(
+    qe = VanillaGetRasterExecutor(
         variable=q["variable"],
         start_datetime=q["start_time"],
         end_datetime=q["end_time"],
@@ -43,4 +44,4 @@ if __name__ == "__main__":
 
     df_query["execution_time"] = time_list
     current_time = time.strftime("%m%d-%H%M%S")
-    df_query.to_csv(f"results/proposed_get_raster_test_025H_result_{current_time}.csv", index=False)
+    df_query.to_csv(f"results/vanilla_get_raster_test_025H_result_{current_time}.csv", index=False)

@@ -22,7 +22,7 @@ def gen_random_time_span(n_years):
     if n_years == 20:
         return "2004-01-01 00:00:00", "2023-12-31 23:00:00"
     start_year = np.random.randint(2004, 2023 - n_years + 1)
-    end_year = start_year + n_years
+    end_year = start_year + n_years - 1
     start_time = f"{start_year}-01-01 00:00:00"
     end_time = f"{end_year}-12-31 23:00:00"
     return start_time, end_time
