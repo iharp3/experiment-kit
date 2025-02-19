@@ -17,6 +17,10 @@ class cloud_find_area_executor:
         filter_predicate: str,  # "<", ">" !! only these two predicates are enough
         filter_value: float,
     ):
+        # change min_lon, max_lon to 0-360
+        min_lon = min_lon % 360
+        max_lon = max_lon % 360
+
         self.variable = variable
         self.start_datetime = start_datetime
         self.end_datetime = end_datetime

@@ -122,4 +122,4 @@ if __name__ == "__main__":
     df = pd.DataFrame(queries)
     df["qid"] = df.index
     df = df[["qid"] + [col for col in df.columns if col != "qid"]]
-    df.to_csv("get_raster_test_set_025H.csv", index=False)
+    df.to_csv("get_raster_test_set_025H2.csv", index=False)

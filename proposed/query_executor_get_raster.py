@@ -109,8 +109,7 @@ class GetRasterExecutor(QueryExecutor):
         # 3.2 read local files
         ds_list = []
         for file in file_list:
-            ds = xr.open_dataset(file, engine="netcdf4")
-            ds = ds.sel(
+            ds = xr.open_dataset(file, engine="netcdf4").sel(
                 time=slice(self.start_datetime, self.end_datetime),
                 latitude=slice(self.max_lat, self.min_lat),
                 longitude=slice(self.min_lon, self.max_lon),
