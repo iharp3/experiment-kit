@@ -48,4 +48,4 @@ class VanillaGetHeatmapExecutor:
             heatmap = raster.min(dim="time")
         else:
             raise ValueError("Invalid aggregation")
-        return heatmap.load()
+        return heatmap.compute()

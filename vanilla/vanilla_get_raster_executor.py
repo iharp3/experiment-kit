@@ -97,7 +97,7 @@ class VanillaGetRasterExecutor:
                 ds = coarsened.min()
             else:
                 raise ValueError(f"Spatial aggregation {self.aggregation} is not supported.")
-        return ds.load()
+        return ds.compute()
 
     # def execute_dask(self):
     #     """
@@ -138,4 +138,4 @@ class VanillaGetRasterExecutor:
     #             ds = coarsened.min()
     #         else:
     #             raise ValueError(f"Spatial aggregation {self.aggregation} is not supported.")
-    #     return ds.load()
+    #     return ds.compute()

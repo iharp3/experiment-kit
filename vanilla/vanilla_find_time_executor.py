@@ -50,4 +50,4 @@ class VanillaFindTimeExecutor:
             res = ts.where(ts < self.filter_value, drop=False)
         else:
             raise ValueError("Invalid filter_predicate")
-        return res.load()
+        return res.compute()

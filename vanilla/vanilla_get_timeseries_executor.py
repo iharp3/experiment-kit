@@ -41,11 +41,11 @@ class VanillaGetTimeseriesExecutor:
         )
         vanilla_raster = vanilla_get_raster_executor.execute()
         if self.aggregation == "mean":
-            time_series = vanilla_raster.mean(dim=["latitude", "longitude"]).load()
+            time_series = vanilla_raster.mean(dim=["latitude", "longitude"]).compute()
         elif self.aggregation == "max":
-            time_series = vanilla_raster.max(dim=["latitude", "longitude"]).load()
+            time_series = vanilla_raster.max(dim=["latitude", "longitude"]).compute()
         elif self.aggregation == "min":
-            time_series = vanilla_raster.min(dim=["latitude", "longitude"]).load()
+            time_series = vanilla_raster.min(dim=["latitude", "longitude"]).compute()
         else:
             raise ValueError(f"Invalid time series aggregation method: {self.aggregation}")
-        return time_series.load()
+        return time_series.compute()
