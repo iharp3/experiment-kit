@@ -1,12 +1,20 @@
+import os
 import xarray as xr
 
 
 def get_file_list(start_datetime, end_datetime):
+
+    # check if data dir exist
+    if not os.path.exists("/data/era5/raw/2m_temperature"):
+        file_dir = "/data"
+    else:
+        file_dir = "/data/era5/raw/2m_temperature"
+
     file_list = []
     start_year = start_datetime[:4]
     end_year = end_datetime[:4]
     for year in range(int(start_year), int(end_year) + 1):
-        file_path = f"/data/2m_temperature-{year}.nc"
+        file_path = f"{file_dir}/2m_temperature-{year}.nc"
         file_list.append(file_path)
     return file_list
 
