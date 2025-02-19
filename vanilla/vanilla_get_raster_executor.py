@@ -6,7 +6,7 @@ def get_file_list(start_datetime, end_datetime):
     start_year = start_datetime[:4]
     end_year = end_datetime[:4]
     for year in range(int(start_year), int(end_year) + 1):
-        file_path = f"/data/era5/raw/2m_temperature/2m_temperature-{year}.nc"
+        file_path = f"/data/2m_temperature-{year}.nc"
         file_list.append(file_path)
     return file_list
 
