@@ -22,7 +22,7 @@ def gen_random_time_span_tiledb(n_years):
     if n_years > 5:
         n_years = 5
     start_year = np.random.randint(2014, 2020 - n_years + 1)
-    end_year = start_year + n_years
+    end_year = start_year + n_years - 1
     start_time = f"{start_year}-01-01 00:00:00"
     end_time = f"{end_year}-12-31 23:00:00"
     return start_time, end_time
