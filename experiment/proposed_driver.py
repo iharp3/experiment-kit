@@ -6,6 +6,7 @@ import time
 sys.path.append("..")
 from proposed.query_executor_get_raster import GetRasterExecutor
 
+
 def run_query(q):
     start_time = time.time()
     qe = GetRasterExecutor(
@@ -30,7 +31,7 @@ def run_query(q):
 
 
 if __name__ == "__main__":
-    df_query = pd.read_csv("queries/get_raster_test_set_025H.csv")
+    df_query = pd.read_csv("queries/get_raster_test_set_025H3.csv")
 
     time_list = []
 
@@ -43,4 +44,4 @@ if __name__ == "__main__":
 
     df_query["execution_time"] = time_list
     current_time = time.strftime("%m%d-%H%M%S")
-    df_query.to_csv(f"results/proposed_get_raster_test_025H_result_{current_time}.csv", index=False)
+    df_query.to_csv(f"results/proposed_get_raster_test_025H3_result_{current_time}.csv", index=False)
