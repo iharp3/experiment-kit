@@ -156,10 +156,13 @@ if __name__ == "__main__":
                     t_idx += t_size
                 
                 # deleting previous file
-                if os.path.exists(prev_file):
+                if os.path.exists(os.path.join(inputs["nc_data_dir"], prev_file)):
                     os.remove(prev_file)
                     print(f"{file} has been deleted.")
                 prev_file = file
+
+        tiledb.consolidate(inputs["tiledb_data_dir"])
+        tiledb.vacuum(inputs["tiledb_data_dir"])
 
     else:   # for one .nc file
         ds = load_dataset(inputs["nc_data_dir"], inputs["eg_file"])

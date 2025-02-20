@@ -231,7 +231,22 @@ def get_index_pairs(timestamps, time_res, start_time):
 if __name__ == "__main__":
     """Testing util functions"""
     
-    open_tiledb_array()
+    # open_tiledb_array()
+    config = tiledb.Config()
+    config["vfs.min_parallel_size"] = str(100 * 1024 * 1024)  # Reduce parallel I/O size
+    config["sm.consolidation.buffer_size"] = str(50 * 1024 * 1024)  # 50MB buffer (default is 500MB)
+    config["sm.consolidation.mode"] = "fragments"  # Consolidate only fragments
+
+    # config = tiledb.Config()
+    for _ in range(5):  # Run multiple passes to avoid OOM
+        tiledb.consolidate("my_array", config=config)
+        tiledb.vacuum("my_array", config=config)
+
+    print(f"begin consolidation")
+    tiledb.consolidate(inputs["tiledb_data_dir"])
+    print(f"begin vacuum")
+    tiledb.vacuum(inputs["tiledb_data_dir"])
+    print(f"done")
 
     # s = pd.Timestamp("2015-06-01 00:00")
     # e = pd.Timestamp("2016-02-28 00:00")

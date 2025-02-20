@@ -50,4 +50,19 @@ def main():
     df_query.to_csv(f"/data/experiment-kit/experiment/results/tiledb_get_raster_test_result_{current_time}.csv", index=False)
 
 if __name__ == "__main__":
-    main()
+    # main()
+
+    df_query = pd.read_csv("/data/experiment-kit/experiment/queries/get_raster_test_set_tiledb_5yr.csv")
+
+    time_list = []
+
+    for query in df_query.to_records():
+        print(query)
+        execution_time = run_query(query)
+        print(execution_time)
+        time_list.append(execution_time)
+        print("======================\n")
+
+    df_query["execution_time"] = time_list
+    current_time = time.strftime("%m%d-%H%M%S")
+    df_query.to_csv(f"/data/experiment-kit/experiment/results/tiledb_get_raster_test_result_{current_time}.csv", index=False)
