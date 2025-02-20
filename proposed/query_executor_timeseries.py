@@ -1,6 +1,6 @@
 from xarray.core.dataset import Dataset
-from query_executor import *
-from query_executor_get_raster import GetRasterExecutor
+from .query_executor import *
+from .query_executor_get_raster import GetRasterExecutor
 
 
 class TimeseriesExecutor(QueryExecutor):
@@ -44,8 +44,8 @@ class TimeseriesExecutor(QueryExecutor):
             min_lon=self.min_lon,
             max_lon=self.max_lon,
             temporal_resolution=self.temporal_resolution,
-            spatial_resolution=self.spatial_resolution,
-            aggregation=self.aggregation,
+            spatial_resolution=1,
+            aggregation=self.time_series_aggregation_method,
             metadata=self.metadata.f_path,
         )
         raster = get_raster_executor.execute()

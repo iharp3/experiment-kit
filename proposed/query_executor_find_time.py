@@ -1,10 +1,10 @@
 import pandas as pd
 import xarray as xr
 
-from query_executor import QueryExecutor
-from query_executor_get_raster import GetRasterExecutor
-from query_executor_timeseries import TimeseriesExecutor
-from utils.get_whole_period import get_whole_period_between, get_last_date_of_month, time_array_to_range
+from .query_executor import QueryExecutor
+from .query_executor_get_raster import GetRasterExecutor
+from .query_executor_timeseries import TimeseriesExecutor
+from .utils.get_whole_period import get_whole_period_between, get_last_date_of_month, time_array_to_range
 
 
 class FindTimeExecutor(QueryExecutor):
@@ -115,6 +115,7 @@ class FindTimeExecutor(QueryExecutor):
                 year_datetime = f"{year}-12-31 00:00:00"
                 curr_year_min = year_min.sel(time=year_datetime)[self.variable_short_name].values.min()
                 curr_year_max = year_max.sel(time=year_datetime)[self.variable_short_name].values.max()
+                print(f"year: {year}, min: {curr_year_min}, max: {curr_year_max}")
                 if self.filter_predicate == ">":
                     if curr_year_min > self.filter_value:
                         print(f"{year}: min > filter, True")
