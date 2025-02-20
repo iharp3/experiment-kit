@@ -13,7 +13,7 @@ from tiledb.tiledb_get_raster_executor import tiledb_get_raster_executor
 def run_query(q):
     start_time = time.time()
     qe = tiledb_get_raster_executor(
-        variable=q["variable"],
+        variable="temperature",
         start_datetime=q["start_time"],
         end_datetime=q["end_time"],
         max_lat=q["max_lat"],
@@ -37,9 +37,9 @@ def run_query(q):
 
 
 def main():
-    df_query = pd.read_csv("/data/experiment-kit/experiment/queries/get_raster_test_set_tiledb_5yr.csv")
+    df_query = pd.read_csv("/data/experiment-kit/experiment/queries/get_raster_test_set_tiledb_10yr.csv")
 
-    num_cores = max(1, multiprocessing.cpu_count() - 3)
+    num_cores = max(1, multiprocessing.cpu_count() - 5)
     print(f"Using {num_cores} cores")
 
     with multiprocessing.Pool(processes=num_cores) as pool:
@@ -51,8 +51,7 @@ def main():
 
 if __name__ == "__main__":
     # main()
-
-    df_query = pd.read_csv("/data/experiment-kit/experiment/queries/get_raster_test_set_tiledb_5yr.csv")
+    df_query = pd.read_csv("/data/experiment-kit/experiment/queries/get_raster_test_set_tiledb.csv")
 
     time_list = []
 
