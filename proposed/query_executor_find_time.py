@@ -220,6 +220,9 @@ class FindTimeExecutor(QueryExecutor):
         return result
 
     def _get_range_min_max(self, _range, temporal_res):
+        # TODO: optimize this function
+        # Read with a range of first time to last time
+        # Select the time point in the _range
         ds_min = []
         ds_max = []
         for start, end in _range:
