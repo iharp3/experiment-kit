@@ -218,6 +218,11 @@ def time_array_to_range(time_array, resolution):
     """
     Range: [[pd.Timestamp(start), pd.Timestamp(end)], ...]
     """
+    # quick fix for single year
+    if resolution == "year" and len(time_array) == 1:
+        single_year = time_array[0]
+        return [[pd.Timestamp(f"{single_year}-01-01 00:00:00"), pd.Timestamp(f"{single_year}-12-31 23:00:00")]]
+
     if len(time_array) == 0:
         return []
 
