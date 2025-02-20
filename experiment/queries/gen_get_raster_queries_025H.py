@@ -51,7 +51,7 @@ def make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, s_res, 
 
 def gen_queries():
     queries = []
-    aggs = ["min", "max", "mean"]
+    aggs = ["min", "max", "mean"] * 3
 
     # 1. [10%, 25%, 50%, 100% of Greenland], 5 years, 0.25, hourly
     areas = [[3, 5], [15, 25], [25, 30], [25, 60]]
@@ -122,4 +122,4 @@ if __name__ == "__main__":
     df = pd.DataFrame(queries)
     df["qid"] = df.index
     df = df[["qid"] + [col for col in df.columns if col != "qid"]]
-    df.to_csv("get_raster_test_set_025H2.csv", index=False)
+    df.to_csv("get_raster_test_set_025H3.csv", index=False)
