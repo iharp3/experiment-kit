@@ -1,4 +1,4 @@
-qid,variable,start_time,end_time,min_lat,max_lat,min_lon,max_lon,spatial_resolution,temporal_resolution,aggregation,time_span,area_persent,category
+qid,variable,start_time,end_time,min_lat,max_lat,min_lon,max_lon,spatial_resolution,temporal_resolution,aggregation,time_span,area_persent,category,execution_time
 0,2m_temperature,2014-01-01 00:00:00,2018-12-31 23:00:00,-6,-3,52,57,1.0,day,min,5,1,changing_area,1241.9213330745697
 1,2m_temperature,2014-01-01 00:00:00,2018-12-31 23:00:00,-65,-62,98,103,1.0,day,max,5,1,changing_area,1307.0931231975555
 2,2m_temperature,2014-01-01 00:00:00,2018-12-31 23:00:00,67,70,49,54,1.0,day,mean,5,1,changing_area,1349.8912160396576
@@ -28,8 +28,8 @@ qid,variable,start_time,end_time,min_lat,max_lat,min_lon,max_lon,spatial_resolut
 26,2m_temperature,2015-01-01 00:00:00,2019-12-31 23:00:00,3,28,-34,26,1.0,day,mean,5,100,changing_spatial_res,1764.5183045864105
 27,2m_temperature,2014-01-01 00:00:00,2018-12-31 23:00:00,-16,9,82,142,1.0,hour,min,5,100,changing_temporal_res,41195.31653237343
 28,2m_temperature,2015-01-01 00:00:00,2019-12-31 23:00:00,-27,-2,18,78,1.0,hour,max,5,100,changing_temporal_res,41080.7584438324
-29,2m_temperature,2015-01-01 00:00:00,2019-12-31 23:00:00,-25,0,16,76,1.0,hour,mean,5,100,changing_temporal_res,40000.0
-30,2m_temperature,2015-01-01 00:00:00,2019-12-31 23:00:00,-56,-31,-153,-93,1.0,day,min,5,100,changing_temporal_res,40000.0
+29,2m_temperature,2015-01-01 00:00:00,2019-12-31 23:00:00,-25,0,16,76,1.0,hour,mean,5,100,changing_temporal_res
+30,2m_temperature,2015-01-01 00:00:00,2019-12-31 23:00:00,-56,-31,-153,-93,1.0,day,min,5,100,changing_temporal_res
 31,2m_temperature,2015-01-01 00:00:00,2019-12-31 23:00:00,-70,-45,22,82,1.0,day,max,5,100,changing_temporal_res,
 32,2m_temperature,2015-01-01 00:00:00,2019-12-31 23:00:00,-89,-64,54,114,1.0,day,mean,5,100,changing_temporal_res
 33,2m_temperature,2015-01-01 00:00:00,2019-12-31 23:00:00,-23,2,29,89,1.0,month,min,5,100,changing_temporal_res
