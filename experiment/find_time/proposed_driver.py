@@ -4,7 +4,7 @@ import time
 
 # add the path to the sys.path
 sys.path.append("../..")
-from proposed.query_executor_find_time import FindTimeExecutor
+from proposed.query_executor_find_time2 import FindTimeExecutor
 
 
 def run_query(q):
