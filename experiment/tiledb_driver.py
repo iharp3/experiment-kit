@@ -31,23 +31,20 @@ def run_query(q):
         print(e)
         return -1
     
-    end_time = time.time() - start_time
-    print(end_time)
-    return end_time
+    return time.time() - start_time
 
+# def main():
+#     df_query = pd.read_csv("/data/experiment-kit/experiment/queries/get_raster_test_set_tiledb_10yr.csv")
 
-def main():
-    df_query = pd.read_csv("/data/experiment-kit/experiment/queries/get_raster_test_set_tiledb_10yr.csv")
+#     num_cores = max(1, multiprocessing.cpu_count() - 5)
+#     print(f"Using {num_cores} cores")
 
-    num_cores = max(1, multiprocessing.cpu_count() - 5)
-    print(f"Using {num_cores} cores")
-
-    with multiprocessing.Pool(processes=num_cores) as pool:
-        time_list = pool.map(run_query, df_query.to_dict(orient="records"))
+#     with multiprocessing.Pool(processes=num_cores) as pool:
+#         time_list = pool.map(run_query, df_query.to_dict(orient="records"))
         
-    df_query["execution_time"] = time_list
-    current_time = time.strftime("%m%d-%H%M%S")
-    df_query.to_csv(f"/data/experiment-kit/experiment/results/tiledb_get_raster_test_result_{current_time}.csv", index=False)
+#     df_query["execution_time"] = time_list
+#     current_time = time.strftime("%m%d-%H%M%S")
+#     df_query.to_csv(f"/data/experiment-kit/experiment/results/tiledb_get_raster_test_result_{current_time}.csv", index=False)
 
 if __name__ == "__main__":
     # main()

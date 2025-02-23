@@ -1,0 +1,5 @@
+qid,variable,start_time,end_time,min_lat,max_lat,min_lon,max_lon,spatial_resolution,temporal_resolution,aggregation,time_span,area_persent,category
+
+39,2m_temperature,2016-01-01 00:00:00,2018-12-31 23:00:00,-61,-36,-126,-66,1,day,min,3,100,changing_time,
+40,2m_temperature,2014-01-01 00:00:00,2016-12-31 23:00:00,-85,-60,-20,40,1,day,max,3,100,changing_time,
+41,2m_temperature,2015-01-01 00:00:00,2017-12-31 23:00:00,64,89,25,85,1,day,mean,3,100,changing_time,
