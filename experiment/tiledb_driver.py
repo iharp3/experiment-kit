@@ -48,7 +48,7 @@ def run_query(q):
 
 if __name__ == "__main__":
     # main()
-    df_query = pd.read_csv("/data/experiment-kit/experiment/queries/get_raster_test_set_3yr.csv")
+    df_query = pd.read_csv("/data/experiment-kit/experiment/queries/get_raster_ordered_test_set_tiledb.csv")
 
     time_list = []
 
@@ -61,4 +61,4 @@ if __name__ == "__main__":
 
     df_query["execution_time"] = time_list
     current_time = time.strftime("%m%d-%H%M%S")
-    df_query.to_csv(f"/data/experiment-kit/experiment/results/3yr_tiledb_get_raster_test_result_{current_time}.csv", index=False)
+    df_query.to_csv(f"/data/experiment-kit/experiment/results/20_min_tiledb_get_raster_test_result_{current_time}.csv", index=False)
