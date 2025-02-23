@@ -36,7 +36,7 @@ def run_query(q):
 
 
 if __name__ == "__main__":
-    df_query = pd.read_csv("/home/uribe055/experiment-kit/experiment/queries/get_raster_test_set_1D_all.csv")   # /get_raster_test_set_3yr.csv
+    df_query = pd.read_csv("/home/uribe055/experiment-kit/experiment/queries/get_raster_test_set_3yr.csv")
 
     time_list = []
 

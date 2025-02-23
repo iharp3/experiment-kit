@@ -3,8 +3,13 @@ import sys
 import time
 
 # add the path to the sys.path
-sys.path.append("../cloud")
-from cloud_get_raster_executor import cloud_get_raster_executor
+import os
+main_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+print(main_dir)
+sys.path.append(main_dir)
+from cloud.cloud_get_raster_executor import cloud_get_raster_executor
+# sys.path.append("../cloud")
+# from cloud_get_raster_executor import cloud_get_raster_executor
 
 
 def run_query(q):
@@ -31,7 +36,7 @@ def run_query(q):
 
 
 if __name__ == "__main__":
-    df_query = pd.read_csv("queries/get_raster_test_set_025H.csv")
+    df_query = pd.read_csv("/home/uribe055/experiment-kit/experiment/queries/get_raster_test_set_1D_all.csv")
 
     time_list = []
 
@@ -44,4 +49,4 @@ if __name__ == "__main__":
 
     df_query["execution_time"] = time_list
     current_time = time.strftime("%m%d-%H%M%S")
-    df_query.to_csv(f"results/cloud_get_raster_test_025H_result_{current_time}.csv", index=False)
+    df_query.to_csv(f"/home/uribe055/experiment-kit/experiment/results/cloud_get_raster_TileDBtest_result_{current_time}.csv", index=False)
