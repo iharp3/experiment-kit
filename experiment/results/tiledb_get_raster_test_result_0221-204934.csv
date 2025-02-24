@@ -38,3 +38,6 @@ qid,variable,start_time,end_time,min_lat,max_lat,min_lon,max_lon,spatial_resolut
 36,2m_temperature,2014-01-01 00:00:00,2018-12-31 23:00:00,-10,15,-4,56,1.0,year,min,5,100,changing_temporal_res,52.48848509788513
 37,2m_temperature,2014-01-01 00:00:00,2018-12-31 23:00:00,-34,-9,-6,54,1.0,year,max,5,100,changing_temporal_res,51.388429164886475
 38,2m_temperature,2014-01-01 00:00:00,2018-12-31 23:00:00,-25,0,62,122,1.0,year,mean,5,100,changing_temporal_res,52.2773871421814
+39,2m_temperature,2016-01-01 00:00:00,2018-12-31 23:00:00,-61,-36,-126,-66,1,day,min,3,100,changing_time,840.463794708252
+40,2m_temperature,2014-01-01 00:00:00,2016-12-31 23:00:00,-85,-60,-20,40,1,day,max,3,100,changing_time,839.2774925231934
+41,2m_temperature,2015-01-01 00:00:00,2017-12-31 23:00:00,64,89,25,85,1,day,mean,3,100,changing_time,872.9986300468445
