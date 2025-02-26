@@ -3,7 +3,12 @@ import sys
 import time
 
 # add the path to the sys.path
-sys.path.append("../../vanilla")
+# sys.path.append("../../vanilla")
+# from vanilla_find_time_executor import VanillaFindTimeExecutor
+import os
+main_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+print(main_dir)
+sys.path.append(os.path.join(main_dir, "vanilla"))
 from vanilla_find_time_executor import VanillaFindTimeExecutor
 
 
@@ -33,17 +38,18 @@ def run_query(q):
 
 
 if __name__ == "__main__":
-    df_query = pd.read_csv("findtime_test.csv")
+    df_query = pd.read_csv("/home/uribe055/experiment-kit/experiment/find_time/findtime_test_5yr.csv")
 
-    time_list = []
+    for i in range(2):
+        time_list = []
 
-    for query in df_query.to_records():
-        print(query)
-        execution_time = run_query(query)
-        print(execution_time)
-        time_list.append(execution_time)
-        print("======================\n")
+        for query in df_query.to_records():
+            print(query)
+            execution_time = run_query(query)
+            print(execution_time)
+            time_list.append(execution_time)
+            print("======================\n")
 
-    df_query["execution_time"] = time_list
-    current_time = time.strftime("%m%d-%H%M%S")
-    df_query.to_csv(f"vanilla_findtime_result_{current_time}.csv", index=False)
+        df_query["execution_time"] = time_list
+        current_time = time.strftime("%m%d-%H%M%S")
+        df_query.to_csv(f"/home/uribe055/experiment-kit/experiment/find_time/vanilla_findtime_5yrresult_{current_time}.csv", index=False)
