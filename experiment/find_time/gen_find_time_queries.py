@@ -26,7 +26,8 @@ def gen_random_time_span(n_years):
         return "2004-01-01 00:00:00", "2023-12-31 23:00:00"
 
     int_years = int(n_years)
-    start_year = np.random.randint(2004, 2023 - int_years + 1)
+    start_year = np.random.randint(2014, 2023 - int_years + 1)  # for tiledb
+    # start_year = np.random.randint(2004, 2023 - int_years + 1)  # for vanilla, polaris
     end_year = start_year + int_years
     start_time = f"{start_year}-01-01 00:00:00"
     if n_years % 1 == 0.5:
@@ -48,7 +49,7 @@ def make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, s_res, 
         "spatial_resolution": s_res,
         "temporal_resolution": t_res,
         "aggregation": agg,
-        "time_series_aggregation_method": agg,
+        # "time_series_aggregation_method": agg,
         "filter_predicate": pred,
         "filter_value": value,
     }
@@ -67,26 +68,26 @@ def gen_queries():
     # ]
 
     # 1. [1, 2.5, 5, 10 years], pred 310
-    for span in [1, 2.5, 5, 10]:
-        for agg in aggs:
-            for pred in predicates:
-                start_time, end_time = gen_random_time_span(span)
-                query = make_query(
-                    start_time, end_time, min_lat, max_lat, min_lon, max_lon, 0.25, "hour", agg, pred, 310
-                )
-                query["time_span"] = span
-                query["category"] = "changing_time"
-                queries.append(query)
+    # for span in [1, 2.5, 5, 10]:
+    #     for agg in aggs:
+    #         for pred in predicates:
+    #             start_time, end_time = gen_random_time_span(span)
+    #             query = make_query(
+    #                 start_time, end_time, min_lat, max_lat, min_lon, max_lon, 0.25, "hour", agg, pred, 310
+    #             )
+    #             query["time_span"] = span
+    #             query["category"] = "changing_time"
+    #             queries.append(query)
 
     # 2. 10 years, pred [205, 240, 275, 310]
     for value in values:
         for agg in aggs:
             for pred in predicates:
-                start_time, end_time = gen_random_time_span(10)
+                start_time, end_time = gen_random_time_span(5)
                 query = make_query(
                     start_time, end_time, min_lat, max_lat, min_lon, max_lon, 0.25, "hour", agg, pred, value
                 )
-                query["time_span"] = 10
+                query["time_span"] = 5
                 query["category"] = "changing_value"
                 queries.append(query)
 
@@ -111,4 +112,4 @@ if __name__ == "__main__":
     df = pd.DataFrame(queries)
     df["qid"] = df.index
     df = df[["qid"] + [col for col in df.columns if col != "qid"]]
-    df.to_csv("findtime_test.csv", index=False)
+    df.to_csv("/data/experiment-kit/experiment/find_time/findtime_test_5yr.csv", index=False)

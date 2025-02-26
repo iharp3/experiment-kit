@@ -12,7 +12,7 @@ from tiledb_find_time_executor import tiledb_find_time_executor
 def run_query(q):
     start_time = time.time()
     qe = tiledb_find_time_executor(
-        variable= "t2m", #q["variable"],
+        variable= "temperature", #q["variable"],
         start_datetime=q["start_time"],
         end_datetime=q["end_time"],
         max_lat=q["max_lat"],
@@ -34,17 +34,19 @@ def run_query(q):
     return time.time() - start_time
 
 if __name__ == "__main__":
-    df_query = pd.read_csv("/data/experiment-kit/experiment/find_time/findtime_test.csv")
+    df_query = pd.read_csv("/data/experiment-kit/experiment/find_time/findtime_test_tdb.csv")
 
-    time_list = []
+    for i in range(2):
 
-    for query in df_query.to_records():
-        print(query)
-        execution_time = run_query(query)
-        print(execution_time)
-        time_list.append(execution_time)
-        print("======================\n")
+        time_list = []
 
-    df_query["execution_time"] = time_list
-    current_time = time.strftime("%m%d-%H%M%S")
-    df_query.to_csv(f"/data/experiment-kit/experiment/find_time/tiledb_findtime_result_{current_time}.csv", index=False)
+        for query in df_query.to_records():
+            print(query)
+            execution_time = run_query(query)
+            print(execution_time)
+            time_list.append(execution_time)
+            print("======================\n")
+
+        df_query["execution_time"] = time_list
+        current_time = time.strftime("%m%d-%H%M%S")
+        df_query.to_csv(f"/data/experiment-kit/experiment/find_time/tiledb_findtime_result_{current_time}.csv", index=False)
