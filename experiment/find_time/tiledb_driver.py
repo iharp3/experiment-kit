@@ -34,7 +34,7 @@ def run_query(q):
     return time.time() - start_time
 
 if __name__ == "__main__":
-    df_query = pd.read_csv("/data/experiment-kit/experiment/find_time/findtime_test_tdb.csv")
+    df_query = pd.read_csv("/data/experiment-kit/experiment/find_time/findtime_test_5yr.csv")
 
     for i in range(2):
 
