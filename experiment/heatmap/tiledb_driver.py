@@ -12,7 +12,7 @@ from tiledb_get_heatmap_executor import tiledb_get_heatmap_executor
 def run_query(q):
     start_time = time.time()
     qe = tiledb_get_heatmap_executor(
-        variable=q["variable"],
+        variable="temperature", #q["variable"],
         start_datetime=q["start_time"],
         end_datetime=q["end_time"],
         max_lat=q["max_lat"],
@@ -20,6 +20,7 @@ def run_query(q):
         min_lon=q["min_lon"],
         max_lon=q["max_lon"],
         spatial_resolution=q["spatial_resolution"],
+        temporal_resolution=q["temporal_resolution"],
         aggregation=q["aggregation"],
     )
     try:
@@ -33,15 +34,16 @@ def run_query(q):
 if __name__ == "__main__":
     df_query = pd.read_csv("/data/experiment-kit/experiment/heatmap/heatmap_test_tdb.csv")
 
-    time_list = []
+    for i in range(3):
+        time_list = []
 
-    for query in df_query.to_records():
-        print(query)
-        execution_time = run_query(query)
-        print(execution_time)
-        time_list.append(execution_time)
-        print("======================\n")
+        for query in df_query.to_records():
+            print(query)
+            execution_time = run_query(query)
+            print(execution_time)
+            time_list.append(execution_time)
+            print("======================\n")
 
-    df_query["execution_time"] = time_list
-    current_time = time.strftime("%m%d-%H%M%S")
-    df_query.to_csv(f"/data/experiment-kit/experiment/heatmap/tiledb_heatmap_result_{current_time}.csv", index=False)
+        df_query["execution_time"] = time_list
+        current_time = time.strftime("%m%d-%H%M%S")
+        df_query.to_csv(f"/data/experiment-kit/experiment/heatmap/tiledb_heatmap_result_{current_time}.csv", index=False)
