@@ -31,7 +31,7 @@ def run_query(q):
     return time.time() - start_time
 
 if __name__ == "__main__":
-    df_query = pd.read_csv("/data/experiment-kit/experiment/heatmap/heatmap_test.csv")
+    df_query = pd.read_csv("/data/experiment-kit/experiment/heatmap/heatmap_test_tdb.csv")
 
     time_list = []
 
