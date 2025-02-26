@@ -4,15 +4,15 @@ import time
 import os
 
 # add the path to the sys.path
-main_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+main_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 print(main_dir)
-sys.path.append(main_dir)
-from tiledb.tiledb_find_time_executor import tiledb_find_time_executor
+sys.path.append(os.path.join(main_dir, "tiledb"))
+from tiledb_find_time_executor import tiledb_find_time_executor
 
 def run_query(q):
     start_time = time.time()
     qe = tiledb_find_time_executor(
-        variable=q["variable"],
+        variable= "t2m", #q["variable"],
         start_datetime=q["start_time"],
         end_datetime=q["end_time"],
         max_lat=q["max_lat"],
@@ -22,7 +22,6 @@ def run_query(q):
         spatial_resolution=q["spatial_resolution"],
         temporal_resolution=q["temporal_resolution"],
         aggregation=q["aggregation"],
-        time_series_aggregation_method=q["aggregation"],
         filter_predicate=q["filter_predicate"],
         filter_value=q["filter_value"],
     )
