@@ -37,7 +37,7 @@ def timeout(seconds):
     return decorator
 
 
-@timeout(5)
+@timeout(250)
 def query_wrapper(q):
     qe = cloud_get_raster_executor(
         variable=q["variable"],
