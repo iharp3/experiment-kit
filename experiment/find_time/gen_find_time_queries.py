@@ -49,7 +49,7 @@ def make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, s_res, 
         "spatial_resolution": s_res,
         "temporal_resolution": t_res,
         "aggregation": agg,
-        # "time_series_aggregation_method": agg,
+        "time_series_aggregation_method": agg,
         "filter_predicate": pred,
         "filter_value": value,
     }

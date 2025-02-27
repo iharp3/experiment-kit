@@ -9,7 +9,7 @@ sys.path.append(main_dir)
 def run_query(q, r):
     start_time = time.time()
     if r == "heatmap":
-        qe = HeatmapExecutor(
+        qe = HExecutor(
         variable=q["variable"],
         start_datetime=q["start_time"],
         end_datetime=q["end_time"],
@@ -23,14 +23,14 @@ def run_query(q, r):
     )
         
 
-
-
-
 print("all modules loaded")
 
 if __name__ == "__main__":
     systems_list = ["proposed", "vanilla"]
     query_list = ["heatmap", "find_time"]
+    t_resolution_list = ["H", "Y"]
+    s_resolution_list = [0.25, 1.0]
+    time_span_list = [1, 2.5, 5, 10]
 
     for s in systems_list:
         if s == "proposed":
@@ -42,3 +42,18 @@ if __name__ == "__main__":
         else:   # s == "tiledb"
             from tile.tiledb_get_heatmap_executor import tiledb_get_heatmap_executor as HExecutor
             from tile.tiledb_find_time_executor import tiledb_find_time_executor as FExecutor
+
+        # generate spatial region the size of alaska
+
+        for t_res in t_resolution_list: # H, Y
+
+            for s_res in s_resolution_list: # 0.25, 1.0
+
+
+                for r in query_list:    # heatmap, find_time
+
+                    for y in time_span_list:
+
+                    if r == "heatmap":
+
+
