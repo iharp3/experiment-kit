@@ -45,6 +45,7 @@ class HeatmapExecutor(QueryExecutor):
         self.heatmap_aggregation_method = heatmap_aggregation_method
 
     def execute(self):
+        # print(f"\t\t\t current executor: PROPOSED GET HEATMAP")
         if self.heatmap_aggregation_method == "mean":
             return self._get_mean_heatmap().compute()
         elif self.heatmap_aggregation_method == "max":

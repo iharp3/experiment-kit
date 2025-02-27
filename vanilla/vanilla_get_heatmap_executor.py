@@ -27,6 +27,7 @@ class VanillaGetHeatmapExecutor:
         self.aggregation = aggregation
 
     def execute(self):
+        # print(f"\t\t\t current executor: VANILLA GET HEATMAP")
         qe = VanillaGetRasterExecutor(
             variable=self.variable,
             start_datetime=self.start_datetime,

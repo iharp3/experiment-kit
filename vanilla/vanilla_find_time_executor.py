@@ -31,6 +31,7 @@ class VanillaFindTimeExecutor:
         self.filter_value = filter_value
 
     def execute(self):
+        # print(f"\t\t\t current executor: VANILLA FIND TIME")
         qe = VanillaGetTimeseriesExecutor(
             variable=self.variable,
             start_datetime=self.start_datetime,

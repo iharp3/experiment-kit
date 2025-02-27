@@ -25,7 +25,8 @@ def gen_random_time_span(n_years, s_year, e_year):
 
 if __name__ == "__main__":
 
-    queries = []
+    heatmap_queries = []
+    findtime_queries = []
 
     query_list = ["heatmap", "find_time"]
     t_resolution_list = ["hour", "year"]
@@ -71,7 +72,7 @@ if __name__ == "__main__":
                                         query["time_span"] = y
                                         query["area_persent"] = area_size
                                         query["category"] = "changing_value"
-                                        queries.append(query)
+                                        findtime_queries.append(query)
                             else:
                                 for pred in predicates_list:
                                     start_time, end_time = gen_random_time_span(n_years=y, s_year=s_year, e_year=e_year)
@@ -80,7 +81,7 @@ if __name__ == "__main__":
                                     query["time_span"] = y
                                     query["area_persent"] = area_size
                                     query["category"] = "changing_time"
-                                    queries.append(query)
+                                    findtime_queries.append(query)
 
                         else:   # r == "heatmap"
                             start_time, end_time = gen_random_time_span(n_years=y, s_year=s_year, e_year=e_year)
@@ -88,9 +89,16 @@ if __name__ == "__main__":
                             query["time_span"] = y
                             query["area_persent"] = area_size
                             query["category"] = "changing_time"
-                            queries.append(query)
-                            
-    df = pd.DataFrame(queries)
-    df["qid"] = df.index
-    df = df[["qid"] + [col for col in df.columns if col != "qid"]]
-    df.to_csv("/home/uribe055/experiment-kit/experiment/queries/additional_queries.csv", index=False)
+                            heatmap_queries.append(query)
+
+    # save heatmap queries         
+    df_h = pd.DataFrame(heatmap_queries)
+    df_h["qid"] = df_h.index
+    df_h = df_h[["qid"] + [col for col in df_h.columns if col != "qid"]]
+    df_h.to_csv("/home/uribe055/experiment-kit/experiment/queries/additional_heatmap_queries.csv", index=False)
+
+    # save findtime queries         
+    df_f = pd.DataFrame(findtime_queries)
+    df_f["qid"] = df_f.index
+    df_f = df_f[["qid"] + [col for col in df_f.columns if col != "qid"]]
+    df_f.to_csv("/home/uribe055/experiment-kit/experiment/queries/additional_findtime_queries.csv", index=False)

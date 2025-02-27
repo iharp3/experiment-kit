@@ -42,6 +42,7 @@ class FindTimeExecutor(QueryExecutor):
         self.filter_value = filter_value
 
     def execute(self):
+        # print(f"\t\t\t current executor: PROPOSED FIND TIME")
         if self.temporal_resolution == "hour" and self.filter_predicate != "!=":
             return self._execute_pyramid_hour()
         return self._execute_baseline(self.start_datetime, self.end_datetime)
