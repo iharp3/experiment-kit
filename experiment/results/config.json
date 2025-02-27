@@ -31,9 +31,17 @@
                     "font_size": 20,
                     "title_font_size": 21,
                     "tick_size": 20,
+                    "line_width": 3,
                     "above": "bottom",
                     "below": "top",
-                    "y_label": "Avg execution time (sec)"
+                    "y_label": "Avg execution time (sec)",
+                    "x_col": {
+                                "changing_area": "area_persent",
+                                "changing_time": "time_span",
+                                "changing_spatial_res": "spatial_resolution",
+                                "changing_temporal_res": "temporal_resolution",
+                                "changing_vaule": "filter_value"
+                             }
 
 
     },
@@ -47,7 +55,7 @@
                 "tick_list": [[1, 25, 50, 100], [1, 2.5, 5], [0.25, 0.5, 1.0], [0, 1, 2, 3]],
                 "tick_labels_w10": [[1, 25, 50, 100], [1, 2.5, 5, 10], [0.25, 0.5, 1.0], ["hour", "day", "month", "year"]],
                 "tick_labels": [[1, 25, 50, 100], [1, 2.5, 5], [0.25, 0.5, 1.0], ["hour", "day", "month", "year"]],
-                "categories": [ "changing_time","changing_value"],
+                "categories": ["changing_area", "changing_time", "changing_spatial_res", "changing_temporal_res"],
                 "x_labels": ["Spatial region (% of Alaska)", "Time span (years)", "Spatial resolution (degree)", "Temporal resolution"]
     },
     "heatmap": {
@@ -76,5 +84,4 @@
                 "categories": ["changing_time"],
                 "x_labels": ["Time span (years)", "Filter value (Kelvin)"]
     }
-    
 }
