@@ -58,12 +58,13 @@ if __name__ == "__main__":
                     for agg in agg_list:    # min, max, mean
 
                         # generate random time span of length y
-                        start_time, end_time = gen_random_time_span(n_years=y, s_year=s_year, e_year=e_year)
+                        # start_time, end_time = gen_random_time_span(n_years=y, s_year=s_year, e_year=e_year)
 
                         if r == "find_time":
                             if y == 5:
-                                for pred in predicates_list:
-                                    for f in filter_values_list:
+                                for pred in predicates_list:    # <, >
+                                    for f in filter_values_list:    # 205, 240, 275
+                                        start_time, end_time = gen_random_time_span(n_years=y, s_year=s_year, e_year=e_year)
                                         # generate queries for different values
                                         query = e_make_query(start_time, end_time, min_lat=60, max_lat=60, min_lon=-70, max_lon=-10, 
                                                                 s_res=s_res, t_res=t_res, agg=agg, pred=pred, value=f)
@@ -73,6 +74,7 @@ if __name__ == "__main__":
                                         queries.append(query)
                             else:
                                 for pred in predicates_list:
+                                    start_time, end_time = gen_random_time_span(n_years=y, s_year=s_year, e_year=e_year)
                                     query = e_make_query(start_time, end_time, min_lat=60, max_lat=60, min_lon=-70, max_lon=-10, 
                                                 s_res=s_res, t_res=t_res, agg=agg, pred=pred, value=fixed_filter_value)
                                     query["time_span"] = y
@@ -80,7 +82,8 @@ if __name__ == "__main__":
                                     query["category"] = "changing_time"
                                     queries.append(query)
 
-                        else:
+                        else:   # r == "heatmap"
+                            start_time, end_time = gen_random_time_span(n_years=y, s_year=s_year, e_year=e_year)
                             query = h_make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, s_res, t_res, agg)
                             query["time_span"] = y
                             query["area_persent"] = area_size
