@@ -13,8 +13,32 @@ from cloud.cloud_get_raster_executor import cloud_get_raster_executor
 # from cloud_get_raster_executor import cloud_get_raster_executor
 
 
-def run_query(q):
-    start_time = time.time()
+# define a timeout decorator for run_query
+import signal
+
+
+def timeout(seconds):
+    def decorator(func):
+        def _handle_timeout(signum, frame):
+            error_message = f"Function call exceeded {seconds} seconds"
+            raise TimeoutError(error_message)
+
+        def wrapper(*args, **kwargs):
+            signal.signal(signal.SIGALRM, _handle_timeout)
+            signal.alarm(seconds)
+            try:
+                result = func(*args, **kwargs)
+            finally:
+                signal.alarm(0)
+            return result
+
+        return wrapper
+
+    return decorator
+
+
+@timeout(300)
+def query_wrapper(q):
     qe = cloud_get_raster_executor(
         variable=q["variable"],
         start_datetime=q["start_time"],
@@ -29,6 +53,14 @@ def run_query(q):
     )
     try:
         qe.execute()
+    except Exception as e:
+        raise e
+
+
+def run_query(q):
+    start_time = time.time()
+    try:
+        query_wrapper(q)
     except Exception as e:
         print(e)
         return -1
