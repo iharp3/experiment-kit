@@ -1,0 +1,71 @@
+{
+    "proposed_glob": {
+                        "raster": "",
+                        "heatmap": "",
+                        "findtime": ""
+
+    },
+    "vanilla_glob": {
+                        "raster": "",
+                        "heatmap": "",
+                        "findtime": ""
+    },
+    "cloud_glob": {
+                        "raster": "",
+                        "heatmap": "",
+                        "findtime": ""
+
+    },
+    "tiledb_glob": {
+                        "raster": "",
+                        "heatmap": "",
+                        "findtime": ""
+
+    },
+    "general": {
+                    "p_name": "Polaris",
+                    "c_name": "Cloud",
+                    "v_name": "Vanilla",
+                    "t_name": "TileDB",
+                    "marker_size": 15,
+                    "font_size": 20,
+                    "title_font_size": 21,
+                    "tick_size": 20,
+                    "above": "bottom",
+                    "below": "top",
+                    "y_label": "Avg execution time (sec)"
+
+
+    },
+    "raster": {
+                "system_labels": ["Polaris", "Vanilla", "Cloud", "TileDB"],
+                "marker_shapes": ["o", "v", "o", "s"],
+                "marker_fills": ["full", "none", "none", "none"],
+                "linestyles": ["-", "--", ":", "-."],
+                "fig_title": "Get Raster Query Performance",
+                "tick_list_w10": [[1, 25, 50, 100], [1, 2.5, 5, 10], [0.25, 0.5, 1.0], [0, 1, 2, 3]],
+                "tick_list": [[1, 25, 50, 100], [1, 2.5, 5], [0.25, 0.5, 1.0], [0, 1, 2, 3]],
+                "tick_labels_w10": [[1, 25, 50, 100], [1, 2.5, 5, 10], [0.25, 0.5, 1.0], ["hour", "day", "month", "year"]],
+                "tick_labels": [[1, 25, 50, 100], [1, 2.5, 5], [0.25, 0.5, 1.0], ["hour", "day", "month", "year"]],
+                "categories": ["changing_area", "changing_time", "changing_spatial_res", "changing_temporal_res"],
+                "x_labels": ["Spatial region (% of Alaska)", "Time span (years)", "Spatial resolution (degree)", "Temporal resolution"]
+    },
+    "heatmap": {
+                "system_labels": ["Polaris", "Vanilla", "Cloud", "TileDB"],
+                "marker_shapes": ["o", "v", "o", "s"],
+                "marker_fills": ["full", "none", "none", "none"],
+                "linestyles": ["-", "--", ":", "-."],
+                "fig_title": "Get Heatmap Query Performance",
+                "tick_list_w10": [1, 2.5, 5, 10],
+                "tick_list": [1, 2.5, 5],
+                "tick_labels_w10": [1, 2.5, 5, 10],
+                "tick_labels": [1, 2.5, 5],
+                "categories": ["changing_area", "changing_time", "changing_spatial_res", "changing_temporal_res"],
+                "x_labels": ["Spatial region (% of Alaska)", "Time span (years)", "Spatial resolution (degree)", "Temporal resolution"]
+    
+    },
+    "findtime": {
+
+    }
+    
+}
