@@ -50,6 +50,7 @@ class GetRasterExecutor(QueryExecutor):
             self.spatial_resolution,
             self.aggregation,
         )
+        assert leftover is None, "Should not have leftover in experiment"
 
         local_files = df_overlap["file_path"].tolist()
         api_calls = []
