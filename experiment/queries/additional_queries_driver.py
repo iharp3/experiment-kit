@@ -42,18 +42,3 @@ if __name__ == "__main__":
         else:   # s == "tiledb"
             from tile.tiledb_get_heatmap_executor import tiledb_get_heatmap_executor as HExecutor
             from tile.tiledb_find_time_executor import tiledb_find_time_executor as FExecutor
-
-        # generate spatial region the size of alaska
-
-        for t_res in t_resolution_list: # H, Y
-
-            for s_res in s_resolution_list: # 0.25, 1.0
-
-
-                for r in query_list:    # heatmap, find_time
-
-                    for y in time_span_list:
-
-                    if r == "heatmap":
-
-
