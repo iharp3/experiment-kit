@@ -1,6 +1,6 @@
 #!/bin/bash
 
-hostname="cs-u-spatial-514.cs.umn.edu"
+hostname="cs-u-spatial-516.cs.umn.edu"
 
 
 # # Iterate through the years
