@@ -7,7 +7,7 @@ import os
 main_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 print(main_dir)
 sys.path.append(main_dir)
-from tile.tiledb_get_raster_executor import tiledb_get_raster_executor
+from tiledb2.tiledb_get_raster_executor import tiledb_get_raster_executor
 
 
 def run_query(q):
