@@ -1,4 +1,4 @@
-from tiledb_get_heatmap_executor import tiledb_get_heatmap_executor
+from tile.tiledb_get_heatmap_executor import tiledb_get_heatmap_executor
 
 class tiledb_find_area_executor:
     def __init__(

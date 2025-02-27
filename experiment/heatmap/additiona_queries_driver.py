@@ -12,8 +12,8 @@ from proposed.query_executor_find_time2 import FindTimeExecutor
 from vanilla.vanilla_get_heatmap_executor import VanillaGetHeatmapExecutor
 from vanilla.vanilla_find_time_executor import VanillaFindTimeExecutor
 
-from tile.tiledb_get_heatmap_executor import tiledb_get_heatmap_executor
-from tile.tiledb_find_time_executor import tiledb_find_time_executor
+# from tile.tiledb_get_heatmap_executor import tiledb_get_heatmap_executor
+# from tile.tiledb_find_time_executor import tiledb_find_time_executor
 
 systems_list = ["proposed", "vanilla"]
 print("all modules loaded")

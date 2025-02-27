@@ -1,4 +1,4 @@
-from vanilla_get_timeseries_executor import VanillaGetTimeseriesExecutor
+from vanilla.vanilla_get_timeseries_executor import VanillaGetTimeseriesExecutor
 
 
 class VanillaFindTimeExecutor:
