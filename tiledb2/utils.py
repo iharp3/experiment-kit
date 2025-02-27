@@ -122,3 +122,16 @@ def nparray_to_xarray(nparray, start_time, end_time, min_lat, max_lat, min_lon, 
         },
     )
     return ds_empty
+
+
+def temporal_resolution_to_freq(resolution):
+    if resolution == "hour":
+        return "h"
+    elif resolution == "day":
+        return "D"
+    elif resolution == "month":
+        return "ME"
+    elif resolution == "year":
+        return "YE"
+    else:
+        raise ValueError("Invalid temporal_resolution")

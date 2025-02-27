@@ -1,9 +1,9 @@
 import tiledb
 
 try:
-    from tiledb.utils import get_time_indices, get_spatial_range, nparray_to_xarray
+    from tiledb.utils import get_time_indices, get_spatial_range, nparray_to_xarray, temporal_resolution_to_freq
 except:
-    from utils import get_time_indices, get_spatial_range, nparray_to_xarray
+    from utils import get_time_indices, get_spatial_range, nparray_to_xarray, temporal_resolution_to_freq
 
 
 class tiledb_get_raster_executor:
