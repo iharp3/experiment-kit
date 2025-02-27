@@ -14,6 +14,7 @@ class VanillaGetHeatmapExecutor:
         max_lon: float,
         spatial_resolution: float,  # 0.25, 0.5, 1
         aggregation: str,  # "mean", "max", "min"  !! Use this aggregation for heatmap aggregation as well
+        heatmap_aggregation_method: str
     ):
         self.variable = variable
         self.start_datetime = start_datetime

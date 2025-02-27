@@ -25,8 +25,10 @@ class HeatmapExecutor(QueryExecutor):
         min_lon: float,
         max_lon: float,
         spatial_resolution: float,  # e.g., 0.25, 0.5, 1.0
+        temporal_resolution: str,
         aggregation,  # e.g., "mean", "max", "min"
         heatmap_aggregation_method: str,  # e.g., "mean", "max", "min"
+        
         metadata=None,  # metadata file path
     ):
         super().__init__(

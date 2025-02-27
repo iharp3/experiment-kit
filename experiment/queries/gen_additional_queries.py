@@ -76,7 +76,7 @@ if __name__ == "__main__":
                             else:
                                 for pred in predicates_list:
                                     start_time, end_time = gen_random_time_span(n_years=y, s_year=s_year, e_year=e_year)
-                                    query = e_make_query(start_time, end_time, min_lat=60, max_lat=60, min_lon=-70, max_lon=-10, 
+                                    query = e_make_query(start_time, end_time, min_lat=60, max_lat=85, min_lon=-70, max_lon=-10, 
                                                 s_res=s_res, t_res=t_res, agg=agg, pred=pred, value=fixed_filter_value)
                                     query["time_span"] = y
                                     query["area_persent"] = area_size

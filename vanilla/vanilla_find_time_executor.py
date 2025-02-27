@@ -13,6 +13,7 @@ class VanillaFindTimeExecutor:
         min_lon: float,
         max_lon: float,
         spatial_resolution: float,  # 0.25, 0.5, 1
+        time_series_aggregation_method: str,
         aggregation: str,  # "mean", "max", "min"  !! Use this aggregation for all aggregation
         filter_predicate: str,  # "<", ">" !! only these two predicates are enough
         filter_value: float,

@@ -18,6 +18,7 @@ def run_query(q, r):
         min_lon=q["min_lon"],
         max_lon=q["max_lon"],
         spatial_resolution=q["spatial_resolution"],
+        temporal_resolution=q["temporal_resolution"],
         aggregation=q["aggregation"],
         heatmap_aggregation_method=q["aggregation"],
     )
@@ -32,6 +33,7 @@ def run_query(q, r):
         max_lon=q["max_lon"],
         spatial_resolution=q["spatial_resolution"],
         temporal_resolution=q["temporal_resolution"],
+        time_series_aggregation_method=q["aggregation"],
         aggregation=q["aggregation"],
         filter_predicate=q["filter_predicate"],
         filter_value=q["filter_value"],
@@ -75,12 +77,13 @@ if __name__ == "__main__":
             # run queries
             time_list = []
             for query in df_query.to_records():
-                print(f"SYSTEM {s}:\t {query}")
-                execution_time = run_query(q=query, r=r)
-                print(execution_time)
-                time_list.append(execution_time)
-                print("======================\n")
 
+                    print(f"SYSTEM {s}:\t {query}")
+                    execution_time = run_query(q=query, r=r)
+                    print(execution_time)
+                    time_list.append(execution_time)
+                    print("======================\n")
+                    
             # save queries for each
             df_query["execution_time"] = time_list
             current_time = time.strftime("%m%d-%H%M%S")
