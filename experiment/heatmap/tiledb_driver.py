@@ -6,8 +6,8 @@ import os
 # add the path to the sys.path
 main_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 print(main_dir)
-sys.path.append(os.path.join(main_dir, "tiledb"))
-from tiledb_get_heatmap_executor import tiledb_get_heatmap_executor
+sys.path.append(os.path.join(main_dir, "tile"))
+from tile.tiledb_get_heatmap_executor import tiledb_get_heatmap_executor
 
 def run_query(q):
     start_time = time.time()

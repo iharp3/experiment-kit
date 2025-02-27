@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import tiledb
 
-json_file = "/data/experiment-kit/tiledb/config.json"
+json_file = "/data/experiment-kit/tile/config.json"
 with open(json_file, "r") as f:
     inputs = json.load(f)
 

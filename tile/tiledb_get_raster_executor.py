@@ -4,7 +4,7 @@ import pandas as pd
 import tiledb
 
 try:
-    from tiledb.utils import (get_time_indices, 
+    from tile.utils import (get_time_indices, 
                     get_spatial_range, 
                     get_index_pairs, 
                     get_agg_function, 
@@ -16,7 +16,7 @@ except:
                    get_agg_function, 
                    get_coord_block)
 
-# json_file = "/data/experiment-kit/tiledb/config.json"
+# json_file = "/data/experiment-kit/tile/config.json"
 # with open(json_file, "r") as f:
 #     inputs = json.load(f),
 

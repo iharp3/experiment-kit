@@ -7,7 +7,7 @@ import os
 main_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 print(main_dir)
 sys.path.append(os.path.join(main_dir, "tiledb"))
-from tiledb_find_time_executor import tiledb_find_time_executor
+from tile.tiledb_find_time_executor import tiledb_find_time_executor
 
 def run_query(q):
     start_time = time.time()

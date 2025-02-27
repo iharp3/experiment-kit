@@ -15,7 +15,7 @@ from tiledb_get_timeseries_executor import tiledb_get_timeseries_executor
 from tiledb_find_area_executor import tiledb_find_area_executor
 from tiledb_find_time_executor import tiledb_find_time_executor
 
-json_file = "/data/experiment-kit/tiledb/config.json"
+json_file = "/data/experiment-kit/tile/config.json"
 with open(json_file, "r") as f:
     inputs = json.load(f)
 
