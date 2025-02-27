@@ -1,25 +1,25 @@
 {
-    "proposed_glob": {
-                        "raster": "",
-                        "heatmap": "",
-                        "findtime": ""
+    "proposed": {
+                        "raster": "proposed_get_raster_test_025H*_result_*.csv",
+                        "heatmap": "proposed_heatmap_result_*.csv",
+                        "findtime": "proposed_findtime_result_*.csv"
 
     },
-    "vanilla_glob": {
-                        "raster": "",
-                        "heatmap": "",
+    "vanilla": {
+                        "raster": "vanilla_get_raster_test_025H*_result_*.csv",
+                        "heatmap": "vanilla_heatmap_result_*.csv",
                         "findtime": ""
     },
-    "cloud_glob": {
-                        "raster": "",
-                        "heatmap": "",
-                        "findtime": ""
+    "cloud": {
+                        "raster": "cloud_get_raster_test_025H*_result_*.csv",
+                        "heatmap": "-",
+                        "findtime": "-"
 
     },
-    "tiledb_glob": {
-                        "raster": "",
-                        "heatmap": "",
-                        "findtime": ""
+    "tiledb": {
+                        "raster": "get_raster_025H_tiledb_*.csv",
+                        "heatmap": "tiledb_heatmap_result_*.csv",
+                        "findtime": "tiledb_findtime_result_*.csv"
 
     },
     "general": {
@@ -47,7 +47,7 @@
                 "tick_list": [[1, 25, 50, 100], [1, 2.5, 5], [0.25, 0.5, 1.0], [0, 1, 2, 3]],
                 "tick_labels_w10": [[1, 25, 50, 100], [1, 2.5, 5, 10], [0.25, 0.5, 1.0], ["hour", "day", "month", "year"]],
                 "tick_labels": [[1, 25, 50, 100], [1, 2.5, 5], [0.25, 0.5, 1.0], ["hour", "day", "month", "year"]],
-                "categories": ["changing_area", "changing_time", "changing_spatial_res", "changing_temporal_res"],
+                "categories": [ "changing_time","changing_value"],
                 "x_labels": ["Spatial region (% of Alaska)", "Time span (years)", "Spatial resolution (degree)", "Temporal resolution"]
     },
     "heatmap": {
@@ -60,12 +60,21 @@
                 "tick_list": [1, 2.5, 5],
                 "tick_labels_w10": [1, 2.5, 5, 10],
                 "tick_labels": [1, 2.5, 5],
-                "categories": ["changing_area", "changing_time", "changing_spatial_res", "changing_temporal_res"],
-                "x_labels": ["Spatial region (% of Alaska)", "Time span (years)", "Spatial resolution (degree)", "Temporal resolution"]
-    
+                "categories": ["changing_time"],
+                "x_labels": ["Time span (years)"]
     },
     "findtime": {
-
+                "system_labels": ["Polaris", "Vanilla", "Cloud", "TileDB"],
+                "marker_shapes": ["o", "v", "o", "s"],
+                "marker_fills": ["full", "none", "none", "none"],
+                "linestyles": ["-", "--", ":", "-."],
+                "fig_title": "Find Time Query Performance",
+                "tick_list_w10": [[1, 2.5, 5, 10], [205,240,275,310]],
+                "tick_list": [[1, 2.5, 5], [205,240,275,310]],
+                "tick_labels_w10": [[1, 2.5, 5, 10], [205, 240, 275, 310]],
+                "tick_labels": [[1, 2.5, 5], [205, 240, 275, 310]],
+                "categories": ["changing_time"],
+                "x_labels": ["Time span (years)", "Filter value (Kelvin)"]
     }
     
 }
