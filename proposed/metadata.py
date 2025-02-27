@@ -91,6 +91,7 @@ class Metadata:
             & (self.df_meta["spatial_resolution"] == spatial_resolution)
             & (self.df_meta["aggregation"] == aggregation)
         ]
+        return df_overlap, None
 
         ds_query = gen_empty_xarray(
             min_lat,
