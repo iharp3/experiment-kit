@@ -103,4 +103,4 @@ if __name__ == "__main__":
     df = pd.DataFrame(queries)
     df["qid"] = df.index
     df = df[["qid"] + [col for col in df.columns if col != "qid"]]
-    df.to_csv("tdb_GR_test_0226.csv", index=False)
+    df.to_csv("tdb_GR_test_0227.csv", index=False)
