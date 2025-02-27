@@ -1,4 +1,4 @@
-from tiledb_get_raster_executor import tiledb_get_raster_executor
+from tiledb2.tiledb_get_raster_executor import tiledb_get_raster_executor
 
 
 class tiledb_get_heatmap_executor:
@@ -12,6 +12,7 @@ class tiledb_get_heatmap_executor:
         max_lat: float,
         min_lon: float,
         max_lon: float,
+        heatmap_aggregation_method: str,
         spatial_resolution: float,  # 0.25, 0.5, 1
         aggregation: str,  # "mean", "max", "min"  !! Use this aggregation for heatmap aggregation as well
     ):

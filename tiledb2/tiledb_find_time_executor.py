@@ -1,4 +1,4 @@
-from tiledb_get_timeseries_executor import tiledb_get_timeseries_executor
+from tiledb2.tiledb_get_timeseries_executor import tiledb_get_timeseries_executor
 
 
 class tiledb_find_time_executor:
@@ -12,6 +12,7 @@ class tiledb_find_time_executor:
         max_lat: float,
         min_lon: float,
         max_lon: float,
+        time_series_aggregation_method: str,
         spatial_resolution: float,  # 0.25, 0.5, 1
         aggregation: str,  # "mean", "max", "min"  !! Use this aggregation for all aggregation
         filter_predicate: str,  # "<", ">" !! only these two predicates are enough

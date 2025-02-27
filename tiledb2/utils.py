@@ -5,7 +5,7 @@ import pandas as pd
 import tiledb
 import xarray as xr
 
-json_file = "/data/experiment-kit/tiledb/config.json"
+json_file = "/data/experiment-kit/tiledb2/config.json"
 with open(json_file, "r") as f:
     inputs = json.load(f)
 
