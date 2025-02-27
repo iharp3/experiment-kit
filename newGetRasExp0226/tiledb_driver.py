@@ -33,7 +33,7 @@ def run_query(q):
 
 
 if __name__ == "__main__":
-    df_query = pd.read_csv("tdb_GR_test_0226.csv")
+    df_query = pd.read_csv("tdb_GR_test_0227.csv")
 
     time_list = []
     for query in df_query.to_records():
