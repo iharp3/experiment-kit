@@ -11,8 +11,8 @@ sys.path.append(os.path.join(main_dir, "round2/executors"))
 
 cur_plot = [[0.25, "hour"], [0.25, "year"], [0.5, "month"], [1, "hour"], [1, "year"]]
 
-# sys_list = ["TDB"]
-sys_list = ["Vanilla", "Polaris"]
+sys_list = ["TDB"]
+# sys_list = ["Vanilla", "Polaris"]
 
 df_query = pd.read_csv(os.path.join(main_dir, f"round2/tests/5a.csv"))
 
