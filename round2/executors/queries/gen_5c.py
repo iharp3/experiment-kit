@@ -30,18 +30,37 @@ def make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, s_res, 
     }
     return query
 
+# generates queries for 5a
 if __name__ == "__main__":
     queries = []
     aggs = ["min", "max", "mean"]
 
-    area = [25, 60]
-
-    for agg in aggs:
-        max_lat, min_lat, min_lon, max_lon = gen_random_spatial_range(area[0], area[1])
-        start_time, end_time = gen_random_time_span_tiledb(5)
-        query = make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, 1, "day", agg)
-        queries.append(query)
+    area_percents = [[3, 5], [15, 25], [25, 30], [25, 60]]
+    for area in area_percents:
+        for agg in aggs:
+            max_lat, min_lat, min_lon, max_lon = gen_random_spatial_range(area[0], area[1])
+            start_time, end_time = gen_random_time_span_tiledb(5)
+            query = make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, 1, "day", agg)
+            queries.append(query)
 
     query_df = pd.DataFrame(queries)
-    out_file = "/data/experiment-kit/round2/tests/5d.csv"
+    out_file = "/data/experiment-kit/round2/tests/5a.csv" 
     query_df.to_csv(out_file)
+
+
+ # generates queries for 5c, 5d
+# if __name__ == "__main__":
+#     queries = []
+#     aggs = ["min", "max", "mean"]
+
+#     area = [25, 60]
+
+#     for agg in aggs:
+#         max_lat, min_lat, min_lon, max_lon = gen_random_spatial_range(area[0], area[1])
+#         start_time, end_time = gen_random_time_span_tiledb(5)
+#         query = make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, 1, "day", agg)
+#         queries.append(query)
+
+#     query_df = pd.DataFrame(queries)
+#     out_file = "/data/experiment-kit/round2/tests/5d.csv"   # 5c.csv
+#     query_df.to_csv(out_file)
