@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 import matplotlib
 
 # Load the CSV file
-csv_file_path = "/data/experiment-kit/round2/results/5c_all.csv"
+csv_file_path = "/data/experiment-kit/round2/results/5d_all.csv"
 df = pd.read_csv(csv_file_path)
 
-cur_plot = "t_res"
-x = "s_res"
+cur_plot = "s_res"
+x = "t_res"
 line = "sys"
 y = "total_time"
 
@@ -15,19 +15,19 @@ y = "total_time"
 unique_plots = df[cur_plot].unique()
 
 marker_size = 25
-m_fill = "none"
+m_fill="none"
 font_size = 30
 tick_font_size = 30
 tick_size = 30
-tick_list = [0.25, 0.5, 1.0]
-tick_labels = tick_list
+tick_list = [0, 1, 2, 3]
+tick_labels = ["hour", "day", "month", "year"]
 line_width = 4
 above = "bottom"
 below = "top"
 y_label = "Execution time (sec)"
 viridis = matplotlib.colormaps["viridis"]
 colors = [viridis(i) for i in [0, 0.25, 0.5, 0.75]]
-x_label = "Spatial resolution (degrees)"
+x_label = "Temporal resolution"
 
 # Define style dictionary based on 'line' values
 style_dict = {
@@ -68,10 +68,10 @@ for plot_value in unique_plots:
     
     # test
     plt.tight_layout()
-    plt.savefig(f"/data/experiment-kit/round2/figs/f1_test/5c_{plot_value}.eps")  # Save the plot to a file
+    plt.savefig(f"/data/experiment-kit/round2/figs/f1_test/5d_{plot_value}.png")  # Save the plot to a file
     plt.close(fig)
 
-    # final
+    # # final
     # plt.tight_layout()
-    # plt.savefig(f"/data/experiment-kit/round2/figs/5c_eps/5c_{plot_value}.eps")  # Save the plot to a file
+    # plt.savefig(f"/data/experiment-kit/round2/figs/5d_eps/5d_{plot_value}.eps")  # Save the plot to a file
     # plt.close(fig)
