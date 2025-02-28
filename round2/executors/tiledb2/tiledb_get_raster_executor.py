@@ -57,7 +57,8 @@ class tiledb_get_raster_executor:
             self.min_lon,
             self.max_lon,
         )
-        return time.time() - t0
+        return time.time() - t0   # get raster alone
+        # return 
     
     def agg(self):
         ds_copy = self.ds.copy(deep=True)

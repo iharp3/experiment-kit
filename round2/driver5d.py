@@ -12,8 +12,9 @@ sys.path.append(os.path.join(main_dir, "round2/executors"))
 t_res = ["hour", "day", "month", "year"]
 s_res = [0.25, 0.5, 1.0]
 sys_list = ["TDB"]
+# sys_list = ["Vanilla", "Polaris"]
 
-df_query = pd.read_csv(f"/data/experiment-kit/round2/tests/5c.csv")
+df_query = pd.read_csv(os.path.join(main_dir, f"round2/tests/5d.csv"))
 
 results_list = []
 
@@ -37,8 +38,8 @@ for cur_sys in sys_list:
         exit
 
 
-    for t in t_res:
-        for s in s_res:
+    for s in s_res:
+        for t in t_res:
 
             for q in df_query.to_records():
 
@@ -80,5 +81,5 @@ for cur_sys in sys_list:
                     print(f"-1")
 
 results_df = pd.DataFrame(results_list)
-out_file = f"/data/experiment-kit/round2/results/5c_{cur_sys}_results.csv"
+out_file = os.path.join(main_dir, f"round2/results/5d_{cur_sys}_results.csv")
 results_df.to_csv(out_file, index=False)
