@@ -1,0 +1,4 @@
+,variable,start_time,end_time,min_lat,max_lat,min_lon,max_lon,aggregation
+0,2m_temperature,2015-01-01 00:00:00,2019-12-31 23:00:00,-76,-51,105,165,min
+1,2m_temperature,2015-01-01 00:00:00,2019-12-31 23:00:00,-58,-33,60,120,max
+2,2m_temperature,2015-01-01 00:00:00,2019-12-31 23:00:00,-53,-28,102,162,mean

@@ -1,0 +1,19 @@
+qid,variable,start_time,end_time,min_lat,max_lat,min_lon,max_lon,spatial_resolution,temporal_resolution,aggregation,time_series_aggregation_method,filter_predicate,filter_value,time_span,category,execution_time
+0,2m_temperature,2015-01-01 00:00:00,2015-12-31 23:00:00,60,85,-70,-10,0.25,hour,min,min,>,310,1.0,changing_time,37.220948219299316
+1,2m_temperature,2019-01-01 00:00:00,2019-12-31 23:00:00,60,85,-70,-10,0.25,hour,min,min,<,310,1.0,changing_time,36.44409155845642
+2,2m_temperature,2016-01-01 00:00:00,2016-12-31 23:00:00,60,85,-70,-10,0.25,hour,max,max,>,310,1.0,changing_time,36.2445547580719
+3,2m_temperature,2022-01-01 00:00:00,2022-12-31 23:00:00,60,85,-70,-10,0.25,hour,max,max,<,310,1.0,changing_time,36.70361518859863
+4,2m_temperature,2015-01-01 00:00:00,2015-12-31 23:00:00,60,85,-70,-10,0.25,hour,mean,mean,>,310,1.0,changing_time,36.266704082489014
+5,2m_temperature,2016-01-01 00:00:00,2016-12-31 23:00:00,60,85,-70,-10,0.25,hour,mean,mean,<,310,1.0,changing_time,36.34161329269409
+6,2m_temperature,2012-01-01 00:00:00,2014-06-30 23:00:00,60,85,-70,-10,0.25,hour,min,min,>,310,2.5,changing_time,38.25818705558777
+7,2m_temperature,2014-01-01 00:00:00,2016-06-30 23:00:00,60,85,-70,-10,0.25,hour,min,min,<,310,2.5,changing_time,40.01606893539429
+8,2m_temperature,2012-01-01 00:00:00,2014-06-30 23:00:00,60,85,-70,-10,0.25,hour,max,max,>,310,2.5,changing_time,37.320226192474365
+9,2m_temperature,2017-01-01 00:00:00,2019-06-30 23:00:00,60,85,-70,-10,0.25,hour,max,max,<,310,2.5,changing_time,42.257582902908325
+10,2m_temperature,2018-01-01 00:00:00,2020-06-30 23:00:00,60,85,-70,-10,0.25,hour,mean,mean,>,310,2.5,changing_time,40.27083945274353
+11,2m_temperature,2013-01-01 00:00:00,2015-06-30 23:00:00,60,85,-70,-10,0.25,hour,mean,mean,<,310,2.5,changing_time,37.44297671318054
+12,2m_temperature,2018-01-01 00:00:00,2022-12-31 23:00:00,60,85,-70,-10,0.25,hour,min,min,>,310,5.0,changing_time,46.12270450592041
+13,2m_temperature,2015-01-01 00:00:00,2019-12-31 23:00:00,60,85,-70,-10,0.25,hour,min,min,<,310,5.0,changing_time,39.37119674682617
+14,2m_temperature,2014-01-01 00:00:00,2018-12-31 23:00:00,60,85,-70,-10,0.25,hour,max,max,>,310,5.0,changing_time,41.68374276161194
+15,2m_temperature,2017-01-01 00:00:00,2021-12-31 23:00:00,60,85,-70,-10,0.25,hour,max,max,<,310,5.0,changing_time,39.352333784103394
+16,2m_temperature,2018-01-01 00:00:00,2022-12-31 23:00:00,60,85,-70,-10,0.25,hour,mean,mean,>,310,5.0,changing_time,38.660653591156006
+17,2m_temperature,2015-01-01 00:00:00,2019-12-31 23:00:00,60,85,-70,-10,0.25,hour,mean,mean,<,310,5.0,changing_time,38.794440269470215
