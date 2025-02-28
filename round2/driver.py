@@ -11,7 +11,8 @@ sys.path.append(os.path.join(main_dir, "round2/executors"))
 
 t_res = ["hour", "day", "month", "year"]
 s_res = [0.25, 0.5, 1.0]
-sys_list = ["TDB"]
+# sys_list = ["TDB"]
+sys_list = ["Polaris"]
 
 df_query = pd.read_csv(f"/data/experiment-kit/round2/tests/5c.csv")
 
@@ -64,7 +65,7 @@ for cur_sys in sys_list:
                     tr = -1
 
                 if tr != -1:
-                    if cur_sys == "Polaris" and s == 0.25 and t == "hour":
+                    if cur_sys == "Polaris":
                         ta = 0
                     else:
                         ta = qe.agg()
