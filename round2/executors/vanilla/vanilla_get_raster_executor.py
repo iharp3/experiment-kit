@@ -64,6 +64,7 @@ class VanillaGetRasterExecutor:
         Will be run on cs-u-spatial-514.cs.umn.edu
         Only use the raw data in :/era5/raw/2m_temperature, See README.md
         """
+        t0 = time.time()
         file_list = get_file_list(self.start_datetime, self.end_datetime)
         ds_list = []
         for file in file_list:
@@ -74,38 +75,38 @@ class VanillaGetRasterExecutor:
             )
             ds_list.append(ds)
         self.ds = xr.concat([i.chunk() for i in ds_list], dim="time")
-        tr = time.time()    # raw data 
+        tr = time.time() - t0 # raw data 
         return tr
 
     def agg(self):
-        t0 = time.time()
         ds_copy = self.ds.copy(deep=True)
+        t0 = time.time()
         # temporal aggregation
         if self.temporal_resolution != "hour":
             resampled = ds_copy.resample(time=temporal_resolution_to_freq(self.temporal_resolution))
             if self.aggregation == "mean":
-                re_agg = resampled.mean()
+                ds_copy = resampled.mean()
             elif self.aggregation == "max":
-                re_agg = resampled.max()
+                ds_copy = resampled.max()
             elif self.aggregation == "min":
-                re_agg = resampled.min()
+                ds_copy = resampled.min()
             else:
                 raise ValueError(f"Temporal aggregation {self.aggregation} is not supported.")
 
         # spatial aggregation
         if self.spatial_resolution > 0.25:
             c_f = int(self.spatial_resolution / 0.25)
-            coarsened = re_agg.coarsen(latitude=c_f, longitude=c_f, boundary="trim")
+            coarsened = ds_copy.coarsen(latitude=c_f, longitude=c_f, boundary="trim")
             if self.aggregation == "mean":
-                re_agg = coarsened.mean()
+                ds_copy = coarsened.mean()
             elif self.aggregation == "max":
-                re_agg = coarsened.max()
+                ds_copy = coarsened.max()
             elif self.aggregation == "min":
-                re_agg = coarsened.min()
+                ds_copy = coarsened.min()
             else:
                 raise ValueError(f"Spatial aggregation {self.aggregation} is not supported.")
         
-        re_agg.compute()
+        ds_copy.compute()
         return time.time() - t0
 
     # def execute_dask(self):

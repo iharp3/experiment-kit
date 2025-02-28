@@ -1,4 +1,5 @@
 import tiledb
+import time
 
 try:
     from tiledb2.utils import get_time_indices, get_spatial_range, nparray_to_xarray, temporal_resolution_to_freq
@@ -31,8 +32,10 @@ class tiledb_get_raster_executor:
         self.max_lon = max_lon
         self.spatial_resolution = spatial_resolution
         self.aggregation = aggregation
+        self.ds = None
 
     def execute(self):
+        t0 = time.time()
         s, e = get_time_indices(start_time=self.start_datetime, end_time=self.end_datetime)
         max_la, min_la, max_lo, min_lo = get_spatial_range(
             max_lat=self.max_lat, min_lat=self.min_lat, max_lon=self.max_lon, min_lon=self.min_lon
@@ -45,7 +48,7 @@ class tiledb_get_raster_executor:
             lon_range = slice(min_lo, max_lo)
             tdb_nparray = array[time_range, lat_range, lon_range][self.variable]  # numpy array
 
-        ds = nparray_to_xarray(
+        self.ds = nparray_to_xarray(
             tdb_nparray,
             self.start_datetime,
             self.end_datetime,
@@ -54,29 +57,34 @@ class tiledb_get_raster_executor:
             self.min_lon,
             self.max_lon,
         )
-
+        return time.time() - t0
+    
+    def agg(self):
+        ds_copy = self.ds.copy(deep=True)
+        t0 = time.time()
         # temporal aggregation
         if self.temporal_resolution != "hour":
-            resampled = ds.resample(time=temporal_resolution_to_freq(self.temporal_resolution))
+            resampled = ds_copy.resample(time=temporal_resolution_to_freq(self.temporal_resolution))
             if self.aggregation == "mean":
-                ds = resampled.mean()
+                ds_copy = resampled.mean()
             elif self.aggregation == "max":
-                ds = resampled.max()
+                ds_copy = resampled.max()
             elif self.aggregation == "min":
-                ds = resampled.min()
+                ds_copy = resampled.min()
             else:
                 raise ValueError(f"Temporal aggregation {self.aggregation} is not supported.")
 
         # spatial aggregation
         if self.spatial_resolution > 0.25:
             c_f = int(self.spatial_resolution / 0.25)
-            coarsened = ds.coarsen(latitude=c_f, longitude=c_f, boundary="trim")
+            coarsened = ds_copy.coarsen(latitude=c_f, longitude=c_f, boundary="trim")
             if self.aggregation == "mean":
-                ds = coarsened.mean()
+                ds_copy = coarsened.mean()
             elif self.aggregation == "max":
-                ds = coarsened.max()
+                ds_copy = coarsened.max()
             elif self.aggregation == "min":
-                ds = coarsened.min()
+                ds_copy = coarsened.min()
             else:
                 raise ValueError(f"Spatial aggregation {self.aggregation} is not supported.")
-        return ds.compute()
+        ds_copy.compute()
+        return time.time() - t0

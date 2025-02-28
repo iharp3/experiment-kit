@@ -11,9 +11,9 @@ sys.path.append(os.path.join(main_dir, "round2/executors"))
 
 t_res = ["hour", "day", "month", "year"]
 s_res = [0.25, 0.5, 1.0]
-sys_list = ["TDB"]
+sys_list = ["Polaris"]
 
-df_query = pd.read_csv(f"/data/experiment-kit/round2/tests/5c.csv")
+df_query = pd.read_csv(f"/home/uribe055/experiment-kit/round2/tests/5c.csv")
 
 results_list = []
 
@@ -34,6 +34,7 @@ for cur_sys in sys_list:
         from tiledb2.tiledb_find_time_executor import tiledb_find_time_executor as FExecutor
     else:
         print("Unknown system")
+        exit
 
 
     for t in t_res:
@@ -42,7 +43,7 @@ for cur_sys in sys_list:
             for q in df_query.to_records():
 
                 qe = GRExecutor(
-                variable="temperature", # q["variable"],
+                variable=q["variable"],
                 start_datetime=q["start_time"],
                 end_datetime=q["end_time"],
                 max_lat=q["max_lat"],
@@ -63,16 +64,21 @@ for cur_sys in sys_list:
                     tr = -1
 
                 if tr != -1:
-                    ta = qe.agg()
+                    if s == 0.25 and t == "hour":
+                        ta = 0
+                    else:
+                        ta = qe.agg()
                     print(f"total time: {tr+ta}")
                     results_list.append({"sys": cur_sys, 
                                          "t_res": t,
                                          "s_res": s,
+                                         "tr": tr,
+                                         "ta": ta,
                                          "total_time": tr + ta})
                     print("======================\n")
                 else:
                     print(f"-1")
 
 results_df = pd.DataFrame(results_list)
-out_file = "/data/experiment-kit/round2/results/5c_results.csv"
+out_file = f"/home/uribe055/experiment-kit/round2/results/5c_{cur_sys}_results.csv"
 results_df.to_csv(out_file, index=False)

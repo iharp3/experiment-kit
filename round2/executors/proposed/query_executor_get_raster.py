@@ -1,6 +1,7 @@
 import math
 import pandas as pd
 import xarray as xr
+import time
 
 from proposed.query_executor import QueryExecutor
 
@@ -33,6 +34,7 @@ class GetRasterExecutor(QueryExecutor):
             aggregation,
             metadata=metadata,
         )
+        self.ds = None
 
     def _check_metadata(self):
         """
@@ -103,6 +105,7 @@ class GetRasterExecutor(QueryExecutor):
         return local_files, api_calls
 
     def execute(self):
+        t0 = time.time()
         # 1. check metadata
         file_list, api = self._check_metadata()
         assert len(api) == 0, "Should not call api in experiment"
@@ -126,5 +129,13 @@ class GetRasterExecutor(QueryExecutor):
         #     print("WARNING: conflict in merging data, use override")
         #     ds = xr.merge([i.chunk() for i in ds_list], compat="override")
 
-        ds = xr.concat([i.chunk() for i in ds_list], dim="time")
-        return ds.compute()
+        self.ds = xr.concat([i.chunk() for i in ds_list], dim="time")
+        tr = time.time() - t0
+        return tr
+    
+    def agg(self):
+        ds_copy = self.ds.copy(deep=True)
+        t0 = time.time()
+        ds_copy.compute()
+        
+        return time.time() - t0
