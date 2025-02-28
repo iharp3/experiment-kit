@@ -63,15 +63,15 @@ for plot_value in unique_plots:
     ax.set_ylabel(y_label, fontsize=font_size)
     ax.set_yscale("log")  # Set y-axis to log scale
     ax.set_ylim(y_min, y_max)
-    ax.legend(fontsize=font_size)
+    ax.legend(fontsize=font_size-5)
     ax.tick_params(axis='both', labelsize=tick_font_size)
     
     # test
-    plt.tight_layout()
-    plt.savefig(f"/data/experiment-kit/round2/figs/f1_test/5d_{plot_value}.png")  # Save the plot to a file
-    plt.close(fig)
+    # plt.tight_layout()
+    # plt.savefig(f"/data/experiment-kit/round2/figs/f1_test/5d_{plot_value}.png")  # Save the plot to a file
+    # plt.close(fig)
 
     # # final
-    # plt.tight_layout()
-    # plt.savefig(f"/data/experiment-kit/round2/figs/5d_eps/5d_{plot_value}.eps")  # Save the plot to a file
-    # plt.close(fig)
+    plt.tight_layout()
+    plt.savefig(f"/data/experiment-kit/round2/figs/5d_eps/5d_{plot_value}.eps")  # Save the plot to a file
+    plt.close(fig)
