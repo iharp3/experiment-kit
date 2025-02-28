@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# driver
+driver5d.py
+
 # C extensions
 *.so
 
