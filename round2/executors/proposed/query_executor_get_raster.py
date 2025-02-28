@@ -130,12 +130,6 @@ class GetRasterExecutor(QueryExecutor):
         #     ds = xr.merge([i.chunk() for i in ds_list], compat="override")
 
         self.ds = xr.concat([i.chunk() for i in ds_list], dim="time")
-        tr = time.time() - t0
-        return tr
-    
-    def agg(self):
-        ds_copy = self.ds.copy(deep=True)
-        t0 = time.time()
-        ds_copy.compute()
+        self.ds.compute()
         
         return time.time() - t0
