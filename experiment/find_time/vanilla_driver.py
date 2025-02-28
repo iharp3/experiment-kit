@@ -8,8 +8,8 @@ import time
 import os
 main_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 print(main_dir)
-sys.path.append(os.path.join(main_dir, "vanilla"))
-from vanilla_find_time_executor import VanillaFindTimeExecutor
+sys.path.append(os.path.join(main_dir))
+from vanilla.vanilla_find_time_executor import VanillaFindTimeExecutor
 
 
 def run_query(q):
@@ -24,6 +24,7 @@ def run_query(q):
         max_lon=q["max_lon"],
         spatial_resolution=q["spatial_resolution"],
         temporal_resolution=q["temporal_resolution"],
+        time_series_aggregation_method=q["aggregation"],
         aggregation=q["aggregation"],
         filter_predicate=q["filter_predicate"],
         filter_value=q["filter_value"],
@@ -38,7 +39,7 @@ def run_query(q):
 
 
 if __name__ == "__main__":
-    df_query = pd.read_csv("/home/uribe055/experiment-kit/experiment/find_time/findtime_test_5yr.csv")
+    df_query = pd.read_csv("/home/uribe055/experiment-kit/experiment/find_time/tdb_ft_310_tests.csv")
 
     for i in range(2):
         time_list = []
@@ -52,4 +53,4 @@ if __name__ == "__main__":
 
         df_query["execution_time"] = time_list
         current_time = time.strftime("%m%d-%H%M%S")
-        df_query.to_csv(f"/home/uribe055/experiment-kit/experiment/find_time/vanilla_findtime_5yrresult_{current_time}.csv", index=False)
+        df_query.to_csv(f"/home/uribe055/experiment-kit/experiment/find_time/fv_310/vanilla_findtime_result_{current_time}.csv", index=False)
