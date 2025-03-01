@@ -9,12 +9,12 @@ sys.path.append(os.path.join(main_dir, "round2/executors"))
 
 # impact of spatial resolution
 
-cur_plot = [[0.25, "hour"], [0.25, "year"], [0.5, "month"], [1, "hour"], [1, "year"]]
+cur_plot = [[0.25, "hour"],[1, "hour"]]
+# cur_plot = [[0.25, "hour"]]
+# sys_list = ["TDB"]
+sys_list = ["Polaris"]
 
-sys_list = ["TDB"]
-# sys_list = ["Polaris", "Vanilla"]
-
-df_query = pd.read_csv(os.path.join(main_dir, f"round2/tests/fv.csv"))
+df_query = pd.read_csv(os.path.join(main_dir, f"round2/tests/fv_new.csv"))
 
 heatmap_results_list = []
 find_time_results_list = []
@@ -46,7 +46,7 @@ for cur_sys in sys_list:    # p, v, t
         for q in df_query.to_records():
 
             fqe = FExecutor(   
-                variable="temperature", #q["variable"],
+                variable=q["variable"],
                 start_datetime=q["start_time"],
                 end_datetime=q["end_time"],
                 max_lat=q["max_lat"],
@@ -93,10 +93,10 @@ for cur_sys in sys_list:    # p, v, t
                 print(f"-1")
 
 
-            in_find_time_results_df = pd.DataFrame(find_time_results_list)
-            in_find_time_out_file = os.path.join(main_dir, f"round2/figs/f1_test/in_filter_value_{cur_sys}_results.csv")
-            in_find_time_results_df.to_csv(in_find_time_out_file, mode='a', header=not os.path.exists(in_find_time_out_file), index=False)
+            # in_find_time_results_df = pd.DataFrame(find_time_results_list)
+            # in_find_time_out_file = os.path.join(main_dir, f"round2/figs/f1_test/in_filter_value_{cur_sys}_results.csv")
+            # in_find_time_results_df.to_csv(in_find_time_out_file, mode='a', header=not os.path.exists(in_find_time_out_file), index=False)
 
 find_time_results_df = pd.DataFrame(find_time_results_list)
-find_time_out_file = os.path.join(main_dir, f"round2/results/filter_value_{cur_sys}_results.csv")
+find_time_out_file = os.path.join(main_dir, f"round2/results/filter_value_{cur_sys}_results_no_printing.csv")
 find_time_results_df.to_csv(find_time_out_file, index=False)
