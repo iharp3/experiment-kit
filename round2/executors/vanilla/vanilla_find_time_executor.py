@@ -1,5 +1,5 @@
 from vanilla.vanilla_get_timeseries_executor import VanillaGetTimeseriesExecutor
-import time
+
 
 class VanillaFindTimeExecutor:
     def __init__(
@@ -30,10 +30,8 @@ class VanillaFindTimeExecutor:
         self.aggregation = aggregation
         self.filter_predicate = filter_predicate
         self.filter_value = filter_value
-        self.ds = None
 
     def execute(self):
-        t0 = time.time()
         # print(f"\t\t\t current executor: VANILLA FIND TIME")
         qe = VanillaGetTimeseriesExecutor(
             variable=self.variable,
@@ -54,6 +52,4 @@ class VanillaFindTimeExecutor:
             res = ts.where(ts < self.filter_value, drop=False)
         else:
             raise ValueError("Invalid filter_predicate")
-        
-        self.ds = res.compute()
-        return time.time()- t0
+        return res.compute()

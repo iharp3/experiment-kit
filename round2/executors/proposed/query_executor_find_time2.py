@@ -1,6 +1,5 @@
 import pandas as pd
 import xarray as xr
-import time
 
 from .query_executor import QueryExecutor
 from .query_executor_timeseries import TimeseriesExecutor
@@ -38,21 +37,15 @@ class FindTimeExecutor(QueryExecutor):
             aggregation,
             metadata=metadata,
         )
-        self.ds = None
         self.time_series_aggregation_method = time_series_aggregation_method
         self.filter_predicate = filter_predicate
         self.filter_value = filter_value
 
     def execute(self):
-        t0 = time.time()
         # print(f"\t\t\t current executor: PROPOSED FIND TIME")
         if self.temporal_resolution == "hour" and self.filter_predicate != "!=":
-            self.ds = self._execute_pyramid_hour()
-            # return self._execute_pyramid_hour()
-            return time.time() - t0
-        self.ds = self._execute_baseline(self.start_datetime, self.end_datetime)
-        return time.time() - t0
-        # return self._execute_baseline(self.start_datetime, self.end_datetime)
+            return self._execute_pyramid_hour()
+        return self._execute_baseline(self.start_datetime, self.end_datetime)
 
     def _execute_baseline(self, start_datetime, end_datetime):
         timeseries_executor = TimeseriesExecutor(
