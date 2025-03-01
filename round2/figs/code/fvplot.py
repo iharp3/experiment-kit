@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 
 # Load the CSV file
-csv_file_path = "/home/uribe055/experiment-kit/round2/results/filter_value_Vanilla_results.csv"
+csv_file_path = "/home/uribe055/experiment-kit/round2/results/fv_all.csv"
 df = pd.read_csv(csv_file_path)
 
 # cur_plot = "s_res"
