@@ -1,5 +1,5 @@
 from vanilla.vanilla_get_raster_executor import VanillaGetRasterExecutor
-
+import time
 
 class VanillaGetHeatmapExecutor:
     def __init__(
@@ -26,8 +26,10 @@ class VanillaGetHeatmapExecutor:
         self.max_lon = max_lon
         self.spatial_resolution = spatial_resolution
         self.aggregation = aggregation
+        self.ds = None
 
     def execute(self):
+        t0 = time.time()
         # print(f"\t\t\t current executor: VANILLA GET HEATMAP")
         qe = VanillaGetRasterExecutor(
             variable=self.variable,
@@ -50,4 +52,6 @@ class VanillaGetHeatmapExecutor:
             heatmap = raster.min(dim="time")
         else:
             raise ValueError("Invalid aggregation")
-        return heatmap.compute()
+        
+        self.ds = heatmap.compute()
+        return time.time() - t0
