@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import os
 
 def gen_random_spatial_range(n_lat, n_lon):
     min_lat = np.random.randint(-90, 90 - n_lat)
@@ -36,15 +37,22 @@ if __name__ == "__main__":
     aggs = ["min", "max", "mean"]
 
     area_percents = [[3, 5], [15, 25], [25, 30], [25, 60]]
-    for area in area_percents:
+    percent_list = [1, 25, 50, 100]
+    for area, per_cent in zip(area_percents, percent_list):
         for agg in aggs:
             max_lat, min_lat, min_lon, max_lon = gen_random_spatial_range(area[0], area[1])
             start_time, end_time = gen_random_time_span_tiledb(5)
             query = make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, 1, "day", agg)
+
+            query["percent_area"] = per_cent
+
             queries.append(query)
 
     query_df = pd.DataFrame(queries)
-    out_file = "/data/experiment-kit/round2/tests/5a.csv" 
+    main_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    # print(main_dir)
+    # out_file = os.path.join(main_dir, "/round2/tests/5a.csv")
+    out_file = "/data/experiment-kit/round2/tests/5a.csv"
     query_df.to_csv(out_file)
 
 
