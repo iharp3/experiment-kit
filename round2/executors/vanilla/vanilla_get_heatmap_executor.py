@@ -1,4 +1,4 @@
-from vanilla.vanilla_get_raster_executor import VanillaGetRasterExecutor
+from vanilla.vanilla_get_raster_executor_for_hm import VanillaGetRasterExecutor
 import time
 
 class VanillaGetHeatmapExecutor:
@@ -26,10 +26,9 @@ class VanillaGetHeatmapExecutor:
         self.max_lon = max_lon
         self.spatial_resolution = spatial_resolution
         self.aggregation = aggregation
-        self.ds = None
 
     def execute(self):
-        t0 = time.time()
+        # t0 = time.time()
         # print(f"\t\t\t current executor: VANILLA GET HEATMAP")
         qe = VanillaGetRasterExecutor(
             variable=self.variable,
@@ -53,5 +52,4 @@ class VanillaGetHeatmapExecutor:
         else:
             raise ValueError("Invalid aggregation")
         
-        self.ds = heatmap.compute()
-        return time.time() - t0
+        return heatmap.compute()

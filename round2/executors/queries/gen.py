@@ -18,6 +18,21 @@ def gen_random_time_span_tiledb(n_years):
     end_time = f"{end_year}-12-31 23:00:00"
     return start_time, end_time
 
+def gen_random_time_span_half_years(n_years):
+    if n_years == 10:   # 1, 2.5, 5, 10
+        int_years = int(n_years)
+        start_year = np.random.randint(2004, 2023 - int_years + 1)  # for vanilla, polaris (tdb filtered out in driver)
+    else:
+        int_years = int(n_years)
+        start_year = np.random.randint(2014, 2020 - int_years + 1)  # for tiledb
+    end_year = start_year + int_years
+    start_time = f"{start_year}-01-01 00:00:00"
+    if n_years % 1 == 0.5:
+        end_time = f"{end_year}-06-30 23:00:00"
+    else:
+        end_time = f"{end_year-1}-12-31 23:00:00"
+    return start_time, end_time
+
 def make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, s_res, t_res, agg):
     query = {
         "variable": "2m_temperature",
@@ -34,6 +49,7 @@ def make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, s_res, 
 
 # generates queries for heatmap query
 if __name__ == "__main__":
+
     queries = []
     aggs = ["min", "max", "mean"]
 
@@ -42,18 +58,19 @@ if __name__ == "__main__":
     for t_span in time_span_list:
         for agg in aggs:
             max_lat, min_lat, min_lon, max_lon = gen_random_spatial_range(area[0], area[1])
-            start_time, end_time = gen_random_time_span_tiledb(5)
+            start_time, end_time = gen_random_time_span_half_years(t_span)
             query = make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, 1, "day", agg)
 
+            query["filter_predicate"] = 
+            query["filter_value"] = 
             query["time_span"] = t_span
 
             queries.append(query)
 
     query_df = pd.DataFrame(queries)
     main_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    # print(main_dir)
-    # out_file = os.path.join(main_dir, "/round2/tests/5a.csv")
-    out_file = "/data/experiment-kit/round2/tests/5b.csv"
+
+    out_file = "/home/uribe055/experiment-kit/round2/tests/hmft.csv"
     query_df.to_csv(out_file)
 
 

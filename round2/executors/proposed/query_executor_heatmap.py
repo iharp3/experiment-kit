@@ -1,9 +1,8 @@
 import numpy as np
 import xarray as xr
-import time
 
 from .query_executor import QueryExecutor
-from .query_executor_get_raster import GetRasterExecutor
+from .query_executor_get_raster_for_hm import GetRasterExecutor
 from .utils.get_whole_period import (
     get_whole_ranges_between,
     get_total_hours_in_year,
@@ -27,7 +26,7 @@ class HeatmapExecutor(QueryExecutor):
         max_lon: float,
         spatial_resolution: float,  # e.g., 0.25, 0.5, 1.0
         temporal_resolution: str,
-        aggregation,  # e.g., "mean", "max", "min"
+        aggregation: str,  # e.g., "mean", "max", "min"
         heatmap_aggregation_method: str,  # e.g., "mean", "max", "min"
         
         metadata=None,  # metadata file path
@@ -46,20 +45,15 @@ class HeatmapExecutor(QueryExecutor):
             metadata=metadata,
         )
         self.heatmap_aggregation_method = heatmap_aggregation_method
-        self.ds = None
 
     def execute(self):
-        t0 = time.time()
         # print(f"\t\t\t current executor: PROPOSED GET HEATMAP")
         if self.heatmap_aggregation_method == "mean":
-            self.ds = self._get_mean_heatmap().compute()
-            return time.time() - t0
+            return self._get_mean_heatmap().compute()
         elif self.heatmap_aggregation_method == "max":
-            self.ds = self._get_max_heatmap().compute()
-            return time.time() - t0
+            return self._get_max_heatmap().compute()
         elif self.heatmap_aggregation_method == "min":
-            self.ds = self._get_min_heatmap().compute
-            return time.time() - t0
+            return self._get_min_heatmap().compute()
         else:
             raise ValueError("Invalid heatmap_aggregation_method")
 
