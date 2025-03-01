@@ -65,7 +65,7 @@ for cur_sys in sys_list:
                     tr = -1
 
                 if tr != -1:
-                    if cur_sys == "Polaris" and s == 0.25 and t == "hour":
+                    if cur_sys == "Polaris":
                         ta = 0
                     else:
                         ta = qe.agg()
@@ -81,5 +81,5 @@ for cur_sys in sys_list:
                     print(f"-1")
 
 results_df = pd.DataFrame(results_list)
-out_file = os.path.join(main_dir, f"round2/results/5d_{cur_sys}_results.csv")
+out_file = os.path.join(main_dir, f"round2/results/5d_{cur_sys}_results_fixed.csv")
 results_df.to_csv(out_file, index=False)

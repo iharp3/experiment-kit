@@ -77,11 +77,11 @@ for plot_value in unique_plots:
     ax.tick_params(axis='both', labelsize=tick_font_size)
     
     # test
-    plt.tight_layout()
-    plt.savefig(f"/data/experiment-kit/round2/figs/f1_test/5c_{plot_value}.png")  # Save the plot to a file
-    plt.close(fig)
+    # plt.tight_layout()
+    # plt.savefig(f"/data/experiment-kit/round2/figs/f1_test/5c_{plot_value}.png")  # Save the plot to a file
+    # plt.close(fig)
 
     # final
-    # plt.tight_layout()
-    # plt.savefig(f"/data/experiment-kit/round2/figs/5c_eps/5c_{plot_value}.eps")  # Save the plot to a file
-    # plt.close(fig)
+    plt.tight_layout()
+    plt.savefig(f"/data/experiment-kit/round2/figs/5c_eps/5c_{plot_value}.eps")  # Save the plot to a file
+    plt.close(fig)
