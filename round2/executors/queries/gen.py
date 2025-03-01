@@ -31,7 +31,8 @@ def make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, s_res, 
     }
     return query
 
-# generates queries for 5b
+
+# generates queries for heatmap query
 if __name__ == "__main__":
     queries = []
     aggs = ["min", "max", "mean"]
@@ -54,6 +55,31 @@ if __name__ == "__main__":
     # out_file = os.path.join(main_dir, "/round2/tests/5a.csv")
     out_file = "/data/experiment-kit/round2/tests/5b.csv"
     query_df.to_csv(out_file)
+
+
+# # generates queries for 5b
+# if __name__ == "__main__":
+#     queries = []
+#     aggs = ["min", "max", "mean"]
+
+#     area = [25, 60]
+#     time_span_list = [1, 2.5, 5.0, 10]
+#     for t_span in time_span_list:
+#         for agg in aggs:
+#             max_lat, min_lat, min_lon, max_lon = gen_random_spatial_range(area[0], area[1])
+#             start_time, end_time = gen_random_time_span_tiledb(5)
+#             query = make_query(start_time, end_time, min_lat, max_lat, min_lon, max_lon, 1, "day", agg)
+
+#             query["time_span"] = t_span
+
+#             queries.append(query)
+
+#     query_df = pd.DataFrame(queries)
+#     main_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+#     # print(main_dir)
+#     # out_file = os.path.join(main_dir, "/round2/tests/5a.csv")
+#     out_file = "/data/experiment-kit/round2/tests/5b.csv"
+#     query_df.to_csv(out_file)
 
 # generates queries for 5a
 # if __name__ == "__main__":
