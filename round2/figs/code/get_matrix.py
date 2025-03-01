@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Load the CSV file
-df = pd.read_csv("/home/uribe055/experiment-kit/round2/results/5c_all.csv")
+df = pd.read_csv("/home/uribe055/experiment-kit/round2/results/heatmap_all.csv")
 
 # Define columns
 x = "s_res"
