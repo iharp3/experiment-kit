@@ -46,7 +46,7 @@ for cur_sys in sys_list:    # p, v, t
         for q in df_query.to_records():
 
             fqe = FExecutor(   
-                variable=q["variable"],
+                variable="temperature", #q["variable"],
                 start_datetime=q["start_time"],
                 end_datetime=q["end_time"],
                 max_lat=q["max_lat"],
