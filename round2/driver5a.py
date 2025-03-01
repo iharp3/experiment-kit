@@ -66,7 +66,7 @@ for cur_sys in sys_list:
                 tr = -1
 
             if tr != -1:
-                if cur_sys == "Polaris" and s == 0.25 and t == "hour":
+                if cur_sys == "Polaris":
                     ta = 0
                 else:
                     ta = qe.agg()

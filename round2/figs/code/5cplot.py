@@ -48,24 +48,24 @@ for plot_value in unique_plots:
     for line_value in subset[line].unique():
         line_data = subset[subset[line] == line_value]  # df[df[system] == polaris]
 
-        if line_value == "Polaris":
-            line_data = line_data.groupby(x, as_index=False)["tr"].mean()   # Average over tr values
-        else:
-            line_data = line_data.groupby(x, as_index=False)[y].mean()  # Average over x values
+        # if line_value == "Polaris":
+        #     line_data = line_data.groupby(x, as_index=False)["tr"].mean()   # Average over tr values
+        # else:
+        line_data = line_data.groupby(x, as_index=False)[y].mean()  # Average over x values
         
         line_data = line_data.sort_values(by=x)  # Ensure lines are connected correctly
 
         # Get style properties from dictionary, use defaults if not found
         style = style_dict.get(line_value, {"marker": "o", "markersize": 4, "linewidth": 1.5, "color": "black", "labelsize": 10, "ticksize": 8})
         
-        if line_value == "Polaris":
-            ax.plot(line_data[x], line_data["tr"], 
-                    marker=style["marker"], markersize=style["markersize"], fillstyle=m_fill,
-                    linewidth=style["linewidth"], color=style["color"], label=f"{line_value}")
-        else:
-            ax.plot(line_data[x], line_data[y], 
-                    marker=style["marker"], markersize=style["markersize"], fillstyle=m_fill,
-                    linewidth=style["linewidth"], color=style["color"], label=f"{line_value}")
+        # if line_value == "Polaris":
+        #     ax.plot(line_data[x], line_data["tr"], 
+        #             marker=style["marker"], markersize=style["markersize"], fillstyle=m_fill,
+        #             linewidth=style["linewidth"], color=style["color"], label=f"{line_value}")
+        # else:
+        ax.plot(line_data[x], line_data[y], 
+                marker=style["marker"], markersize=style["markersize"], fillstyle=m_fill,
+                linewidth=style["linewidth"], color=style["color"], label=f"{line_value}")
     
     ax.set_xlabel(x_label, fontsize=font_size)
     if style["ticklist"] is not None:
@@ -77,11 +77,11 @@ for plot_value in unique_plots:
     ax.tick_params(axis='both', labelsize=tick_font_size)
     
     # test
-    plt.tight_layout()
-    plt.savefig(f"/data/experiment-kit/round2/figs/f1_test/5c_{plot_value}.png")  # Save the plot to a file
-    plt.close(fig)
+    # plt.tight_layout()
+    # plt.savefig(f"/data/experiment-kit/round2/figs/f1_test/5c_{plot_value}.png")  # Save the plot to a file
+    # plt.close(fig)
 
     # final
-    # plt.tight_layout()
-    # plt.savefig(f"/data/experiment-kit/round2/figs/5c_eps/5c_{plot_value}.eps")  # Save the plot to a file
-    # plt.close(fig)
+    plt.tight_layout()
+    plt.savefig(f"/data/experiment-kit/round2/figs/5c_eps/5c_{plot_value}.eps")  # Save the plot to a file
+    plt.close(fig)
