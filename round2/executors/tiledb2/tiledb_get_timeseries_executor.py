@@ -1,4 +1,4 @@
-from tiledb2.tiledb_get_raster_executor import tiledb_get_raster_executor
+from tiledb2.tiledb_get_raster_executor_for_hm import tiledb_get_raster_executor
 
 
 class tiledb_get_timeseries_executor:

@@ -9,7 +9,7 @@ sys.path.append(os.path.join(main_dir, "round2/executors"))
 
 # impact of spatial resolution
 
-cur_plot = [[0.25, "hour"], [0.25, "year"], [0.5, "month"], [1, "hour"], [1, "year"]]
+cur_plot = [[0.25, "hour"], [0.25, "year"], [1, "hour"], [1, "year"]]
 
 # sys_list = ["TDB"]
 sys_list = ["Polaris", "Vanilla"]
