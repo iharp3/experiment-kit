@@ -74,6 +74,7 @@ for cur_sys in sys_list:    # p, v, t
                 results_list.append({"sys": cur_sys, 
                                         "t_res": t,
                                         "s_res": s,
+                                        "percent_area": q["percent_area"],
                                         "tr": tr,
                                         "ta": ta,
                                         "total_time": tr + ta})
