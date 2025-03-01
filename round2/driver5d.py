@@ -11,8 +11,8 @@ sys.path.append(os.path.join(main_dir, "round2/executors"))
 
 t_res = ["hour", "day", "month", "year"]
 s_res = [0.25, 0.5, 1.0]
-sys_list = ["TDB"]
-# sys_list = ["Vanilla", "Polaris"]
+# sys_list = ["TDB"]
+sys_list = ["Vanilla", "Polaris"]
 
 df_query = pd.read_csv(os.path.join(main_dir, f"round2/tests/5d.csv"))
 
@@ -44,7 +44,7 @@ for cur_sys in sys_list:
             for q in df_query.to_records():
 
                 qe = GRExecutor(
-                variable="temperature", #q["variable"],
+                variable=q["variable"],
                 start_datetime=q["start_time"],
                 end_datetime=q["end_time"],
                 max_lat=q["max_lat"],
