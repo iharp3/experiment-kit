@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 
 # Load the CSV file
-csv_file_path = "/home/uribe055/experiment-kit/round2/results/fv_all.csv"
+csv_file_path = "/home/uribe055/experiment-kit/round2/results/greenland.csv"
 df = pd.read_csv(csv_file_path)
 
 # cur_plot = "s_res"
@@ -65,16 +65,16 @@ for plot_value, vals in zip(unique_plots, cur_plot): # strings, [0.25, H]...
         ax.set_xticks(ticks=style["ticklist"], labels=style["ticklabels"])
     ax.set_ylabel(y_label, fontsize=font_size)
     ax.set_yscale("log")  # Set y-axis to log scale
-    ax.set_ylim(y_min, y_max)
+    ax.set_ylim(y_min, y_max+100)
     ax.legend(fontsize=font_size-5)
     ax.tick_params(axis='both', labelsize=tick_font_size)
     
     # test
-    plt.tight_layout()
-    plt.savefig(f"/home/uribe055/experiment-kit/round2/figs/f1_test/filter_value_{plot_value}.png")  # Save the plot to a file
-    plt.close(fig)
+    # plt.tight_layout()
+    # plt.savefig(f"/home/uribe055/experiment-kit/round2/figs/f1_test/filter_value_{plot_value}.png")  # Save the plot to a file
+    # plt.close(fig)
 
     # # final
-    # plt.tight_layout()
-    # plt.savefig(f"/home/uribe055/experiment-kit/round2/figs/hm_eps/filter_vaule_{plot_value}.eps")  # Save the plot to a file
-    # plt.close(fig)
+    plt.tight_layout()
+    plt.savefig(f"/home/uribe055/experiment-kit/round2/figs/fv_eps/filter_vaule_{plot_value}.eps")  # Save the plot to a file
+    plt.close(fig)

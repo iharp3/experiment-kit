@@ -9,10 +9,10 @@ sys.path.append(os.path.join(main_dir, "round2/executors"))
 
 # impact of spatial resolution
 
-cur_plot = [[0.25, "hour"],[1, "hour"]]
+cur_plot = [[0.25, "year"]]
 # cur_plot = [[0.25, "hour"]]
 # sys_list = ["TDB"]
-sys_list = ["Polaris"]
+sys_list = ["Polaris", "Vanilla"]
 
 df_query = pd.read_csv(os.path.join(main_dir, f"round2/tests/fv_new.csv"))
 
@@ -61,6 +61,7 @@ for cur_sys in sys_list:    # p, v, t
                 filter_value=q["filter_value"],
                 )
 
+            print(q)
             try:
                 t0 = time.time()
                 fqe.execute()
@@ -98,5 +99,5 @@ for cur_sys in sys_list:    # p, v, t
             # in_find_time_results_df.to_csv(in_find_time_out_file, mode='a', header=not os.path.exists(in_find_time_out_file), index=False)
 
 find_time_results_df = pd.DataFrame(find_time_results_list)
-find_time_out_file = os.path.join(main_dir, f"round2/results/filter_value_{cur_sys}_results_no_printing.csv")
+find_time_out_file = os.path.join(main_dir, f"round2/results/filter_value_{cur_sys}_results_greenland_025y.csv")
 find_time_results_df.to_csv(find_time_out_file, index=False)
