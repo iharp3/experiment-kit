@@ -3,23 +3,25 @@ import matplotlib.pyplot as plt
 import matplotlib
 
 # Load the CSV file
-csv_file_path = "/data/experiment-kit/round2/results/5a_all.csv"
+csv_file_path = "/home/uribe055/experiment-kit/round2/results/5a_all.csv"
 df = pd.read_csv(csv_file_path)
 
 # cur_plot = "s_res"
-x = "t_res"
+x = "percent_area"
 line = "sys"
 y = "total_time"
 
 # Get unique plot values
 unique_plots = ["025_H", "025_Y", "05_M", "1_H", "1_Y"]
+cur_plot = [[0.25, "hour"], [0.25, "year"], [0.5, "month"], [1, "hour"], [1, "year"]]
+
 
 marker_size = 25
 m_fill="none"
 font_size = 30
 tick_font_size = 30
 tick_size = 30
-tick_list = [0, 1, 2, 3]
+tick_list = [1,25, 50, 100]
 tick_labels = [1, 25, 50, 100]
 line_width = 4
 above = "bottom"
@@ -27,7 +29,7 @@ below = "top"
 y_label = "Execution time (sec)"
 viridis = matplotlib.colormaps["viridis"]
 colors = [viridis(i) for i in [0, 0.25, 0.5, 0.75]]
-x_label = "Temporal resolution"
+x_label = "Spatial region (% of Greenland)"
 
 # Define style dictionary based on 'line' values
 style_dict = {
@@ -41,11 +43,12 @@ y_min = df[y].min()
 y_max = df[y].max()
 
 # Generate and save individual plots
-for plot_value in unique_plots:
+for plot_value, vals in zip(unique_plots, cur_plot): # strings, [0.25, H]...
     fig, ax = plt.subplots(figsize=(8, 6))
-    subset = df[df[cur_plot] == plot_value]
+    sub1 = df[df["s_res"] == vals[0]]
+    subset = sub1[sub1["t_res"] == vals[1]]
     
-    for line_value in subset[line].unique():
+    for line_value in subset[line].unique():    # for unique system "line"
         line_data = subset[subset[line] == line_value]
         line_data = line_data.groupby(x, as_index=False)[y].mean()  # Average over x values
         line_data = line_data.sort_values(by=x)  # Ensure lines are connected correctly
@@ -66,12 +69,12 @@ for plot_value in unique_plots:
     ax.legend(fontsize=font_size-5)
     ax.tick_params(axis='both', labelsize=tick_font_size)
     
-    # test
-    plt.tight_layout()
-    plt.savefig(f"/data/experiment-kit/round2/figs/f1_test/5a_{plot_value}.png")  # Save the plot to a file
-    plt.close(fig)
+    # # test
+    # plt.tight_layout()
+    # plt.savefig(f"/home/uribe055/experiment-kit/round2/figs/f1_test/5a_{plot_value}.png")  # Save the plot to a file
+    # plt.close(fig)
 
     # # final
-    # plt.tight_layout()
-    # plt.savefig(f"/data/experiment-kit/round2/figs/5a_eps/5a_{plot_value}.eps")  # Save the plot to a file
-    # plt.close(fig)
+    plt.tight_layout()
+    plt.savefig(f"/home/uribe055/experiment-kit/round2/figs/5a_eps/5a_{plot_value}.eps")  # Save the plot to a file
+    plt.close(fig)
