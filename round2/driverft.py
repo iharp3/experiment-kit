@@ -11,8 +11,8 @@ sys.path.append(os.path.join(main_dir, "round2/executors"))
 
 cur_plot = [[0.25, "hour"], [0.25, "year"], [1, "hour"], [1, "year"]]
 
-# sys_list = ["TDB"]
-sys_list = ["Polaris", "Vanilla"]
+sys_list = ["TDB"]
+# sys_list = ["Polaris", "Vanilla"]
 
 df_query = pd.read_csv(os.path.join(main_dir, f"round2/tests/ft.csv"))
 
@@ -50,7 +50,7 @@ for cur_sys in sys_list:    # p, v, t
             else:
                 
                 fqe = FExecutor(   
-                    variable=q["variable"],
+                    variable="temperature", #q["variable"],
                     start_datetime=q["start_time"],
                     end_datetime=q["end_time"],
                     max_lat=q["max_lat"],
