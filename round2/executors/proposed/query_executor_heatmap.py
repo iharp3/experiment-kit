@@ -1,5 +1,6 @@
 import numpy as np
 import xarray as xr
+import time
 
 from .query_executor import QueryExecutor
 from .query_executor_get_raster import GetRasterExecutor
@@ -45,15 +46,20 @@ class HeatmapExecutor(QueryExecutor):
             metadata=metadata,
         )
         self.heatmap_aggregation_method = heatmap_aggregation_method
+        self.ds = None
 
     def execute(self):
+        t0 = time.time()
         # print(f"\t\t\t current executor: PROPOSED GET HEATMAP")
         if self.heatmap_aggregation_method == "mean":
-            return self._get_mean_heatmap().compute()
+            self.ds = self._get_mean_heatmap().compute()
+            return time.time() - t0
         elif self.heatmap_aggregation_method == "max":
-            return self._get_max_heatmap().compute()
+            self.ds = self._get_max_heatmap().compute()
+            return time.time() - t0
         elif self.heatmap_aggregation_method == "min":
-            return self._get_min_heatmap().compute()
+            self.ds = self._get_min_heatmap().compute
+            return time.time() - t0
         else:
             raise ValueError("Invalid heatmap_aggregation_method")
 
