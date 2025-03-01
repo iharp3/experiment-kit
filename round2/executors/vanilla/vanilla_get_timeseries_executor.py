@@ -1,4 +1,4 @@
-from vanilla.vanilla_get_raster_executor import VanillaGetRasterExecutor
+from vanilla.vanilla_get_raster_executor_for_hm import VanillaGetRasterExecutor
 
 
 class VanillaGetTimeseriesExecutor:

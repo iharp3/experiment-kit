@@ -1,6 +1,6 @@
 from xarray.core.dataset import Dataset
 from .query_executor import *
-from .query_executor_get_raster import GetRasterExecutor
+from .query_executor_get_raster_for_hm import GetRasterExecutor
 
 
 class TimeseriesExecutor(QueryExecutor):
