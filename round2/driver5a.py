@@ -18,7 +18,7 @@ df_query = pd.read_csv(os.path.join(main_dir, f"round2/tests/5a.csv"))
 
 results_list = []
 
-for cur_sys in sys_list:
+for cur_sys in sys_list:    # p, v, t
 
     # load executors
     if cur_sys == "Polaris":
@@ -38,7 +38,7 @@ for cur_sys in sys_list:
         exit
 
 
-    for p in cur_plot:
+    for p in cur_plot:  # (0.25, h) (0.25, y)...
         s = p[0]
         t = p[1]
 
