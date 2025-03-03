@@ -121,19 +121,19 @@ def get_whole_period_between(start, end):
             for res in residual:
                 hours = get_whole_hour_between(pd.Timestamp(res[0]), pd.Timestamp(res[1]))
                 whole_hours.extend(hours)
-    print("******************")
-    print("whole year")
-    for y in whole_years:
-        print(y)
-    print("whole month")
-    for m in whole_months:
-        print(m)
-    print("whole day")
-    for d in whole_days:
-        print(d)
-    print("whole hour")
-    for h in whole_hours:
-        print(h)
+    # print("******************")
+    # print("whole year")
+    # for y in whole_years:
+    # #     print(y)
+    # # print("whole month")
+    # for m in whole_months:
+    # #     print(m)
+    # # print("whole day")
+    # for d in whole_days:
+    #     print(d)
+    # print("whole hour")
+    # for h in whole_hours:
+    #     print(h)
     return whole_years, whole_months, whole_days, whole_hours
 
 
@@ -165,19 +165,19 @@ def get_whole_ranges_between(start, end):
                 hour_start = pd.Timestamp(f"{res[0]}")
                 hour_end = pd.Timestamp(f"{res[1]}")
                 hour_range.append([hour_start, hour_end])
-    print("******************")
-    print("year range")
-    for y in year_range:
-        print(y)
-    print("month range")
-    for m in month_range:
-        print(m)
-    print("day range")
-    for d in day_range:
-        print(d)
-    print("hour range")
-    for h in hour_range:
-        print(h)
+    # print("******************")
+    # print("year range")
+    # for y in year_range:
+    #     print(y)
+    # print("month range")
+    # for m in month_range:
+    #     print(m)
+    # print("day range")
+    # for d in day_range:
+    #     print(d)
+    # print("hour range")
+    # for h in hour_range:
+    #     print(h)
     return year_range, month_range, day_range, hour_range
 
 

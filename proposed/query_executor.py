@@ -39,7 +39,7 @@ class QueryExecutor(ABC):
         if metadata:
             self.metadata = Metadata(metadata)
         else:
-            self.metadata = Metadata("/data/metadata_post.csv")
+            self.metadata = Metadata("/home/uribe055/metadata_post.csv")
 
     @abstractmethod
     def execute(self) -> xr.Dataset:

@@ -100,8 +100,8 @@ class GetRasterExecutor(QueryExecutor):
             }
             api_calls.append((dataset, request))
         local_files = sorted(local_files)
-        print("local files:", local_files)
-        # print("api:", api_calls)
+        # print("local files:", local_files)
+        # # print("api:", api_calls)
         return local_files, api_calls
 
     def execute(self):

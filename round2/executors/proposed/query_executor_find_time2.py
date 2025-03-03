@@ -98,7 +98,7 @@ class FindTimeExecutor(QueryExecutor):
         )
 
         if years:
-            print("checking years")
+            # print("checking years")
             year_range = time_array_to_range(years, "year")
             year_min, year_max = self._get_min_max_time_series(year_range, "year")
             for year in years:
@@ -106,28 +106,28 @@ class FindTimeExecutor(QueryExecutor):
                 year_datetime = f"{year}-12-31 00:00:00"
                 curr_year_min = year_min[self.variable_short_name].sel(time=year_datetime).values.item()
                 curr_year_max = year_max[self.variable_short_name].sel(time=year_datetime).values.item()
-                print(f"year: {year}, min: {curr_year_min}, max: {curr_year_max}")
+                # print(f"year: {year}, min: {curr_year_min}, max: {curr_year_max}")
                 if self.filter_predicate == ">":
                     if curr_year_min > self.filter_value:
-                        print(f"{year}: min > filter, True")
+                        # print(f"{year}: min > filter, True")
                         year_determined = True
                         result[self.variable_short_name].loc[str(year) : str(year)] = True
                     elif curr_year_max <= self.filter_value:
-                        print(f"{year}: max <= filter, False")
+                        # print(f"{year}: max <= filter, False")
                         year_determined = True
                         result[self.variable_short_name].loc[str(year) : str(year)] = False
                 elif self.filter_predicate == "<":
                     if curr_year_min >= self.filter_value:
-                        print(f"{year}: min >= filter, False")
+                        # print(f"{year}: min >= filter, False")
                         year_determined = True
                         result[self.variable_short_name].loc[str(year) : str(year)] = False
                     elif curr_year_max < self.filter_value:
-                        print(f"{year}: max < filter, True")
+                        # print(f"{year}: max < filter, True")
                         year_determined = True
                         result[self.variable_short_name].loc[str(year) : str(year)] = True
                 elif self.filter_predicate == "==":
                     if curr_year_min > self.filter_value or curr_year_max < self.filter_value:
-                        print(f"{year}: min > filter or max < filter, False")
+                        # print(f"{year}: min > filter or max < filter, False")
                         year_determined = True
                         result[self.variable_short_name].loc[str(year) : str(year)] = False
                 if not year_determined:
@@ -135,7 +135,7 @@ class FindTimeExecutor(QueryExecutor):
                     months = months + [f"{year}-{month:02d}" for month in range(1, 13)]
 
         if months:
-            print("checking months")
+            # print("checking months")
             month_range = time_array_to_range(months, "month")
             month_min, month_max = self._get_min_max_time_series(month_range, "month")
             for month in months:
@@ -145,25 +145,25 @@ class FindTimeExecutor(QueryExecutor):
                 curr_month_max = month_max[self.variable_short_name].sel(time=month_datetime).values.item()
                 if self.filter_predicate == ">":
                     if curr_month_min > self.filter_value:
-                        print(f"{month}: min > filter, True")
+                        # print(f"{month}: min > filter, True")
                         month_determined = True
                         result[self.variable_short_name].loc[month:month] = True
                     elif curr_month_max <= self.filter_value:
-                        print(f"{month}: max <= filter, False")
+                        # print(f"{month}: max <= filter, False")
                         month_determined = True
                         result[self.variable_short_name].loc[month:month] = False
                 elif self.filter_predicate == "<":
                     if curr_month_min >= self.filter_value:
-                        print(f"{month}: min >= filter, False")
+                        # print(f"{month}: min >= filter, False")
                         month_determined = True
                         result[self.variable_short_name].loc[month:month] = False
                     elif curr_month_max < self.filter_value:
-                        print(f"{month}: max < filter, True")
+                        # print(f"{month}: max < filter, True")
                         month_determined = True
                         result[self.variable_short_name].loc[month:month] = True
                 elif self.filter_predicate == "==":
                     if curr_month_min > self.filter_value or curr_month_max < self.filter_value:
-                        print(f"{month}: min > filter or max < filter, False")
+                        # print(f"{month}: min > filter or max < filter, False")
                         month_determined = True
                         result[self.variable_short_name].loc[month:month] = False
                 if not month_determined:
@@ -173,7 +173,7 @@ class FindTimeExecutor(QueryExecutor):
                     ]
 
         if days:
-            print("checking days")
+            # print("checking days")
             day_range = time_array_to_range(days, "day")
             day_min, day_max = self._get_min_max_time_series(day_range, "day")
             for day in days:
@@ -183,25 +183,25 @@ class FindTimeExecutor(QueryExecutor):
                 curr_day_max = day_max[self.variable_short_name].sel(time=day_datetime).values.item()
                 if self.filter_predicate == ">":
                     if curr_day_min > self.filter_value:
-                        print(f"{day}: min > filter, True")
+                        # print(f"{day}: min > filter, True")
                         day_determined = True
                         result[self.variable_short_name].loc[day:day] = True
                     elif curr_day_max <= self.filter_value:
-                        print(f"{day}: max <= filter, False")
+                        # print(f"{day}: max <= filter, False")
                         day_determined = True
                         result[self.variable_short_name].loc[day:day] = False
                 elif self.filter_predicate == "<":
                     if curr_day_min >= self.filter_value:
-                        print(f"{day}: min >= filter, False")
+                        # print(f"{day}: min >= filter, False")
                         day_determined = True
                         result[self.variable_short_name].loc[day:day] = False
                     elif curr_day_max < self.filter_value:
-                        print(f"{day}: max < filter, True")
+                        # print(f"{day}: max < filter, True")
                         day_determined = True
                         result[self.variable_short_name].loc[day:day] = True
                 elif self.filter_predicate == "==":
                     if curr_day_min > self.filter_value or curr_day_max < self.filter_value:
-                        print(f"{day}: min > filter or max < filter, False")
+                        # print(f"{day}: min > filter or max < filter, False")
                         day_determined = True
                         result[self.variable_short_name].loc[day:day] = False
                 if not day_determined:
