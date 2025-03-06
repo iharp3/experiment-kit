@@ -47,8 +47,11 @@ custom_order = tick_labels  # Replace with your actual desired order
 df[x] = pd.Categorical(df[x], categories=custom_order, ordered=True)
 df = df.sort_values(by=x)
 
+# legend position ["025_H" = , "025_Y" = , "05_M" = , "1_H" = , "1_Y = "]
+legend_position = ["best", "best", "best", "best", "best"]
+
 # Generate and save individual plots
-for plot_value in unique_plots: # 0.25, 0.5, 1
+for plot_value, position in zip(unique_plots, legend_position): # 0.25, 0.5, 1
     fig, ax = plt.subplots(figsize=(8, 6))  
     subset = df[df[cur_plot] == plot_value] # s_res == 0.25
     subset = df
@@ -71,15 +74,15 @@ for plot_value in unique_plots: # 0.25, 0.5, 1
     ax.set_ylabel(y_label, fontsize=font_size)
     ax.set_yscale("log")  # Set y-axis to log scale
     ax.set_ylim(y_min, y_max)
-    ax.legend(fontsize=font_size-5)
+    ax.legend(fontsize=font_size-5, loc=position)
     ax.tick_params(axis='both', labelsize=tick_font_size)
     
     # test
     # plt.tight_layout()
-    # plt.savefig(f"/home/uribe055/experiment-kit/round2/figs/f1_test/5d_{plot_value}.png")  # Save the plot to a file
+    # plt.savefig(f"/home/uribe055/experiment-kit/round2/all_final_figs/test/5d_{plot_value}.png")  # Save the plot to a file
     # plt.close(fig)
 
     # # final
     plt.tight_layout()
-    plt.savefig(f"/home/uribe055/experiment-kit/round2/figs/5d_eps/5d_{plot_value}.eps")  # Save the plot to a file
+    plt.savefig(f"/home/uribe055/experiment-kit/round2/all_final_figs/5d_{plot_value}.eps")  # Save the plot to a file
     plt.close(fig)

@@ -42,8 +42,12 @@ style_dict = {
 y_min = df[y].min()
 y_max = df[y].max()
 
+# legend position ["025_H" = , "025_Y" = , "05_M" = , "1_H" = , "1_Y = "]
+legend_position = ["best", "best", "center", "best", "center"]
+
+
 # Generate and save individual plots
-for plot_value, vals in zip(unique_plots, cur_plot): # strings, [0.25, H]...
+for plot_value, vals, position in zip(unique_plots, cur_plot, legend_position): # strings, [0.25, H]...
     fig, ax = plt.subplots(figsize=(8, 6))
     sub1 = df[df["s_res"] == vals[0]]
     subset = sub1[sub1["t_res"] == vals[1]]
@@ -66,15 +70,20 @@ for plot_value, vals in zip(unique_plots, cur_plot): # strings, [0.25, H]...
     ax.set_ylabel(y_label, fontsize=font_size)
     ax.set_yscale("log")  # Set y-axis to log scale
     ax.set_ylim(y_min, y_max+100)
-    ax.legend(fontsize=font_size-5)
+    if plot_value == "1_Y" or plot_value == "05_M":
+        ax.legend(fontsize=font_size, loc=position, bbox_to_anchor=(0.5, 0.35))
+    elif plot_value == "025_Y":
+        ax.legend(fontsize=font_size, loc="center", bbox_to_anchor=(0.5, 0.35))
+    else:
+        ax.legend(fontsize=font_size-5, loc=position)
     ax.tick_params(axis='both', labelsize=tick_font_size)
     
     # test
     # plt.tight_layout()
-    # plt.savefig(f"/home/uribe055/experiment-kit/round2/figs/f1_test/filter_value_{plot_value}.png")  # Save the plot to a file
+    # plt.savefig(f"/home/uribe055/experiment-kit/round2/all_final_figs/test/filter_value_{plot_value}.png")  # Save the plot to a file
     # plt.close(fig)
 
     # # final
     plt.tight_layout()
-    plt.savefig(f"/home/uribe055/experiment-kit/round2/figs/fv_eps/filter_vaule_{plot_value}.eps")  # Save the plot to a file
+    plt.savefig(f"/home/uribe055/experiment-kit/round2/all_final_figs/f/filter_vaule_{plot_value}.eps")  # Save the plot to a file
     plt.close(fig)

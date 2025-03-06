@@ -8,6 +8,7 @@ __pycache__/
 
 # test figures
 round2/figs/f1_test/*
+all_final_figs/*
 
 # Old figures
 experiment/results/old_figures/

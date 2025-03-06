@@ -42,8 +42,12 @@ style_dict = {
 y_min = df[y].min()
 y_max = df[y].max()
 
+# legend position ["025_H" = , "025_Y" = , "05_M" = , "1_H" = , "1_Y = "]
+legend_position = ["center"]*5
+
+
 # Generate and save individual plots
-for plot_value, vals in zip(unique_plots, cur_plot): # strings, [0.25, H]...
+for plot_value, vals, positon in zip(unique_plots, cur_plot, legend_position): # strings, [0.25, H]...
     fig, ax = plt.subplots(figsize=(8, 6))
     sub1 = df[df["s_res"] == vals[0]]
     subset = sub1[sub1["t_res"] == vals[1]]
@@ -66,15 +70,15 @@ for plot_value, vals in zip(unique_plots, cur_plot): # strings, [0.25, H]...
     ax.set_ylabel(y_label, fontsize=font_size)
     ax.set_yscale("log")  # Set y-axis to log scale
     ax.set_ylim(y_min, y_max)
-    ax.legend(fontsize=font_size-5)
+    ax.legend(fontsize=font_size, loc=positon)
     ax.tick_params(axis='both', labelsize=tick_font_size)
     
     # # test
     # plt.tight_layout()
-    # plt.savefig(f"/home/uribe055/experiment-kit/round2/figs/f1_test/heatmap_{plot_value}.png")  # Save the plot to a file
+    # plt.savefig(f"/home/uribe055/experiment-kit/round2/all_final_figs/test/heatmap_{plot_value}.png")  # Save the plot to a file
     # plt.close(fig)
 
     # # final
     plt.tight_layout()
-    plt.savefig(f"/home/uribe055/experiment-kit/round2/figs/hm_eps/heatmap_{plot_value}.eps")  # Save the plot to a file
+    plt.savefig(f"/home/uribe055/experiment-kit/round2/all_final_figs/h/heatmap_{plot_value}.eps")  # Save the plot to a file
     plt.close(fig)

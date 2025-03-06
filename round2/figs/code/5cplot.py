@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 
 # Load the CSV file
-csv_file_path = "/data/experiment-kit/round2/results/5c_all.csv"
+csv_file_path = "/home/uribe055/experiment-kit/round2/results/5c_all.csv"
 df = pd.read_csv(csv_file_path)
 
 cur_plot = "t_res"
@@ -40,8 +40,11 @@ style_dict = {
 y_min = df[y].min()
 y_max = df[y].max()
 
+# legend position ["025_H" = , "025_Y" = , "05_M" = , "1_H" = , "1_Y = "]
+legend_position = ["best", "best", "center right", "center right", "center right"]
+
 # Generate and save individual plots
-for plot_value in unique_plots:
+for plot_value, position  in zip(unique_plots, legend_position):
     fig, ax = plt.subplots(figsize=(8, 6))
     subset = df[df[cur_plot] == plot_value] # df[df[t_res]]==hour
     
@@ -73,15 +76,18 @@ for plot_value in unique_plots:
     ax.set_ylabel(y_label, fontsize=font_size)
     ax.set_yscale("log")  # Set y-axis to log scale
     ax.set_ylim(y_min, y_max)
-    ax.legend(fontsize=font_size)
+    if plot_value == "month" or plot_value == "year":
+        ax.legend(fontsize=font_size, loc=position, bbox_to_anchor=(1.0, 0.40))
+    else:
+        ax.legend(fontsize=font_size, loc=position)
     ax.tick_params(axis='both', labelsize=tick_font_size)
     
     # test
     # plt.tight_layout()
-    # plt.savefig(f"/data/experiment-kit/round2/figs/f1_test/5c_{plot_value}.png")  # Save the plot to a file
+    # plt.savefig(f"/home/uribe055/experiment-kit/round2/all_final_figs/test/5c_{plot_value}.png")  # Save the plot to a file
     # plt.close(fig)
 
     # final
     plt.tight_layout()
-    plt.savefig(f"/data/experiment-kit/round2/figs/5c_eps/5c_{plot_value}.eps")  # Save the plot to a file
+    plt.savefig(f"/home/uribe055/experiment-kit/round2/all_final_figs/c/5c_{plot_value}.eps")  # Save the plot to a file
     plt.close(fig)
